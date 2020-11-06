@@ -27,19 +27,19 @@ public class CustomApplication extends Application {
         super.onCreate();
 
 
-        Database ORMhelper class
+        //Database ORMhelper class
         ActiveAndroid.initialize(this);
 
         context = getApplicationContext();
-          MyNotificationOpenedHandler : This will be called when a notification is tapped on.
-          MyNotificationReceivedHandler : This will be called when a notification is received while your app is running.
+        //MyNotificationOpenedHandler : This will be called when a notification is tapped on.
+        //MyNotificationReceivedHandler : This will be called when a notification is received while your app is running.
           OneSignal.startInit(this)
                 .setNotificationOpenedHandler(new MyNotificationOpenedHandler())
                 .setNotificationReceivedHandler( new MyNotificationReceivedHandler() )
                 .unsubscribeWhenNotificationsAreDisabled(true)
                 .init();
 
-        initialize and create the image loader logic
+         //initialize and create the image loader logic
         DrawerImageLoader.init(new AbstractDrawerImageLoader() {
             @Override
             public void set(ImageView imageView, Uri uri, Drawable placeholder, String tag) {

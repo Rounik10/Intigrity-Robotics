@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private String name, email, photo, mobile;
     private String  first_time;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

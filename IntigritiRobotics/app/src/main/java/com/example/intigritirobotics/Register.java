@@ -192,8 +192,8 @@ public class Register extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                                token.continuePermissionRequest();
+                            public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> list, PermissionToken permissionToken) {
+                                permissionToken.continuePermissionRequest();
                             }
                         })
                         .onSameThread()

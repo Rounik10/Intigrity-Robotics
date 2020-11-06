@@ -102,6 +102,7 @@ public class UpdateData extends AppCompatActivity {
                         .withPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,
                                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         .withListener(new MultiplePermissionsListener() {
+
                             @Override
                             public void onPermissionsChecked(MultiplePermissionsReport report) {
                                 // check if all permissions are granted
@@ -123,12 +124,13 @@ public class UpdateData extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                                token.continuePermissionRequest();
+                            public void onPermissionRationaleShouldBeShown(List<com.karumi.dexter.listener.PermissionRequest> list, PermissionToken permissionToken) {
+                                permissionToken.continuePermissionRequest();
                             }
                         })
                         .onSameThread()
                         .check();
+
             }
         });
 

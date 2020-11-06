@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/com_facebook_blue">
+    <item android:color="@color/wallet_holo_blue_light">
         <shape>
             <gradient
                 android:startColor="#FF512F"

@@ -11,14 +11,27 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.example.intigritirobotics.networksync.CheckInternetConnection;
+import com.example.intigritirobotics.prodcutscategory.Bags;
+import com.example.intigritirobotics.prodcutscategory.Calendars;
+import com.example.intigritirobotics.prodcutscategory.Cards;
+import com.example.intigritirobotics.prodcutscategory.Keychains;
+import com.example.intigritirobotics.prodcutscategory.Stationary;
+import com.example.intigritirobotics.prodcutscategory.Tshirts;
 import com.example.intigritirobotics.usersession.UserSession;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
+import com.mikepenz.materialdrawer.interfaces.ICrossfader;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.webianks.easy_feedback.EasyFeedback;
 
 import java.util.ArrayList;

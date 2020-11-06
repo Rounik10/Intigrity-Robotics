@@ -11,7 +11,6 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.webkit.PermissionRequest;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,7 +34,6 @@ import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.mikepenz.crossfadedrawerlayout.view.CrossfadeDrawerLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +49,6 @@ import es.dmoral.toasty.Toasty;
 
 public class UpdateData extends AppCompatActivity {
 
-    private CrossfadeDrawerLayout crossfadeDrawerLayout = null;
     private Button button;
     private EditText edtname,edtemail,edtmobile;
     CircleImageView primage;

@@ -10,37 +10,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntigritiRobotics">
+        <activity android:name=".userProfile"></activity>
         <activity
             android:name=".MainHomeActivity"
             android:label="@string/title_activity_main_home"
-            android:theme="@style/Theme.IntigritiRobotics.NoActionBar"></activity>
-        <activity android:name=".SplashActivity"
-            android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
-            >
-
+            android:theme="@style/Theme.IntigritiRobotics.NoActionBar" />
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/Theme.IntigritiRobotics.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".ResetActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            />
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".SignInActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            />
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".SignUpActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            />
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.intigritirobotics;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -16,7 +17,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainHomeActivity extends AppCompatActivity {
+public class
+
+
+MainHomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -32,6 +36,8 @@ public class MainHomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                Intent myIntent = new Intent(MainHomeActivity.this, userProfile.class);
+                startActivity(myIntent);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer);
@@ -60,4 +66,5 @@ public class MainHomeActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }

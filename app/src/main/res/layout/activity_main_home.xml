@@ -28,4 +28,5 @@
         app:itemTextColor="@color/darkWhite"
         app:itemTextAppearance="@style/TextViewStyle"
         app:menu="@menu/activity_main_drawer" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -88,4 +88,14 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="title_activity_user_profile">UserProfile</string>
+    <string name="user_image">user image</string>
+    <string name="user_s_courses">User\'s Courses</string>
+    <string name="my_courses">My Courses</string>
+    <string name="saved">Saved</string>
+    <string name="saved_items">Saved Items</string>
+    <string name="new_updates">New Updates</string>
+    <string name="my_orders">My Orders</string>
+    <string name="my_cart">My Cart</string>
+    <string name="give_review">Give Review</string>
 </resources>

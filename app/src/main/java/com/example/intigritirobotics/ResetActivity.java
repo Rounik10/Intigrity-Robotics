@@ -20,7 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class reset_password extends AppCompatActivity {
+public class ResetActivity extends AppCompatActivity {
 
     private EditText em3;
     private Button rt;
@@ -69,7 +69,7 @@ public class reset_password extends AppCompatActivity {
     }
     public void gobak()
     {
-        Intent intt = new Intent(this, sign_in.class);
+        Intent intt = new Intent(this, SignInActivity.class);
         startActivity(intt);
         finish();
     }
@@ -122,7 +122,7 @@ public class reset_password extends AppCompatActivity {
     {
         pb3.setVisibility(View.INVISIBLE);
         Toast.makeText(this, "E-Mail Sent Please Check Your Inbox.", Toast.LENGTH_LONG).show();
-        Intent intt = new Intent(this, sign_in.class);
+        Intent intt = new Intent(this, SignInActivity.class);
         startActivity(intt);
         finish();
     }

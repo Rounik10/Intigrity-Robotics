@@ -25,7 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 
-public class sign_in extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity {
 
     private EditText em2,ps2;
     private Button si2, su2 ;
@@ -52,7 +52,7 @@ public class sign_in extends AppCompatActivity {
         psv2 = (Button) findViewById(R.id.passview2);
         pb2 = (ProgressBar)findViewById(R.id.progressBar2);
         pref = getSharedPreferences("user_details",MODE_PRIVATE);
-        intent = new Intent(sign_in.this,MainHomeActivity.class);
+        intent = new Intent(SignInActivity.this,MainHomeActivity.class);
         fba = FirebaseAuth.getInstance();
         fp = (TextView)findViewById(R.id.FargotPass);
         em2.addTextChangedListener(new TextWatcher() {
@@ -121,13 +121,13 @@ public class sign_in extends AppCompatActivity {
     }
 
     private void Showreset() {
-        Intent intt = new Intent(this, reset_password.class);
+        Intent intt = new Intent(this, ResetActivity.class);
         startActivity(intt);
         finish();
     }
 
     private void signup() {
-        Intent intt = new Intent(this, sign_up.class);
+        Intent intt = new Intent(this, SignUpActivity.class);
         startActivity(intt);
         finish();
     }

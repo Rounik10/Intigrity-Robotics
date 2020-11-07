@@ -37,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
                     finish();
                 }
                 else {
-                    Intent sign = new Intent(SplashActivity.this,sign_up.class);
+                    Intent sign = new Intent(SplashActivity.this, SignUpActivity.class);
                     startActivity(sign);
                     finish();
 
@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
     }
     public void HomeShow() {
 
-        Intent intt2 = new Intent(this, sign_up.class);
+        Intent intt2 = new Intent(this, SignUpActivity.class);
         startActivity(intt2);
         finish();
     }

@@ -7,7 +7,7 @@
     android:background="@drawable/splashback"
     android:scrollbarStyle="outsideInset"
     android:visibility="visible"
-    tools:context=".sign_in">
+    tools:context=".SignInActivity">
 
 
 

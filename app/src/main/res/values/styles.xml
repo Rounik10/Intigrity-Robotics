@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/black_overlay</item>
     </style>
+<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.popOverlay" parent="Theme.AppCompat.Light"/>
 
     <style name="WhiteTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -45,7 +47,11 @@
     </style>
 
 
-
+<style name="TextViewStyle" parent="android:Widget.TextView">
+    <item name="android:fontFamily">@font/nunito_semibold</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">@color/gen_white</item>
+</style>
 
 
     <style name="homegridtext">
@@ -117,4 +123,5 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 -->
+
 </resources>

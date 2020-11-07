@@ -2,10 +2,12 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     android:fitsSystemWindows="true"
+    tools:context=".MainHomeActivity"
     tools:openDrawer="start">
 
     <include
@@ -18,7 +20,12 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="#0E66B9"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
+        app:itemHorizontalPadding="30dp"
+        app:itemIconTint="@color/darkWhite"
+        app:itemTextColor="@color/darkWhite"
+        app:itemTextAppearance="@style/TextViewStyle"
         app:menu="@menu/activity_main_drawer" />
 </androidx.drawerlayout.widget.DrawerLayout>

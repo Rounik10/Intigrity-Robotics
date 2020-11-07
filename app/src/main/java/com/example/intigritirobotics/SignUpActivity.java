@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class sign_up extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     private EditText nm1;
     private EditText em1;
@@ -157,7 +157,7 @@ public class sign_up extends AppCompatActivity {
 
     public void Signin(View v2) {
 
-        Intent intt = new Intent(this, sign_in.class);
+        Intent intt = new Intent(this, SignInActivity.class);
         startActivity(intt);
     }
 
@@ -260,7 +260,7 @@ public class sign_up extends AppCompatActivity {
 
     public void signin() {
 
-        Intent intt2 = new Intent(this, sign_in.class);
+        Intent intt2 = new Intent(this, SignInActivity.class);
         startActivity(intt2);
         finish();
     }

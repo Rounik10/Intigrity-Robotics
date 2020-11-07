@@ -1,59 +1,55 @@
 package com.example.intigritirobotics;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.TextView;
 
-import androidx.core.content.res.ResourcesCompat;
+public class SplashActivity extends AppCompatActivity {
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.example.intigritirobotics.usersession.UserSession;
+    SharedPreferences pref;
+    Intent intent;
 
-public class SplashActivity extends Activity {
-
-    private static int SPLASH_TIME_OUT = 3000;
-
-    //to get user session data
-    private UserSession session;
-
+    private static int SPLASH_TIME_OUT=3000;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_splash2);
 
-        session =new UserSession(SplashActivity.this);
 
-      Typeface typeface = ResourcesCompat.getFont(this, R.font.blacklist);
 
-      TextView appname= findViewById(R.id.appname);
-      appname.setTypeface(typeface);
 
-        YoYo.with(Techniques.Bounce)
-                .duration(7000)
-                .playOn(findViewById(R.id.logo));
 
-        YoYo.with(Techniques.FadeInUp)
-                .duration(5000)
-                .playOn(findViewById(R.id.appname));
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
 
-            new Handler().postDelayed(new Runnable() {
-
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
-
-                @Override
-                public void run() {
-                    // This method will be executed once the timer is over
-                    // Start your app main activity
-                    startActivity(new Intent(SplashActivity.this,WelcomeActivity.class));
+                pref = getSharedPreferences("user_details",MODE_PRIVATE);
+                intent = new Intent(SplashActivity.this,MainHomeActivity.class);
+                if(pref.contains("username") && pref.contains("password")){
+                    startActivity(intent);
                     finish();
                 }
-            }, SPLASH_TIME_OUT);
-        }
+                else {
+                    Intent sign = new Intent(SplashActivity.this,sign_up.class);
+                    startActivity(sign);
+                    finish();
+
+                }
+
+            }
+        },SPLASH_TIME_OUT);
     }
+    public void HomeShow() {
+
+        Intent intt2 = new Intent(this, sign_up.class);
+        startActivity(intt2);
+        finish();
+    }
+}

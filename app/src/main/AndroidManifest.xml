@@ -10,7 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntigritiRobotics">
-        <activity android:name=".userProfile"></activity>
+        <activity android:name=".UserProfileActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".MainHomeActivity"
             android:label="@string/title_activity_main_home"
@@ -36,6 +41,7 @@
             android:name=".SignUpActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
+
     </application>
 
 </manifest>

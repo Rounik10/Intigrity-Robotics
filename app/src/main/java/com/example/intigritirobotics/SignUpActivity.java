@@ -185,7 +185,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void CheckEmailPass() {
-
         if (em1.getText().toString().matches(emailpattern)) {
             if (p.equals(ps)) {
                 pb1.setVisibility(View.VISIBLE);
@@ -230,7 +229,6 @@ public class SignUpActivity extends AppCompatActivity {
                         });
             } else {
                 cps1.setError("Confirm Password Don't Match");
-                // e1.setText(cps1.getText());
             }
 
         } else {

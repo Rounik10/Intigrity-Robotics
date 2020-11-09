@@ -10,12 +10,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntigritiRobotics">
-        <activity android:name=".UserProfileActivity"
+        <activity android:name=".ui.Support.SupportActivity"></activity>
+        <activity android:name=".ui.Setting.SettingActivity" />
+        <activity android:name=".ui.MyCart.MyCartActivity" />
+        <activity
+            android:name=".ui.MyAccount.UserProfileActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".MainHomeActivity"
             android:label="@string/title_activity_main_home"
@@ -41,7 +43,6 @@
             android:name=".SignUpActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
     </application>
 
 </manifest>

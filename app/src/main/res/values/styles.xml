@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/black_overlay</item>
         <item name="colorAccent">@color/dot_dark_screen3</item>
     </style>
-<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light"/>
     <style name="AppTheme.popOverlay" parent="Theme.AppCompat.Light"/>
 
     <style name="WhiteTheme" parent="Theme.AppCompat.Light.NoActionBar">

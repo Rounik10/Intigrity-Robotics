@@ -1,14 +1,14 @@
-package com.example.intigritirobotics.ui.gallery;
+package com.example.intigritirobotics.ui.Category;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class CategoryViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public CategoryViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is gallery fragment");
     }

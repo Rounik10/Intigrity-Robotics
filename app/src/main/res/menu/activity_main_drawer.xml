@@ -8,17 +8,29 @@
             android:icon="@drawable/home"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/nav_category"
+            android:icon="@drawable/category_icon"
+            android:title="@string/menu_category" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_offer"
+            android:icon="@drawable/tag"
+            android:title="@string/menu_offer" />
         <item
-            android:id="@+id/Item_1"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:id="@+id/nav_my_orders"
+            android:icon="@drawable/orders"
+            android:title="@string/my_orders" />
+        <item
+            android:id="@+id/nav_my_cart"
+            android:icon="@drawable/cart"
+            android:title="@string/my_cart" />
+        <item
+            android:id="@+id/nav_my_account"
+            android:icon="@drawable/profile"
+            android:title="@string/menu_my_account" />
+        <item
+            android:id="@+id/nav_notification"
+            android:icon="@drawable/notification"
+            android:title="@string/menu_notification" />
 
     </group>
     <item android:title="">
@@ -27,13 +39,21 @@
 
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/Item_2"
-                    android:icon="@drawable/ic_menu_gallery"
-                    android:title="@string/menu_gallery" />
+                    android:id="@+id/nav_setting"
+                    android:icon="@drawable/settings"
+                    android:title="@string/menu_setting" />
                 <item
-                    android:id="@+id/Item_3"
-                    android:icon="@drawable/ic_menu_slideshow"
-                    android:title="@string/menu_slideshow" />
+                    android:id="@+id/nav_support"
+                    android:icon="@drawable/helpccenter"
+                    android:title="@string/menu_support" />
+                <item
+                    android:id="@+id/nav_bt_home"
+                    android:icon="@drawable/common_full_open_on_phone"
+                    android:title="@string/menu_bt_home" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/logout"
+                    android:title="@string/menu_logout" />
 
 
             </group>

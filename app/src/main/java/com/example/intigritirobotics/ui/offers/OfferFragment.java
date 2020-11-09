@@ -1,4 +1,4 @@
-package com.example.intigritirobotics.ui.slideshow;
+package com.example.intigritirobotics.ui.offers;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.intigritirobotics.R;
 
-public class SlideshowFragment extends Fragment {
+public class OfferFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private OfferViewModel offerViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        offerViewModel =
+                new ViewModelProvider(this).get(OfferViewModel.class);
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        offerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

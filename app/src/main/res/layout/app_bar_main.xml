@@ -9,14 +9,17 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="0dp"
+        android:elevation="8dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#5C6BC0"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+
+            android:background="@drawable/project_toolbar_background"
+
             app:popupTheme="@style/AppTheme.popOverlay"
             app:layout_scrollFlags="scroll|enterAlways"/>
 

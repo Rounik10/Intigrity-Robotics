@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splashback"
     tools:context=".ProductDetailActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -119,7 +118,7 @@
             android:gravity="center"
             android:padding="6dp"
             android:text="@string/pricePlaceHolder"
-            android:textColor="#FFFF"
+            android:textColor="#000"
             android:textSize="26sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.171"
@@ -149,7 +148,7 @@
             android:gravity="center"
             android:padding="6dp"
             android:text="@string/MrpSavingText"
-            android:textColor="#FFF3"
+            android:textColor="@color/design_default_color_primary"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.44"

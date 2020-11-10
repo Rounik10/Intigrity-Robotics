@@ -2,10 +2,8 @@ package com.example.intigritirobotics;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.widget.Toast;
 
 import com.example.intigritirobotics.ui.MyAccount.UserProfileActivity;
 import com.example.intigritirobotics.ui.MyCart.MyCartActivity;
@@ -14,7 +12,6 @@ import com.example.intigritirobotics.ui.Support.SupportActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -52,7 +49,7 @@ MainHomeActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_category, R.id.nav_offer, R.id.nav_my_orders,
+                R.id.nav_e_store, R.id.nav_category, R.id.nav_offer, R.id.nav_my_orders,
                 R.id.nav_notification, R.id.nav_my_cart, R.id.nav_setting, R.id.nav_support)
                 .setDrawerLayout(drawer)
                 .build();

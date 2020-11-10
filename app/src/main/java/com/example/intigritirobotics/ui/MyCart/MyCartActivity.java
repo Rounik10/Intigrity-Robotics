@@ -7,7 +7,6 @@ import android.os.Bundle;
 import com.example.intigritirobotics.R;
 
 public class MyCartActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

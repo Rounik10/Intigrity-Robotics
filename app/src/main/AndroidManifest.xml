@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntigritiRobotics">
-        <activity android:name=".ui.Support.SupportActivity"></activity>
+        <activity android:name=".ProductDetailActivity"></activity>
+        <activity android:name=".ui.Support.SupportActivity" />
         <activity android:name=".ui.Setting.SettingActivity" />
         <activity android:name=".ui.MyCart.MyCartActivity" />
         <activity

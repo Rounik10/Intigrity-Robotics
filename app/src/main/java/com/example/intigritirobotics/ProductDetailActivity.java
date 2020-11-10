@@ -13,17 +13,19 @@ import java.util.List;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
+    private ImageSlider imageSlider;
+    private  List<SlideModel> slideModelList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
-        ImageSlider imageSlider = findViewById(R.id.imgSlider);
-        List<SlideModel> slideModelList = new ArrayList<>();
-        slideModelList.add(new SlideModel(R.drawable.cart,"Image 1"));
-        slideModelList.add(new SlideModel(R.drawable.email,"Image 2"));
-        slideModelList.add(new SlideModel(R.drawable.forgot4,"Image 3"));
-        slideModelList.add(new SlideModel(R.drawable.feedback,"Image 4"));
-        imageSlider.setImageList(slideModelList,false);
+         imageSlider = findViewById(R.id.imgSlider);
+//        slideModelList.add(new SlideModel(R.drawable.cart,"Image 1"));
+//        slideModelList.add(new SlideModel(R.drawable.email,"Image 2"));
+//        slideModelList.add(new SlideModel(R.drawable.forgot4,"Image 3"));
+//        slideModelList.add(new SlideModel(R.drawable.feedback,"Image 4"));
+//        imageSlider.setImageList(slideModelList,false);
     }
 }

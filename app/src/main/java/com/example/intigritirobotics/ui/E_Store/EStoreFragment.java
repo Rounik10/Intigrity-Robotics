@@ -1,42 +1,86 @@
 package com.example.intigritirobotics.ui.E_Store;
 
+import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.daimajia.slider.library.Animations.DescriptionAnimation;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.example.intigritirobotics.CategoryAdapter;
+import com.example.intigritirobotics.CategoryModel;
+import com.example.intigritirobotics.MainHomeActivity;
 import com.example.intigritirobotics.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+
+import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
+import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class EStoreFragment extends Fragment {
 
-    private EStoreViewModel EStoreViewModel;
+    private List<CategoryModel> projectList = new ArrayList<>();
+    private RecyclerView projectRecyclerView;
+    private LinearLayoutManager projectLinearLayoutManager;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        EStoreViewModel =
-                new ViewModelProvider(this).get(EStoreViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_e_store, container, false);
-        return root;
+
+        View view = inflater.inflate(R.layout.fragment_e_store, container, false);
+
+         projectRecyclerView = view.findViewById(R.id.category_recyclerview);
+        projectLinearLayoutManager = new LinearLayoutManager(getContext());
+        loadProject();
+        return view;
+
 
        }
+
+    private void loadProject()
+    {
+        firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    projectList.clear();
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        projectList.add(new CategoryModel(
+                                documentSnapshot.get("index").toString(),
+                                documentSnapshot.get("category_pic").toString(),
+                                documentSnapshot.get("category_title").toString()));
+                    }
+
+                    projectLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                    projectRecyclerView.setLayoutManager(projectLinearLayoutManager);
+                    CategoryAdapter adapter = new CategoryAdapter(projectList);
+                    projectRecyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    loadingDialog.dismiss();
+                }
+                else
+                {
+                    loadingDialog.dismiss();
+                    String error = task.getException().getMessage();
+                    Toast.makeText(getContext(),error,Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
+    }
 
 
 

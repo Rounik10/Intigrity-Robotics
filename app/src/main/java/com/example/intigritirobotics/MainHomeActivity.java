@@ -1,17 +1,26 @@
 package com.example.intigritirobotics;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.intigritirobotics.ui.MyAccount.UserProfileActivity;
 import com.example.intigritirobotics.ui.MyCart.MyCartActivity;
 import com.example.intigritirobotics.ui.Setting.SettingActivity;
 import com.example.intigritirobotics.ui.Support.SupportActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,6 +28,11 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class
 
@@ -26,6 +40,8 @@ public class
 MainHomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static FirebaseFirestore firebaseFirestore;
+    public static Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +50,7 @@ MainHomeActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        firebaseFirestore  =FirebaseFirestore.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +60,14 @@ MainHomeActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+
+         loadingDialog = new Dialog(MainHomeActivity.this);
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
+        loadingDialog.show();
+
         NavigationView navigationView = findViewById(R.id.nav_view);
 
         DrawerLayout drawer = findViewById(R.id.drawer);
@@ -53,6 +78,7 @@ MainHomeActivity extends AppCompatActivity {
                 R.id.nav_notification, R.id.nav_my_cart, R.id.nav_setting, R.id.nav_support)
                 .setDrawerLayout(drawer)
                 .build();
+
 /*
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()){
@@ -68,6 +94,8 @@ MainHomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
     }
 
     @Override
@@ -107,4 +135,6 @@ MainHomeActivity extends AppCompatActivity {
         startActivity(myIntent);
 
     }
+
+
 }

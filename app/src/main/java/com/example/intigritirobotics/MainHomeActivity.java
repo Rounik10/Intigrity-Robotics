@@ -39,7 +39,7 @@ MainHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent myIntent = new Intent(MainHomeActivity.this, UserProfileActivity.class);
+                Intent myIntent = new Intent(MainHomeActivity.this, ProductDetailActivity.class);
                 startActivity(myIntent);
             }
         });
@@ -53,23 +53,18 @@ MainHomeActivity extends AppCompatActivity {
                 R.id.nav_notification, R.id.nav_my_cart, R.id.nav_setting, R.id.nav_support)
                 .setDrawerLayout(drawer)
                 .build();
+/*
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()){
+                case R.id.nav_my_account:
+                    Toast.makeText(getApplicationContext(), "Account Clicked", Toast.LENGTH_SHORT).show();
 
-//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
-//        {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                int id = item.getItemId();
-//
-//              if (id==R.id.nav_my_account)
-//              {
-//
-//                  Intent myIntent = new Intent(MainHomeActivity.this, UserProfileActivity.class);
-//                  startActivity(myIntent);
-//              }
-//
-//                return true;
-//            }
-//        });
+                case R.id.action_settings:
+                    Toast.makeText(getApplicationContext(), "Account Clicked", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        });
+*/
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -89,26 +84,25 @@ MainHomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void cart(View view)
-    {
+    private void cart(View view) {
         Intent myIntent = new Intent(MainHomeActivity.this, MyCartActivity.class);
-                startActivity(myIntent);
+        startActivity(myIntent);
 
     }
-    private void account(View view)
-    {
+
+    private void account(View view) {
         Intent myIntent = new Intent(MainHomeActivity.this, UserProfileActivity.class);
         startActivity(myIntent);
 
     }
-    private void setting(View view)
-    {
+
+    private void setting(View view) {
         Intent myIntent = new Intent(MainHomeActivity.this, SettingActivity.class);
         startActivity(myIntent);
 
     }
-    private void support(View view)
-    {
+
+    private void support(View view) {
         Intent myIntent = new Intent(MainHomeActivity.this, SupportActivity.class);
         startActivity(myIntent);
 

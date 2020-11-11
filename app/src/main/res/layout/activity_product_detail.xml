@@ -61,13 +61,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="6.9/5.0"
+                            android:text="@string/ratingPlaceHolder"
                             android:textSize="20sp" />
 
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/star" />
+                            android:src="@drawable/star"
+                            android:contentDescription="@string/star" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -88,6 +89,7 @@
                     android:layout_marginTop="16dp"
                     android:background="@drawable/fav_icon"
                     android:src="@drawable/fav_icon"
+                    android:contentDescription="@string/add_to_fav_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.95"
                     app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Name: Product Name, Key features, and model details"
+                    android:text="@string/productBriefPlaceHolder"
                     android:textSize="24sp"
                     app:layout_constraintTop_toBottomOf="@id/imgSlider" />
 
@@ -129,7 +131,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:padding="12dp"
-            android:text="In Stock"
+            android:text="@string/in_stock"
             android:textColor="@color/green_light"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -157,8 +159,8 @@
             android:id="@+id/buyNowButton"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="6dp"
-            android:text="Buy Now"
+            android:layout_marginStart="6dp"
+            android:text="@string/buy_now"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/savings"
             app:layout_constraintWidth_percent="0.48" />
@@ -167,8 +169,8 @@
             android:id="@+id/addToCartButton"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_marginRight="6dp"
-            android:text="Add to cart"
+            android:layout_marginEnd="6dp"
+            android:text="@string/add_to_cart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/savings"
@@ -234,19 +236,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="6.9/5.0"
+                        android:text="@string/ratingPlaceHolder"
                         android:textSize="20sp" />
 
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/star" />
+                        android:src="@drawable/star"
+                        android:contentDescription="@string/star"/>
                 </LinearLayout>
                 <TextView
                     android:id="@+id/Rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ratings"
+                    android:text="@string/ratings"
                     android:textSize="24sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"

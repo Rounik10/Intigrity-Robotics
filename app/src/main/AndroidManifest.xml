@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.intigritirobotics">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntigritiRobotics">
-        <activity android:name=".ProductDetailActivity"></activity>
+        <activity android:name=".ViewAllActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/Theme.IntigritiRobotics.NoActionBar">
+
+        </activity>
+        <activity android:name=".ProductDetailActivity" />
         <activity android:name=".ui.Support.SupportActivity" />
         <activity android:name=".ui.Setting.SettingActivity" />
         <activity android:name=".ui.MyCart.MyCartActivity" />

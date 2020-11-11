@@ -71,9 +71,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
              itemView.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
-//                     Intent intent = new Intent( itemView.getContext(),ProjectPdfActivity.class);
-//                     intent.putExtra("PROJECT_ID",index);
-//                     itemView.getContext().startActivity(intent);
+                     Intent intent = new Intent( itemView.getContext(),ViewAllActivity.class);
+                     intent.putExtra("Index",index);
+                     intent.putExtra("Title",title);
+                     itemView.getContext().startActivity(intent);
                  }
              });
 

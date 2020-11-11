@@ -10,12 +10,26 @@
         android:id="@+id/category_recyclerview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/darkWhite"
         android:elevation="5dp"
         android:orientation="horizontal"
-        android:background="@color/darkWhite"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.denzcoskun.imageslider.ImageSlider
+        android:id="@+id/image_slider"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:elevation="5dp"
+        app:auto_cycle="true"
+        app:delay="3000"
+        app:error_image="@drawable/error_image"
+        app:placeholder="@drawable/place_holder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_recyclerview" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

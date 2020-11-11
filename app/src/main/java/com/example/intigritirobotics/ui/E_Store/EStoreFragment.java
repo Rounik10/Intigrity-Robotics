@@ -13,11 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.intigritirobotics.CategoryAdapter;
 import com.example.intigritirobotics.CategoryModel;
 import com.example.intigritirobotics.MainHomeActivity;
 import com.example.intigritirobotics.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -33,6 +36,9 @@ public class EStoreFragment extends Fragment {
 
     private List<CategoryModel> projectList = new ArrayList<>();
     private RecyclerView projectRecyclerView;
+    private ImageSlider imageSlider;
+    private List<SlideModel>slideModels= new ArrayList<>();
+
     private LinearLayoutManager projectLinearLayoutManager;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +47,10 @@ public class EStoreFragment extends Fragment {
 
          projectRecyclerView = view.findViewById(R.id.category_recyclerview);
         projectLinearLayoutManager = new LinearLayoutManager(getContext());
+         imageSlider = view.findViewById(R.id.image_slider);
         loadProject();
+
+
         return view;
 
 
@@ -61,6 +70,28 @@ public class EStoreFragment extends Fragment {
                                 documentSnapshot.get("category_pic").toString(),
                                 documentSnapshot.get("category_title").toString()));
                     }
+                    firebaseFirestore.collection("SLIDER").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful())
+                            {
+                                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                                    slideModels.add(new SlideModel(
+                                            documentSnapshot.get("pic").toString(),
+                                            null));
+                                }
+                                imageSlider.setImageList(slideModels, false);
+
+                            }
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+
 
                     projectLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
                     projectRecyclerView.setLayoutManager(projectLinearLayoutManager);
@@ -68,6 +99,8 @@ public class EStoreFragment extends Fragment {
                     projectRecyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                     loadingDialog.dismiss();
+
+
                 }
                 else
                 {

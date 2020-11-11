@@ -37,27 +37,25 @@ public class EStoreFragment extends Fragment {
     private List<CategoryModel> projectList = new ArrayList<>();
     private RecyclerView projectRecyclerView;
     private ImageSlider imageSlider;
-    private List<SlideModel>slideModels= new ArrayList<>();
+    private List<SlideModel> slideModels = new ArrayList<>();
 
     private LinearLayoutManager projectLinearLayoutManager;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_e_store, container, false);
 
-         projectRecyclerView = view.findViewById(R.id.category_recyclerview);
+        projectRecyclerView = view.findViewById(R.id.category_recyclerview);
         projectLinearLayoutManager = new LinearLayoutManager(getContext());
-         imageSlider = view.findViewById(R.id.image_slider);
+        imageSlider = view.findViewById(R.id.image_slider);
         loadProject();
-
 
         return view;
 
+    }
 
-       }
-
-    private void loadProject()
-    {
+    private void loadProject() {
         firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -73,14 +71,13 @@ public class EStoreFragment extends Fragment {
                     firebaseFirestore.collection("SLIDER").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful())
-                            {
+                            if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                                     slideModels.add(new SlideModel(
                                             documentSnapshot.get("pic").toString(),
                                             null));
                                 }
-                                imageSlider.setImageList(slideModels, false);
+                                imageSlider.setImageList(slideModels);
 
                             }
 
@@ -101,12 +98,10 @@ public class EStoreFragment extends Fragment {
                     loadingDialog.dismiss();
 
 
-                }
-                else
-                {
+                } else {
                     loadingDialog.dismiss();
                     String error = task.getException().getMessage();
-                    Toast.makeText(getContext(),error,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -114,7 +109,5 @@ public class EStoreFragment extends Fragment {
 
 
     }
-
-
 
 }

@@ -113,5 +113,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pricePlaceHolder">Rs XXX.XX</string>
     <string name="strikePricePlaceHolder">MRP:<strike>Rs YYY.YY</strike></string>
-    <string name="MrpSavingText">MRP: Rs YYY.YY, You Save: Rs ZZZ.ZZ</string>
+    <string name="MrpSavingText">MRP: <font color = "#ff0000"><strike>Rs YYY.YY</strike></font>>, You Save: Rs ZZZ.ZZ</string>
+    <string name="details">Details</string>
+    <string name="random_details">Product Name:\n Specs:\n Other details</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="ratingPlaceHolder">6.9/5.0</string>
+    <string name="star">star</string>
+    <string name="productBriefPlaceHolder">Name: Product Name, Key features, and model details</string>
+    <string name="ratings">Ratings</string>
+    <string name="add_to_fav_button">Add to fav. button</string>
+    <string name="in_stock">In Stock</string>
 </resources>

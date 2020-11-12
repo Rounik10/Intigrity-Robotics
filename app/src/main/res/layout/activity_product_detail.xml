@@ -61,13 +61,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="6.9/5.0"
+                            android:text="@string/ratingPlaceHolder"
                             android:textSize="20sp" />
 
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/star" />
+                            android:src="@drawable/star"
+                            android:contentDescription="@string/star" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -88,6 +89,7 @@
                     android:layout_marginTop="16dp"
                     android:background="@drawable/fav_icon"
                     android:src="@drawable/fav_icon"
+                    android:contentDescription="@string/add_to_fav_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.95"
                     app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Name: Product Name, Key features, and model details"
+                    android:text="@string/productBriefPlaceHolder"
                     android:textSize="24sp"
                     app:layout_constraintTop_toBottomOf="@id/imgSlider" />
 
@@ -119,7 +121,7 @@
             android:textColor="#000"
             android:textSize="26sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.171"
+            app:layout_constraintHorizontal_bias="0.142"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgCard" />
 
@@ -129,7 +131,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:padding="12dp"
-            android:text="In Stock"
+            android:text="@string/in_stock"
             android:textColor="@color/green_light"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -157,8 +159,8 @@
             android:id="@+id/buyNowButton"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="6dp"
-            android:text="Buy Now"
+            android:layout_marginStart="6dp"
+            android:text="@string/buy_now"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/savings"
             app:layout_constraintWidth_percent="0.48" />
@@ -167,66 +169,99 @@
             android:id="@+id/addToCartButton"
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_marginRight="6dp"
-            android:text="Add to cart"
+            android:layout_marginEnd="6dp"
+            android:text="@string/add_to_cart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/savings"
             app:layout_constraintWidth_percent="0.48" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/detailCard"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/detailTabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/gen_white"
-            android:elevation="50dp"
-            android:padding="8dp"
-            android:paddingHorizontal="18dp"
-            app:cardCornerRadius="18dp"
-            app:layout_constraintTop_toBottomOf="@id/buyNowButton"
-            tools:layout_editor_absoluteX="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Details"
-                    android:textAlignment="center"
-                    android:textSize="32dp" />
-
-                <TextView
-                    android:id="@+id/detailTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="219dp"
-                    android:paddingHorizontal="18dp"
-                    android:text="Product Name:\nSpecs:\nDetails\n\n\n\n"
-                    android:textSize="32sp"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ratingBar" />
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
-            android:layout_marginBottom="208dp"
+            android:background="@color/grey_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailCard"
-            app:layout_constraintVertical_bias="0.009" />
+            app:layout_constraintTop_toBottomOf="@id/buyNowButton"
+            app:layout_constraintVertical_bias="0.047"
+            app:tabIndicatorColor="@color/colorPrimary">
 
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:layout_marginHorizontal="8dp"
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+
+            android:padding="12dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailTabs"
+            android:background="@color/black_overlay"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="1095dp" />
+
+        <androidx.cardview.widget.CardView
+            app:layout_constraintTop_toBottomOf="@id/viewPager"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:background="@color/grey_light"
+            app:cardCornerRadius="8dp"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/grey_light">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="6dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ratingPlaceHolder"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/star"
+                        android:contentDescription="@string/star"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/Rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ratings"
+                    android:textSize="24sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/Rating" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

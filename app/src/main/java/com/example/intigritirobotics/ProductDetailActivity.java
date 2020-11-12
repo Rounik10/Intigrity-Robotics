@@ -1,33 +1,51 @@
 package com.example.intigritirobotics;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.media.Image;
 import android.os.Bundle;
-import android.widget.ImageView;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
-import com.google.android.material.slider.Slider;
-
+import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
-    private ImageSlider imageSlider;
-    private  List<SlideModel> slideModelList = new ArrayList<>();
-
+    private final List<SlideModel> slideModelList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+        ImageSlider imageSlider = findViewById(R.id.imgSlider);
+        slideModelList.add(new SlideModel(R.drawable.cart, ScaleTypes.FIT));
+        slideModelList.add(new SlideModel(R.drawable.email,ScaleTypes.FIT));
+        slideModelList.add(new SlideModel(R.drawable.forgot4,ScaleTypes.FIT));
+        slideModelList.add(new SlideModel(R.drawable.feedback,ScaleTypes.FIT));
+        imageSlider.setImageList(slideModelList);
 
-         imageSlider = findViewById(R.id.imgSlider);
-      slideModelList.add(new SlideModel(R.drawable.cart,null));
-       slideModelList.add(new SlideModel(R.drawable.email,null));
-        slideModelList.add(new SlideModel(R.drawable.forgot4,null));
-        slideModelList.add(new SlideModel(R.drawable.feedback,null));
-        imageSlider.setImageList(slideModelList, false);
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("Some Details");
+        arrayList.add("Specs");
+        arrayList.add("Other Details");
+
+        TabLayout tabLayout = findViewById(R.id.detailTabs);
+        ViewPager viewPager = findViewById(R.id.viewPager);
+
+        prepareViewPager(viewPager, arrayList);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void prepareViewPager(ViewPager viewPager, ArrayList<String> arrayList) {
+        TabLayoutAdapter adapter = new TabLayoutAdapter(getSupportFragmentManager());
+        productDetailFragment fragment = new productDetailFragment();
+        for(int i=0; i< arrayList.size(); i++) {
+            Bundle bundle = new Bundle();
+            bundle.putString("title",arrayList.get(i));
+            fragment.setArguments(bundle);
+            adapter.addFragment(fragment,arrayList.get(i));
+            fragment = new productDetailFragment();
+        }
+        viewPager.setAdapter(adapter);
     }
 }

@@ -21,13 +21,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private List<CategoryModel> categoryModelList;
 
     public CategoryAdapter(List<CategoryModel> categoryModelList) {
-        this.categoryModelList = categoryModelList;
-    }
+            this.categoryModelList = categoryModelList;
+        }
 
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_item_layout,viewGroup,false);
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_item_layout,viewGroup,false);
         return new ViewHolder(view);
     }
 

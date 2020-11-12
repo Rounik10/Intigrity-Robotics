@@ -3,6 +3,8 @@ package com.example.intigritirobotics;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +12,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.models.SlideModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
+import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class ViewAllActivity extends AppCompatActivity {
+    private List<ViewAllModel> productList = new ArrayList<>();
+    private RecyclerView productRecycler;
+    private LinearLayoutManager projectLinearLayoutManager;
 
+    private FirebaseFirestore firebaseFirestore;
+    private  String ToolbarTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +43,12 @@ public class ViewAllActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.vie_all_toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        getSupportActionBar().setTitle(intent.getStringExtra("Title"));
+       ToolbarTitle= intent.getStringExtra("Title");
+        getSupportActionBar().setTitle(ToolbarTitle);
+        firebaseFirestore  = FirebaseFirestore.getInstance();
+        productRecycler = findViewById(R.id.product_preview_recyclerview);
+        projectLinearLayoutManager = new LinearLayoutManager(ViewAllActivity.this);
+        loadProducts();
 
     }
 
@@ -39,5 +67,45 @@ public class ViewAllActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private void loadProducts()
+    {
+        loadingDialog.show();
+        firebaseFirestore.collection("CATEGORY").document("1AcKQNSDSQqnpvA5e4vN").collection("Products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    productList.clear();
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                       productList.add(new ViewAllModel(
+                                documentSnapshot.get("id").toString(),
+                                documentSnapshot.get("product_pic").toString(),
+                                documentSnapshot.get("product_title").toString(),
+                               (Integer) documentSnapshot.get("product_price"),
+                               (Integer) documentSnapshot.get("product_rating")));
+                    }
+
+
+                    projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+                    productRecycler.setLayoutManager(projectLinearLayoutManager);
+                    ViewAllAdapter adapter = new ViewAllAdapter(productList);
+                    productRecycler.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    loadingDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "rgerehgrt", Toast.LENGTH_SHORT).show();
+
+
+                }
+                else
+                {
+                    loadingDialog.dismiss();
+                }
+
+            }
+        });
+
+
+    }
+
 
 }

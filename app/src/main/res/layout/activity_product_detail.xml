@@ -231,13 +231,6 @@
             app:layout_constraintTop_toBottomOf="@+id/detailTabs"
             android:background="@color/black_overlay"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="968dp" />
-
         <androidx.cardview.widget.CardView
             app:layout_constraintTop_toBottomOf="@id/viewPager"
             app:layout_constraintLeft_toLeftOf="parent"

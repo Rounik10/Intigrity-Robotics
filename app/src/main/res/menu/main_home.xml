@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
@@ -16,5 +15,4 @@
         android:iconTint="@color/black_overlay"
         android:title="@string/action_cart"
         app:showAsAction="always" />
-
 </menu>

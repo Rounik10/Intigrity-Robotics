@@ -1,7 +1,10 @@
 package com.example.intigritirobotics;
 
 import android.os.Bundle;
+import android.view.Menu;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -16,6 +19,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_product_detail);
         ImageSlider imageSlider = findViewById(R.id.imgSlider);
         slideModelList.add(new SlideModel(R.drawable.cart, ScaleTypes.FIT));
@@ -48,4 +52,5 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
         viewPager.setAdapter(adapter);
     }
+
 }

@@ -56,57 +56,43 @@ public class EStoreFragment extends Fragment {
     }
 
     private void loadProject() {
-        firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-
-                    projectList.clear();
-                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                        projectList.add(new CategoryModel(
-                                documentSnapshot.get("index").toString(),
-                                documentSnapshot.get("category_pic").toString(),
-                                documentSnapshot.get("category_title").toString()));
-                    }
-                    firebaseFirestore.collection("SLIDER").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                                    slideModels.add(new SlideModel(
-                                            documentSnapshot.get("pic").toString(),
-                                            null));
-                                }
-                                imageSlider.setImageList(slideModels);
-
-                            }
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
-
-
-                    projectLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-                    projectRecyclerView.setLayoutManager(projectLinearLayoutManager);
-                    CategoryAdapter adapter = new CategoryAdapter(projectList);
-                    projectRecyclerView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                    loadingDialog.dismiss();
-
-
-                } else {
-                    loadingDialog.dismiss();
-                    String error = task.getException().getMessage();
-                    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+        firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                projectList.clear();
+                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                    projectList.add(new CategoryModel(
+                            documentSnapshot.get("index").toString(),
+                            documentSnapshot.get("category_pic").toString(),
+                            documentSnapshot.get("category_title").toString()));
                 }
+                firebaseFirestore.collection("SLIDER").get().addOnCompleteListener(task1 -> {
+                    if (task1.isSuccessful()) {
+                        for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                            slideModels.add(new SlideModel(
+                                    documentSnapshot.get("pic").toString(),
+                                    null));
+                        }
+                        imageSlider.setImageList(slideModels);
+                    }
+                }).addOnFailureListener(e -> {
 
+                });
+
+                projectLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                projectRecyclerView.setLayoutManager(projectLinearLayoutManager);
+                CategoryAdapter adapter = new CategoryAdapter(projectList);
+                projectRecyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                loadingDialog.dismiss();
+
+
+            } else {
+                loadingDialog.dismiss();
+                String error = task.getException().getMessage();
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
             }
-        });
 
+        });
 
     }
 

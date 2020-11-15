@@ -26,36 +26,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_margin="10dp"
-
                 android:background="@drawable/project_toolbar_background"
-
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/AppTheme.popOverlay" />
-
+                app:popupTheme="@style/AppTheme.popOverlay"
+                app:menu="@menu/main_home"/>
         </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/briefTextCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:background="@color/gen_white"
-            android:gravity="center"
-            android:padding="12dp"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.021" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imgCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="18dp"
             android:background="@color/gen_white"
             android:gravity="center"
             app:cardCornerRadius="8dp"
@@ -68,53 +50,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/grey_light"
-                    app:cardCornerRadius="20dp"
-                    app:layout_constraintBottom_toTopOf="@id/itemBriefDetail"
-                    app:layout_constraintLeft_toLeftOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="6dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/ratingPlaceHolder"
-                            android:textSize="20sp" />
-
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:contentDescription="@string/star"
-                            android:src="@drawable/star" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
 
                 <com.denzcoskun.imageslider.ImageSlider
                     android:id="@+id/imgSlider"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:elevation="50dp"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageButton
-                    android:id="@+id/addToFavButton"
-                    android:layout_width="61dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/fav_icon"
-                    android:contentDescription="@string/add_to_fav_button"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.95"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -130,14 +74,27 @@
 
         </androidx.cardview.widget.CardView>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="18dp"
+            android:src="@drawable/fav_icon"
+            android:layout_gravity="bottom|end"
+            android:backgroundTint="@color/grey_light"
+            app:layout_constraintEnd_toEndOf="@id/imgCard"
+            app:layout_constraintTop_toTopOf="@id/imgCard"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/add_to_fav_button" />
+
         <TextView
             android:id="@+id/PriceText"
             android:layout_width="143dp"
             android:layout_height="64dp"
             android:layout_alignParentStart="true"
             android:layout_marginTop="16dp"
-            android:gravity="left"
-            android:padding="6dp"
+            android:gravity="start"
+            android:paddingVertical="6dp"
             android:text="@string/pricePlaceHolder"
             android:textColor="#000"
             android:textSize="26sp"
@@ -148,7 +105,7 @@
             app:layout_constraintTop_toBottomOf="@+id/imgCard" />
 
         <TextView
-            android:id="@+id/savings"
+            android:id="@+id/cut_price"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_below="@+id/PriceText"
@@ -160,8 +117,6 @@
             android:textColor="#80000000"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/PriceText"
-            app:layout_constraintEnd_toStartOf="@+id/inStockText"
-            app:layout_constraintHorizontal_bias="0.227"
             app:layout_constraintStart_toEndOf="@+id/PriceText" />
 
         <TextView
@@ -176,32 +131,35 @@
             android:text="@string/in_stock"
             android:textColor="@color/gen_white"
             android:textSize="24sp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.975"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cut_price"
             app:layout_constraintTop_toBottomOf="@+id/imgCard" />
 
         <Button
             android:id="@+id/buyNowButton"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
             android:text="@string/buy_now"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/savings"
+            app:layout_constraintTop_toBottomOf="@+id/cut_price"
             app:layout_constraintWidth_percent="0.48" />
 
         <Button
             android:id="@+id/addToCartButton"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="6dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/add_to_cart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/savings"
+            app:layout_constraintStart_toEndOf="@+id/buyNowButton"
+            app:layout_constraintTop_toBottomOf="@id/cut_price"
             app:layout_constraintWidth_percent="0.48" />
 
         <com.google.android.material.tabs.TabLayout
@@ -214,7 +172,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/buyNowButton"
-            app:layout_constraintVertical_bias="0.047"
+            app:layout_constraintVertical_bias="0.020"
             app:tabIndicatorColor="@color/colorPrimary" />
 
         <androidx.viewpager.widget.ViewPager
@@ -224,7 +182,6 @@
             android:layout_marginHorizontal="8dp"
             android:background="@color/gen_white"
             android:padding="12dp"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailTabs" />

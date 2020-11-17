@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.intigritirobotics.CategoryAdapter;
 import com.example.intigritirobotics.CategoryModel;
@@ -70,7 +71,7 @@ public class EStoreFragment extends Fragment {
                         for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                             slideModels.add(new SlideModel(
                                     documentSnapshot.get("pic").toString(),
-                                    null));
+                                    ScaleTypes.FIT));
                         }
                         imageSlider.setImageList(slideModels);
                     }

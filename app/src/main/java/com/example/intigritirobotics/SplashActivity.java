@@ -12,6 +12,7 @@ public class SplashActivity extends AppCompatActivity {
     SharedPreferences pref;
     Intent intent;
 
+
     private static int SPLASH_TIME_OUT=3000;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -19,10 +20,6 @@ public class SplashActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash2);
-
-
-
-
 
         new Handler().postDelayed(new Runnable()
         {

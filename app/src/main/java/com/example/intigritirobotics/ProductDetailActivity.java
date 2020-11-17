@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -24,15 +26,32 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private final List<SlideModel> slideModelList = new ArrayList<>();
     public FirebaseFirestore firebaseFirestore;
-
+    Button addToCartButton;
+    String productPath;
+    String userPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
+
         firebaseFirestore = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_product_detail);
+
+        productPath = "/CATEGORY/1AcKQNSDSQqnpvA5e4vN/products/81PeFK4fF8HuTOSxBFUd";
+        userPath = "";
         loadProductDetails();
+        addToCartButton = findViewById(R.id.addToCartButton);
+        addToCartButton.setOnClickListener(view -> addItemToCart());
+    }
+
+    private void addItemToCart() {
+//
+//        firebaseFirestore.collection("USERS")
+//                .document("")
+//                .collection("My Cart");
+
+        Toast.makeText(this, "Item added to the cart", Toast.LENGTH_SHORT).show();
     }
 
     private void prepareViewPager(ViewPager viewPager, ArrayList<String> arrayList, String details, String spec, String other) {
@@ -54,7 +73,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         String category_id = "1AcKQNSDSQqnpvA5e4vN"; // Replace with intent extras variables
         int product_index = 0;
 
-        firebaseFirestore.collection("/CATEGORY/1AcKQNSDSQqnpvA5e4vN/products")
+        firebaseFirestore.collection("/CATEGORY/"+category_id+"/products")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

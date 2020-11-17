@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,8 +44,8 @@ public class SignUpActivity extends AppCompatActivity {
     private String e, p, ps, emailpattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
     private ProgressBar pb1;
     private FirebaseFirestore firebaseFirestore;
-    SharedPreferences pref;
-
+    public static SharedPreferences pref;
+    public static String currentUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,26 +201,28 @@ public class SignUpActivity extends AppCompatActivity {
                                     Map<Object, String> userdata = new HashMap<>();
                                     userdata.put("User Name", nm1.getText().toString());
                                     firebaseFirestore.collection("USERS")
-                                            .add(userdata)
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                            .document(fba.getUid().toString())
+                                            .set(userdata)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                    if (task.isSuccessful()) {
-
-                                                        SharedPreferences.Editor editor = pref.edit();
-                                                        editor.putString("username", e);
-                                                        editor.putString("password", p);
-                                                        editor.commit();
-                                                        HomeShow();
-                                                        finish();
-                                                    } else {
-                                                        String error = task.getException().getMessage();
-                                                        em1.setError(error);
-                                                        pb1.setVisibility(View.INVISIBLE);
-                                                        su1.setEnabled(true);
-                                                    }
+                                                public void onSuccess(Void aVoid) {
+                                                    SharedPreferences.Editor editor = pref.edit();
+                                                    editor.putString("username", e);
+                                                    editor.putString("password", p);
+                                                    editor.apply();
+                                                    HomeShow();
+                                                    currentUID = fba.getUid();
+                                                    finish();
                                                 }
-                                            });
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            String error = task.getException().getMessage();
+                                            em1.setError(error);
+                                            pb1.setVisibility(View.INVISIBLE);
+                                            su1.setEnabled(true);
+                                        }
+                                    });
 
                                 } else {
                                     String error = task.getException().getMessage();
@@ -263,5 +268,3 @@ public class SignUpActivity extends AppCompatActivity {
         finish();
     }
 }
-
-

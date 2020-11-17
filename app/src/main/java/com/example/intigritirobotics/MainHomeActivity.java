@@ -2,7 +2,10 @@ package com.example.intigritirobotics;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
@@ -34,6 +37,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.intigritirobotics.SignUpActivity.pref;
+
 public class
 
 
@@ -61,7 +66,7 @@ MainHomeActivity extends AppCompatActivity {
             }
         });
 
-         loadingDialog = new Dialog(MainHomeActivity.this);
+        loadingDialog = new Dialog(MainHomeActivity.this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -136,4 +141,13 @@ MainHomeActivity extends AppCompatActivity {
 
     }
 
+    public void logout(MenuItem item) {
+        pref = getSharedPreferences("user_details", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.apply();
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

@@ -57,13 +57,9 @@ MainHomeActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         firebaseFirestore  =FirebaseFirestore.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent myIntent = new Intent(MainHomeActivity.this, ProductDetailActivity.class);
-                startActivity(myIntent);
-            }
+        fab.setOnClickListener(view -> {
+            Intent myIntent = new Intent(MainHomeActivity.this, ProductDetailActivity.class);
+            startActivity(myIntent);
         });
 
         loadingDialog = new Dialog(MainHomeActivity.this);

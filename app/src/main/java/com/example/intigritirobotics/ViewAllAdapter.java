@@ -6,20 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-
 import java.util.List;
 
-public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHolder>{
-    private List<ViewAllModel> viewAllModelList;
 
-    public ViewAllAdapter(List<ViewAllModel> viewAllModelList) {
-        this.viewAllModelList = viewAllModelList;
+public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHolder> {
+
+    private List<ViewAllModel> ViewAllModelList;
+
+    public ViewAllAdapter(List<ViewAllModel> ViewAllModelList) {
+        this.ViewAllModelList = ViewAllModelList;
     }
 
     @NonNull
@@ -31,19 +30,17 @@ public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        String id = viewAllModelList.get(position).getId();
-        String resource = viewAllModelList.get(position).getImage();
-        String title = viewAllModelList.get(position).getTitle();
-        int price = viewAllModelList.get(position).getFinalPrice();
-        int rating = viewAllModelList.get(position).getTotalRating();
-        viewHolder.setData(id,resource,title,price,rating);
+        String index = ViewAllModelList.get(position).getId();
+        String resource = ViewAllModelList.get(position).getImage();
+        String title = ViewAllModelList.get(position).getTitle();
+        int price = ViewAllModelList.get(position).getFinalPrice();
+        float rating = ViewAllModelList.get(position).getTotalRating();
+        viewHolder.setData(index,resource,title, price, rating);
     }
-
-
 
     @Override
     public int getItemCount() {
-        return viewAllModelList.size();
+        return ViewAllModelList.size();
     }
 
 
@@ -51,35 +48,35 @@ public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView pic;
-        private TextView ProductTitle;
-        private TextView Price;
-        private TextView Rating;
-
-
+        private TextView CategoryTitle;
+        private TextView ProductPrice;
+        private TextView ProductRating;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             pic = itemView.findViewById(R.id.product_preview_pic);
-            ProductTitle = itemView.findViewById(R.id.product_preview_title);
-            Price = itemView.findViewById(R.id.product_preview_price);
-            Rating = itemView.findViewById(R.id.product_preview_rating);
-
-
+            CategoryTitle = itemView.findViewById(R.id.product_preview_title);
+            ProductRating = itemView.findViewById(R.id.product_preview_rating);
+            ProductPrice = itemView.findViewById(R.id.product_preview_price);
         }
-
-        private void  setData(String id,String resource,String title,int price,int rating)
+        private void  setData( final String index, String resource, String title, int price, float rating)
         {
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
-            ProductTitle.setText(title);
-            Price.setText(price);
-            Rating.setText(rating);
-
+            CategoryTitle.setText(title);
+            String priceText = "Rs." + price +"/-";
+            String ratingText = ""+ rating;
+            ProductPrice.setText(priceText);
+            ProductRating.setText(ratingText);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent( itemView.getContext(),ViewAllActivity.class);
-                    intent.putExtra("ProductId",id);
+                    Intent intent = new Intent( itemView.getContext(),ProductDetailActivity.class);
+                    intent.putExtra("Index",index);
+                    intent.putExtra("Title",title);
+                    intent.putExtra("ID", index);
+                    intent.putExtra("Price",""+price);
+                    intent.putExtra("Rating",""+rating);
                     itemView.getContext().startActivity(intent);
                 }
             });

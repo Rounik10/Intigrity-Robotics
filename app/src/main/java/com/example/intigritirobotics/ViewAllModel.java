@@ -4,10 +4,10 @@ public class ViewAllModel {
     private String Id;
     private String Image;
     private String Title;
-    private int TotalRating;
+    private float TotalRating;
     private int FinalPrice;
 
-    public ViewAllModel(String id, String image, String title, int totalRating, int finalPrice) {
+    public ViewAllModel(String id, String image, String title, float totalRating, int finalPrice) {
         Id = id;
         Image = image;
         Title = title;
@@ -39,7 +39,7 @@ public class ViewAllModel {
         Title = title;
     }
 
-    public int getTotalRating() {
+    public float getTotalRating() {
         return TotalRating;
     }
 
@@ -54,4 +54,5 @@ public class ViewAllModel {
     public void setFinalPrice(int finalPrice) {
         FinalPrice = finalPrice;
     }
+
 }

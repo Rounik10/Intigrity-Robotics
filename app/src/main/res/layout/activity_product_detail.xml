@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <ScrollView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_light"
@@ -17,7 +16,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="70dp">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -64,6 +64,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:elevation="50dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    app:iss_selected_dot="@color/colorPrimary"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -76,6 +78,8 @@
                     android:padding="10dp"
                     android:text="@string/productBriefPlaceHolder"
                     android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/imgSlider" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -147,7 +151,7 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/detailTabs"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:background="@color/gen_white"
@@ -170,7 +174,7 @@
             app:layout_constraintTop_toBottomOf="@+id/detailTabs" />
 
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_marginTop="13dp"

@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
@@ -40,7 +39,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         price = intent.getStringExtra("Price");
-        Toast.makeText(this, price, Toast.LENGTH_SHORT).show();;
+        Toast.makeText(this, price, Toast.LENGTH_SHORT).show();
         rating = intent.getStringExtra("Rating");
         title = intent.getStringExtra("Title");
         index = intent.getStringExtra("Index");
@@ -49,7 +48,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
 
 
-        productPath = "/CATEGORY/1AcKQNSDSQqnpvA5e4vN/products/81PeFK4fF8HuTOSxBFUd";
+        productPath = "/CATEGORY/"+"1AcKQNSDSQqnpvA5e4vN"+"/products/"+id;
         userPath = "";
         loadProductDetails();
         addToCartButton = findViewById(R.id.addToCartButton);
@@ -82,10 +81,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void loadProductDetails() {
-        String category_id = "1AcKQNSDSQqnpvA5e4vN"; // Replace with intent extras variables
+
         int product_index = 0;
 
-        firebaseFirestore.collection("/CATEGORY/"+category_id+"/products")
+        firebaseFirestore.collection("/CATEGORY/1AcKQNSDSQqnpvA5e4vN/products")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

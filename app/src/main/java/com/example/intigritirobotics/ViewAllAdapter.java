@@ -75,6 +75,7 @@ public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHold
                     intent.putExtra("Index",index);
                     intent.putExtra("Title",title);
                     intent.putExtra("ID", index);
+                    intent.putExtra("Category ID","");
                     intent.putExtra("Price",""+price);
                     intent.putExtra("Rating",""+rating);
                     itemView.getContext().startActivity(intent);

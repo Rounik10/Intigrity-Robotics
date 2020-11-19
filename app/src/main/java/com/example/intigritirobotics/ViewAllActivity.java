@@ -30,11 +30,11 @@ import java.util.List;
 import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
-public class ViewAllActivity extends AppCompatActivity {
+public class ViewAllActivity extends AppCompatActivity
+{
     private List<ViewAllModel> productList = new ArrayList<>();
     private RecyclerView productRecycler;
     private LinearLayoutManager projectLinearLayoutManager;
-
     private FirebaseFirestore firebaseFirestore;
     private  String ToolbarTitle;
     @Override
@@ -98,6 +98,5 @@ public class ViewAllActivity extends AppCompatActivity {
         });
 
     }
-    
 
 }

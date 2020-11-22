@@ -39,7 +39,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         price = intent.getStringExtra("Price");
-        Toast.makeText(this, price, Toast.LENGTH_SHORT).show();
         rating = intent.getStringExtra("Rating");
         title = intent.getStringExtra("Title");
         index = intent.getStringExtra("Index");
@@ -47,7 +46,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_product_detail);
 
-
+        Toast.makeText(this, "Index is"+index, Toast.LENGTH_SHORT).show();
+        Log.d("Deb","Index:"+index+"\nid:"+id);
         productPath = "/CATEGORY/"+"1AcKQNSDSQqnpvA5e4vN"+"/products/"+id;
         userPath = "";
         loadProductDetails();
@@ -82,9 +82,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void loadProductDetails() {
 
-        int product_index = 0;
-
-        firebaseFirestore.document("/PRODUCTS/Kb9SIeBEklDphZ73h9qQ")
+        String docPath = "/PRODUCTS/" + id.substring(1); // Extra space was there //
+        firebaseFirestore.document(docPath)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

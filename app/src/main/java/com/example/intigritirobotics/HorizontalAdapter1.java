@@ -13,18 +13,18 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 
-public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHolder> {
+public class HorizontalAdapter1 extends RecyclerView.Adapter<HorizontalAdapter1.ViewHolder> {
 
     private List<ViewAllModel> ViewAllModelList;
 
-    public ViewAllAdapter(List<ViewAllModel> ViewAllModelList) {
+    public HorizontalAdapter1(List<ViewAllModel> ViewAllModelList) {
         this.ViewAllModelList = ViewAllModelList;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.product_preview_layout,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.horizontal_product_layout_item,viewGroup,false);
         return new ViewHolder(view);
     }
 
@@ -43,6 +43,8 @@ public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHold
         return ViewAllModelList.size();
     }
 
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView pic;
@@ -52,10 +54,10 @@ public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            pic = itemView.findViewById(R.id.product_preview_pic);
-            CategoryTitle = itemView.findViewById(R.id.product_preview_title);
-            ProductRating = itemView.findViewById(R.id.product_preview_rating);
-            ProductPrice = itemView.findViewById(R.id.product_preview_price);
+            pic = itemView.findViewById(R.id.horizontal_product_preview_pic);
+            CategoryTitle = itemView.findViewById(R.id.horizontal_product_preview_title);
+            ProductRating = itemView.findViewById(R.id.horizontal_product_preview_rating);
+            ProductPrice = itemView.findViewById(R.id.horizontal_product_preview_price);
         }
         private void  setData( final String index, String resource, String title, int price, float rating)
         {

@@ -18,11 +18,15 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.intigritirobotics.CategoryAdapter;
 import com.example.intigritirobotics.CategoryModel;
+import com.example.intigritirobotics.HorizontalAdapter1;
 import com.example.intigritirobotics.MainHomeActivity;
 import com.example.intigritirobotics.R;
+import com.example.intigritirobotics.ViewAllActivity;
+import com.example.intigritirobotics.ViewAllModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,11 +40,11 @@ import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 public class EStoreFragment extends Fragment {
 
     private List<CategoryModel> projectList = new ArrayList<>();
-    private RecyclerView projectRecyclerView;
+    private RecyclerView projectRecyclerView, horizontalItemsRecyclerview;
     private ImageSlider imageSlider;
     private List<SlideModel> slideModels = new ArrayList<>();
-
-    private LinearLayoutManager projectLinearLayoutManager;
+    private List<ViewAllModel> horizontalList = new ArrayList<>();
+    private LinearLayoutManager projectLinearLayoutManager, horizontalLinearLayoutManager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class EStoreFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_e_store, container, false);
 
         projectRecyclerView = view.findViewById(R.id.category_recyclerview);
+        horizontalItemsRecyclerview = view.findViewById(R.id.horizontal_items_recyclerview);
+        horizontalLinearLayoutManager = new LinearLayoutManager(getContext());
         projectLinearLayoutManager = new LinearLayoutManager(getContext());
         imageSlider = view.findViewById(R.id.image_slider);
         loadProject();
@@ -87,6 +93,7 @@ public class EStoreFragment extends Fragment {
                 loadingDialog.dismiss();
 
 
+
             } else {
                 loadingDialog.dismiss();
                 String error = task.getException().getMessage();
@@ -94,6 +101,34 @@ public class EStoreFragment extends Fragment {
             }
 
         });
+
+        /////////////////////////////////////////////////////////////////// HORIZONTAL ///////////////////////////////////////////////////////
+        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task1 -> {
+            int i =1;
+            if (task1.isSuccessful()) {
+                for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+
+                    String id = documentSnapshot.get("id").toString();
+                    String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
+                    String title = documentSnapshot.get("product title").toString();
+                    float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
+                    int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
+                    horizontalList.add(new ViewAllModel(id, picUrl, title, rating, price));
+                    Toast.makeText(getContext(), ""+i, Toast.LENGTH_LONG).show();
+                    i++;
+                }
+            }
+        }).addOnFailureListener(e -> {
+
+        });
+
+        horizontalLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        horizontalItemsRecyclerview.setLayoutManager(horizontalLinearLayoutManager);
+        HorizontalAdapter1 adapter1 = new HorizontalAdapter1(horizontalList);
+        horizontalItemsRecyclerview.setAdapter(adapter1);
+        adapter1.notifyDataSetChanged();
+        loadingDialog.dismiss();
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 

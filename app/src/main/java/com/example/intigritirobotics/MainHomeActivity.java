@@ -39,10 +39,7 @@ import java.util.List;
 
 import static com.example.intigritirobotics.SignUpActivity.pref;
 
-public class
-
-
-MainHomeActivity extends AppCompatActivity {
+public class MainHomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore firebaseFirestore;

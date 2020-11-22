@@ -8,34 +8,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.denzcoskun.imageslider.ImageSlider;
-import com.denzcoskun.imageslider.constants.ScaleTypes;
-import com.denzcoskun.imageslider.models.SlideModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
-public class ViewAllActivity extends AppCompatActivity
-{
-    private List<ViewAllModel> productList = new ArrayList<>();
+public class ViewAllActivity extends AppCompatActivity {
+
     private RecyclerView productRecycler;
     private LinearLayoutManager projectLinearLayoutManager;
+    private List<ViewAllModel> productList = new ArrayList<>();
     private FirebaseFirestore firebaseFirestore;
+    private List<ViewAllModel> recList = new ArrayList<>();
     private  String ToolbarTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,27 +61,56 @@ public class ViewAllActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-    private void loadProducts()
-    {
+
+    private void loadProducts() {
+
         firebaseFirestore.collection("/CATEGORY/1AcKQNSDSQqnpvA5e4vN/products").get().addOnCompleteListener(task -> {
+
             if (task.isSuccessful()) {
-                productList.clear();
+
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    productList.add(new ViewAllModel(
-                            documentSnapshot.get("id").toString(),
-                            documentSnapshot.get("product_pic").toString().split(", ")[0],
-                            documentSnapshot.get("product_title").toString(),
-                            Float.parseFloat(String.valueOf(documentSnapshot.get("product_rating"))),
-                            Integer.parseInt(String.valueOf(documentSnapshot.get("product_price")))
-                    ));
+
+                    int productId = Integer.parseInt(documentSnapshot.get("product_index").toString());
+
+                    firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task1 -> {
+
+                        if(task1.isSuccessful()) {
+
+                            DocumentSnapshot products = task1.getResult().getDocuments().get(productId);
+
+                            String id = products.get("id").toString();
+                            String picUrl = products.get("product_pic").toString().split(", ")[0];
+                            String title = products.get("product title").toString();
+                            float rating = Float.parseFloat(String.valueOf(products.get("product rating")));
+                            int price = Integer.parseInt(String.valueOf(products.get("product price")));
+
+                            ViewAllModel prodModel = new ViewAllModel(id, picUrl, title, rating, price);
+
+                            formList(prodModel);
+
+//                            Log.d("Fet1", id);
+//                            Log.d("Fet11", picUrl);
+//                            Log.d("Fet11", title);
+//                            Log.d("Fet11", ""+rating);
+//                            Log.d("Fet11", ""+price);
+
+                        } else {
+                            Log.w("Fetch Product", "Product fetching failed");
+                        }
+
+                        for(ViewAllModel x: productList) {
+                            Log.d("Fet", x.getImage());
+                            Log.d("Fet", x.getId());
+                            Log.d("Fet", x.getTitle());
+                            Log.d("Fet", ""+x.getFinalPrice());
+                            Log.d("Fet", ""+x.getTotalRating());
+                        }
+
+                    });
+
                 }
-                
-                projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-                productRecycler.setLayoutManager(projectLinearLayoutManager);
-                ViewAllAdapter adapter = new ViewAllAdapter(productList);
-                productRecycler.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                loadingDialog.dismiss();
+
+                Log.d("Fet", "Product list size: "+productList.size());
 
             } else {
                 loadingDialog.dismiss();
@@ -97,6 +120,22 @@ public class ViewAllActivity extends AppCompatActivity
 
         });
 
+        projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        productRecycler.setLayoutManager(projectLinearLayoutManager);
+        ViewAllAdapter adapter = new ViewAllAdapter(productList);
+        productRecycler.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        loadingDialog.dismiss();
+
+//        Log.d("Fet", ""+recList.size());
+//                productList.add(new ViewAllModel(
+//                "product.get().toString()",
+//                "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSvj_XtCdGmER6V7rg0CFvop3j1uTZ4yQ2vI3DyvVa7_nT862WFegNxBejZQMXS65ISN6ACb5U&usqp=CAc",
+//                "Title ",
+//                4.2F, 129));
+    }
+    private void formList(ViewAllModel prodModel) {
+        recList.add(prodModel);
     }
 
 }

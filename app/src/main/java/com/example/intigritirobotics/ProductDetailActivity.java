@@ -84,11 +84,11 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         int product_index = 0;
 
-        firebaseFirestore.collection("/CATEGORY/1AcKQNSDSQqnpvA5e4vN/products")
+        firebaseFirestore.document("/PRODUCTS/Kb9SIeBEklDphZ73h9qQ")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        DocumentSnapshot doc = Objects.requireNonNull(task.getResult()).getDocuments().get(product_index);
+                        DocumentSnapshot doc = Objects.requireNonNull(task.getResult());
                         loadDataToProduct(doc);
                     } else {
                         Log.w("Product", "Error getting documents.", task.getException());
@@ -98,7 +98,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void loadDataToProduct(DocumentSnapshot product) {
-        String in_stock = Objects.requireNonNull(product.get("in_stock")).toString();
+        String in_stock = Objects.requireNonNull(product.get("in stock")).toString();
 
         // In stock
         if(in_stock.equals("false")) {
@@ -118,12 +118,10 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         for(String imgUrl: productPicUrls) slideModelList.add(new SlideModel(imgUrl, null));
 
-
         imageSlider.setImageList(slideModelList);
 
-
         TextView briefText = findViewById(R.id.itemBriefDetail);
-        briefText.setText(Objects.requireNonNull(product.get("product_title")).toString());
+        briefText.setText(Objects.requireNonNull(product.get("product title")).toString());
 
         // Tabs
         ArrayList<String> arrayList = new ArrayList<>();
@@ -155,7 +153,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         TextView avgRatingText = findViewById(R.id.averageRatingText);
         avgRatingText.setText(getAvg(product));
 
-        String total = Objects.requireNonNull(product.get("total_ratings")).toString();
+        String total = Objects.requireNonNull(product.get("product rating")).toString();
         TextView totalRatings = findViewById(R.id.number_of_rating_text);
         totalRatings.setText(total);
 
@@ -170,7 +168,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private String getAvg(DocumentSnapshot product) {
         float sum = 0, total = 0, temp;
         for(int i=1;i<=5;i++) {
-            temp = Integer.parseInt(Objects.requireNonNull(product.get(i + "_stars")).toString());
+            temp = Integer.parseInt(Objects.requireNonNull(product.get(i + "_star")).toString());
             sum += i*temp;
             total += temp;
         }
@@ -180,7 +178,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     void setProgressInRacingBars(ProgressBar progressBar, int starNo, DocumentSnapshot product) {
-        int stars = Integer.parseInt(Objects.requireNonNull(product.get(starNo + "_stars")).toString());
+        int stars = Integer.parseInt(Objects.requireNonNull(product.get(starNo + "_star")).toString());
         int total = Integer.parseInt(Objects.requireNonNull(product.get("total_ratings")).toString());
         progressBar.setMax(total);
         progressBar.setProgress(stars);

@@ -15,6 +15,10 @@ public class ViewAllModel {
         FinalPrice = finalPrice;
     }
 
+    @Override
+    public String toString(){
+        return Id+"\n"+ Image +"\n" + Title +"\n" + TotalRating + "\n" + FinalPrice;
+    }
     public String getId() {
         return Id;
     }

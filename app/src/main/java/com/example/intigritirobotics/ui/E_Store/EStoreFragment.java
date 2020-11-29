@@ -35,7 +35,7 @@ public class EStoreFragment extends Fragment {
     private List<SlideModel> slideModels = new ArrayList<>();
     private List<ViewAllModel> horizontalList = new ArrayList<>();
     private LinearLayoutManager projectLinearLayoutManager, horizontalLinearLayoutManager;
-
+    public String categoryId;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -58,7 +58,7 @@ public class EStoreFragment extends Fragment {
                 projectList.clear();
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                     projectList.add(new CategoryModel(
-                            documentSnapshot.get("index").toString(),
+                            documentSnapshot.getId(),
                             documentSnapshot.get("category_pic").toString(),
                             documentSnapshot.get("category_title").toString()));
                 }
@@ -98,7 +98,7 @@ public class EStoreFragment extends Fragment {
             if (task1.isSuccessful()) {
                 for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
 
-                    String id = documentSnapshot.get("id").toString();
+                    String id = documentSnapshot.getId();
                     String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
                     String title = documentSnapshot.get("product title").toString();
                     float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));

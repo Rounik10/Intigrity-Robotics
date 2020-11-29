@@ -17,7 +17,8 @@
 
         <activity android:name=".ui.Support.SupportActivity" />
         <activity android:name=".ui.Setting.SettingActivity" />
-        <activity android:name=".ui.MyCart.MyCartActivity" />
+        <activity android:name=".ui.MyCart.MyCartActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
         <activity
             android:name=".ui.MyAccount.UserProfileActivity"
             android:screenOrientation="portrait"

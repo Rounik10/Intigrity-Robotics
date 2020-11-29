@@ -312,6 +312,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="16dp"/>
     <RatingBar
+        android:id="@+id/rating_stars"
+        android:stepSize="1.0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"

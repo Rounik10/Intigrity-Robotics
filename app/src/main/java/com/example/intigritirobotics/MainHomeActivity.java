@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -37,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.intigritirobotics.SignUpActivity.currentUID;
 import static com.example.intigritirobotics.SignUpActivity.pref;
 
 public class MainHomeActivity extends AppCompatActivity {
@@ -44,6 +46,8 @@ public class MainHomeActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore firebaseFirestore;
     public static Dialog loadingDialog;
+    public static String currentUserUId;
+    public FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,11 @@ public class MainHomeActivity extends AppCompatActivity {
             Intent myIntent = new Intent(MainHomeActivity.this, ProductDetailActivity.class);
             startActivity(myIntent);
         });
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        currentUserUId = firebaseAuth.getUid();
+
+        Log.d("CURRENT ID",currentUserUId);
 
         loadingDialog = new Dialog(MainHomeActivity.this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -101,6 +110,20 @@ public class MainHomeActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_home, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.action_cart:
+                 startActivity(new Intent(this, MyCartActivity.class));
+                return true;
+            case R.id.action_search:
+                Toast.makeText(this,"Search", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

@@ -1,12 +1,12 @@
 package com.example.intigritirobotics;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,28 +15,35 @@ import androidx.viewpager.widget.ViewPager;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     private final List<SlideModel> slideModelList = new ArrayList<>();
     private String price, rating, index, title, id;
+    private int total, prev_rating;
     public FirebaseFirestore firebaseFirestore;
     Button addToCartButton;
-    String productPath;
     String userPath;
+    int is_app_starting;
+    private TextView totalRatings;
+    private RatingBar ratingBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
-
         Intent intent = getIntent();
         price = intent.getStringExtra("Price");
         rating = intent.getStringExtra("Rating");
@@ -46,23 +53,78 @@ public class ProductDetailActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_product_detail);
 
-        Toast.makeText(this, "Index is"+index, Toast.LENGTH_SHORT).show();
+        is_app_starting = 0;
+        ratingBar = (RatingBar)findViewById(R.id.rating_stars);
+        totalRatings  = (TextView) findViewById(R.id.number_of_rating_text);
+
         Log.d("Deb","Index:"+index+"\nid:"+id);
-        productPath = "/CATEGORY/"+"1AcKQNSDSQqnpvA5e4vN"+"/products/"+id;
         userPath = "";
         loadProductDetails();
         addToCartButton = findViewById(R.id.addToCartButton);
         addToCartButton.setOnClickListener(view -> addItemToCart());
+
+        Log.d("Is rating null", ""+ratingBar.getRating());
+
+        ratingBar.setOnRatingBarChangeListener((ratingBar, v, b) -> {
+
+            is_app_starting++;
+
+            Map<String, String> map = new HashMap<>();
+            map.put("Rating",""+v);
+
+            firebaseFirestore.document("USERS/"+currentUserUId+"/My Ratings/"+id).set(map);
+
+            DocumentReference docRef = firebaseFirestore.document("PRODUCTS/"+id);
+
+            docRef.get().addOnCompleteListener(task -> {
+                if(task.isSuccessful() && is_app_starting>1) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    String s = documentSnapshot.get((v+"").substring(0,1)+"_star").toString();
+                    int x = Integer.parseInt(s);
+
+                    Log.d("prev_rat", "Bahar"+prev_rating);
+                    if(prev_rating!=0){
+                        Log.d("prev_rat", ""+prev_rating);
+                        int y = Integer.parseInt(documentSnapshot.get(prev_rating+"_star").toString()) - 1;
+                        docRef.update(prev_rating+"_star",""+y);
+                    }
+                    Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+                    x++;
+                    docRef.update((v+"").substring(0,1)+"_star",""+x);
+                }
+            });
+
+        });
+
+        firebaseFirestore.document("USERS/"+currentUserUId+"/My Ratings/"+id).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful())  {
+                ratingBar.setRating(Float.parseFloat(task.getResult().get("Rating").toString()));
+            }
+        });
+
     }
 
     private void addItemToCart() {
-        Map<String, String> idMap = new HashMap<>();
-        idMap.put("Id", id);
-        firebaseFirestore.collection("USERS")
-                .document("cNulLD3zkhRYH64gZhaLNpU0cc02")
-                .collection("My Cart").add(idMap);
+        Map<String, String> map = new HashMap<>();
+        map.put("Id",id);
 
-        Toast.makeText(this, "Item added to the cart", Toast.LENGTH_SHORT).show();
+        firebaseFirestore.document("/USERS/"+currentUserUId+"/My Cart/"+id).get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if(documentSnapshot.exists()){
+                            Toast.makeText(getApplicationContext(),"Item is already added in the cart", Toast.LENGTH_SHORT).show();
+                        } else{
+                            firebaseFirestore.collection("USERS")
+                                    .document(currentUserUId)
+                                    .collection("My Cart").document(id).set(map);
+                            Toast.makeText(getApplicationContext(),"Item was added to the cart", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(),"Dummy text", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 
     private void prepareViewPager(ViewPager viewPager, ArrayList<String> arrayList, String details, String spec, String other) {
@@ -82,12 +144,13 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void loadProductDetails() {
 
-        String docPath = "/PRODUCTS/" + id.substring(1); // Extra space was there //
+        String docPath = "/PRODUCTS/" + id; // Extra space was there //
         firebaseFirestore.document(docPath)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot doc = Objects.requireNonNull(task.getResult());
+                        Log.d("doc", doc.getId());
                         loadDataToProduct(doc);
                     } else {
                         Log.w("Product", "Error getting documents.", task.getException());
@@ -97,8 +160,12 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void loadDataToProduct(DocumentSnapshot product) {
-        String in_stock = Objects.requireNonNull(product.get("in stock")).toString();
 
+        if(product == null) {
+            Log.d("DebX", "Product in null");
+            return;
+        }
+        /*String in_stock = Objects.requireNonNull(product.get("in stock")).toString();
         // In stock
         if(in_stock.equals("false")) {
             TextView inStockText = findViewById(R.id.inStockText);
@@ -108,7 +175,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             buyNow.setEnabled(false);
             Button addToCart = findViewById(R.id.addToCartButton);
             addToCart.setEnabled(false);
-        }
+        }*/
 
         // Slider
         ImageSlider imageSlider = findViewById(R.id.imgSlider);
@@ -121,6 +188,11 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         TextView briefText = findViewById(R.id.itemBriefDetail);
         briefText.setText(Objects.requireNonNull(product.get("product title")).toString());
+
+        // Set Ratings
+        TextView avgRatingText = findViewById(R.id.averageRatingText);
+        avgRatingText.setText(getAvg(product));
+
 
         // Tabs
         ArrayList<String> arrayList = new ArrayList<>();
@@ -148,24 +220,32 @@ public class ProductDetailActivity extends AppCompatActivity {
         MRP.setText(mrpText);
         MRP.setPaintFlags(MRP.getPaintFlags()|Paint.STRIKE_THRU_TEXT_FLAG);
 
-        // Set Ratings
-        TextView avgRatingText = findViewById(R.id.averageRatingText);
-        avgRatingText.setText(getAvg(product));
-
-        String total = Objects.requireNonNull(product.get("product rating")).toString();
-        TextView totalRatings = findViewById(R.id.number_of_rating_text);
-        totalRatings.setText(total);
-
         setProgressInRacingBars(findViewById(R.id.stars1), 1, product);
         setProgressInRacingBars(findViewById(R.id.stars2), 2, product);
         setProgressInRacingBars(findViewById(R.id.stars3), 3, product);
         setProgressInRacingBars(findViewById(R.id.stars4), 4, product);
         setProgressInRacingBars(findViewById(R.id.stars5), 5, product);
 
+        TextView s1 = findViewById(R.id.num_of_1_star);
+        s1.setText(product.get("1_star").toString());
+
+        TextView s2 = findViewById(R.id.num_of_2_stars);
+        s2.setText(product.get("2_star").toString());
+
+        TextView s3 = findViewById(R.id.num_of_3_stars);
+        s3.setText(product.get("3_star").toString());
+
+        TextView s4 = findViewById(R.id.num_of_4_stars);
+        s4.setText(product.get("4_star").toString());
+
+        TextView s5 = findViewById(R.id.num_of_5_stars);
+        s5.setText(product.get("5_star").toString());
+
+        prev_rating = (int) ratingBar.getRating();
     }
 
     private String getAvg(DocumentSnapshot product) {
-        float sum = 0, total = 0, temp;
+        float sum = 0, temp;
         for(int i=1;i<=5;i++) {
             temp = Integer.parseInt(Objects.requireNonNull(product.get(i + "_star")).toString());
             sum += i*temp;
@@ -173,13 +253,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
         String average = ""+sum/total;
         if(average.length()>3) average = average.substring(0,3);
+        totalRatings.setText(""+total);
         return average;
     }
 
     void setProgressInRacingBars(ProgressBar progressBar, int starNo, DocumentSnapshot product) {
         int stars = Integer.parseInt(Objects.requireNonNull(product.get(starNo + "_star")).toString());
-        int total = Integer.parseInt(Objects.requireNonNull(product.get("total_ratings")).toString());
         progressBar.setMax(total);
+        Log.d("Rating",""+stars);
         progressBar.setProgress(stars);
     }
 

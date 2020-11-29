@@ -14,8 +14,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +34,7 @@ public class ViewAllActivity extends AppCompatActivity {
     private List<ViewAllModel> productList = new ArrayList<>();
     private FirebaseFirestore firebaseFirestore;
     private List<ViewAllModel> recList;
-    private  String ToolbarTitle, categoryId;
+    private String ToolbarTitle, categoryId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,30 +73,45 @@ public class ViewAllActivity extends AppCompatActivity {
 
     private void loadProject(){
 
-        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task1 -> {
-            int i =1;
-            if (task1.isSuccessful()) {
-                for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+        String docPath = "/CATEGORY/"+categoryId;
 
-                    String id = documentSnapshot.get("id").toString();
-                    String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
-                    String title = documentSnapshot.get("product title").toString();
-                    float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
-                    int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
-                    productList.add(new ViewAllModel(id, picUrl, title, rating, price));
-                    Toast.makeText(this, ""+i, Toast.LENGTH_SHORT).show();
-                    i++;
+        firebaseFirestore.document(docPath).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot products = task.getResult();
+                List<String> productId = (List<String>) products.get("Product Id Array");
+                Log.d("Itt", products.get("category_title").toString());
+                Log.d("Itt",productId.get(0));
+
+                for(String prod : productId){
+                    String productPath = "/PRODUCTS/"+ prod;
+                    Log.d("Itt",productPath);
+
+                    firebaseFirestore.document(productPath).get().addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            Log.d("Itt",task1.getResult().getId());
+                            DocumentSnapshot documentSnapshot = task1.getResult();
+                            String id = documentSnapshot.get("id").toString();
+                            String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
+                            String title = documentSnapshot.get("product title").toString();
+                            float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
+                            int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
+                            productList.add(new ViewAllModel(id, picUrl, title, rating, price));
+
+                            projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+                            productRecycler.setLayoutManager(projectLinearLayoutManager);
+                            ViewAllAdapter adapter1 = new ViewAllAdapter(productList);
+                            productRecycler.setAdapter(adapter1);
+                            adapter1.notifyDataSetChanged();
+                            MainHomeActivity.loadingDialog.dismiss();
+                        }
+                    }).addOnFailureListener(e -> {
+
+                    });
                 }
-                projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-                productRecycler.setLayoutManager(projectLinearLayoutManager);
-                ViewAllAdapter adapter1 = new ViewAllAdapter(productList);
-                productRecycler.setAdapter(adapter1);
-                adapter1.notifyDataSetChanged();
-                loadingDialog.dismiss();
-            }
-        }).addOnFailureListener(e -> {
 
+            }
         });
+
 
     }
 }

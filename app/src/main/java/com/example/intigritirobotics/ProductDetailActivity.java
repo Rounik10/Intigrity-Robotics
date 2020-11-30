@@ -9,9 +9,11 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
+
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.tabs.TabLayout;
@@ -26,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 
 public class ProductDetailActivity extends AppCompatActivity {
@@ -39,6 +42,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     int is_app_starting;
     private TextView totalRatings;
     private RatingBar ratingBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,51 +58,54 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
 
         is_app_starting = 0;
-        ratingBar = (RatingBar)findViewById(R.id.rating_stars);
-        totalRatings  = (TextView) findViewById(R.id.number_of_rating_text);
+        ratingBar = (RatingBar) findViewById(R.id.rating_stars);
+        totalRatings = (TextView) findViewById(R.id.number_of_rating_text);
 
-        Log.d("Deb","Index:"+index+"\nid:"+id);
+        Log.d("Deb", "Index:" + index + "\nid:" + id);
         userPath = "";
         loadProductDetails();
         addToCartButton = findViewById(R.id.addToCartButton);
         addToCartButton.setOnClickListener(view -> addItemToCart());
 
-        Log.d("Is rating null", ""+ratingBar.getRating());
+        Log.d("Is rating null", "" + ratingBar.getRating());
 
         ratingBar.setOnRatingBarChangeListener((ratingBar, v, b) -> {
 
             is_app_starting++;
 
             Map<String, String> map = new HashMap<>();
-            map.put("Rating",""+v);
+            map.put("Rating", "" + v);
 
-            firebaseFirestore.document("USERS/"+currentUserUId+"/My Ratings/"+id).set(map);
+            firebaseFirestore.document("USERS/" + currentUserUId + "/My Ratings/" + id).set(map);
 
-            DocumentReference docRef = firebaseFirestore.document("PRODUCTS/"+id);
+            DocumentReference docRef = firebaseFirestore.document("PRODUCTS/" + id);
 
             docRef.get().addOnCompleteListener(task -> {
-                if(task.isSuccessful() && is_app_starting>1) {
+                if (task.isSuccessful() && is_app_starting > 1) {
                     DocumentSnapshot documentSnapshot = task.getResult();
-                    String s = documentSnapshot.get((v+"").substring(0,1)+"_star").toString();
+                    String s = documentSnapshot.get((v + "").substring(0, 1) + "_star").toString();
                     int x = Integer.parseInt(s);
 
-                    Log.d("prev_rat", "Bahar"+prev_rating);
-                    if(prev_rating!=0){
-                        Log.d("prev_rat", ""+prev_rating);
-                        int y = Integer.parseInt(documentSnapshot.get(prev_rating+"_star").toString()) - 1;
-                        docRef.update(prev_rating+"_star",""+y);
+                    Log.d("prev_rat", "Bahar" + prev_rating);
+                    if (prev_rating != 0) {
+                        Log.d("prev_rat", "" + prev_rating);
+                        int y = Integer.parseInt(documentSnapshot.get(prev_rating + "_star").toString()) - 1;
+                        docRef.update(prev_rating + "_star", "" + y);
                     }
                     Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
                     x++;
-                    docRef.update((v+"").substring(0,1)+"_star",""+x);
+                    docRef.update((v + "").substring(0, 1) + "_star", "" + x);
                 }
             });
 
         });
 
-        firebaseFirestore.document("USERS/"+currentUserUId+"/My Ratings/"+id).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful())  {
-                ratingBar.setRating(Float.parseFloat(task.getResult().get("Rating").toString()));
+        firebaseFirestore.document("USERS/" + currentUserUId + "/My Ratings/" + id).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    ratingBar.setRating(Float.parseFloat(documentSnapshot.get("Rating").toString()));
+                }
             }
         });
 
@@ -106,22 +113,22 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void addItemToCart() {
         Map<String, String> map = new HashMap<>();
-        map.put("Id",id);
+        map.put("Id", id);
 
-        firebaseFirestore.document("/USERS/"+currentUserUId+"/My Cart/"+id).get()
+        firebaseFirestore.document("/USERS/" + currentUserUId + "/My Cart/" + id).get()
                 .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         DocumentSnapshot documentSnapshot = task.getResult();
-                        if(documentSnapshot.exists()){
-                            Toast.makeText(getApplicationContext(),"Item is already added in the cart", Toast.LENGTH_SHORT).show();
-                        } else{
+                        if (documentSnapshot.exists()) {
+                            Toast.makeText(getApplicationContext(), "Item is already added in the cart", Toast.LENGTH_SHORT).show();
+                        } else {
                             firebaseFirestore.collection("USERS")
                                     .document(currentUserUId)
                                     .collection("My Cart").document(id).set(map);
-                            Toast.makeText(getApplicationContext(),"Item was added to the cart", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Item was added to the cart", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getApplicationContext(),"Dummy text", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Dummy text", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -130,13 +137,13 @@ public class ProductDetailActivity extends AppCompatActivity {
     private void prepareViewPager(ViewPager viewPager, ArrayList<String> arrayList, String details, String spec, String other) {
         TabLayoutAdapter adapter = new TabLayoutAdapter(getSupportFragmentManager());
         productDetailFragment fragment = new productDetailFragment();
-        for(int i=0; i< arrayList.size(); i++) {
+        for (int i = 0; i < arrayList.size(); i++) {
             Bundle bundle = new Bundle();
-            if(i==0) bundle.putString("title",details);
-            else if(i==1) bundle.putString("title", spec);
-            else bundle.putString("title",other);
+            if (i == 0) bundle.putString("title", details);
+            else if (i == 1) bundle.putString("title", spec);
+            else bundle.putString("title", other);
             fragment.setArguments(bundle);
-            adapter.addFragment(fragment,arrayList.get(i));
+            adapter.addFragment(fragment, arrayList.get(i));
             fragment = new productDetailFragment();
         }
         viewPager.setAdapter(adapter);
@@ -161,7 +168,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void loadDataToProduct(DocumentSnapshot product) {
 
-        if(product == null) {
+        if (product == null) {
             Log.d("DebX", "Product in null");
             return;
         }
@@ -182,7 +189,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         String[] productPicUrls = product.get("product_pic").toString().split(", ");
 
-        for(String imgUrl: productPicUrls) slideModelList.add(new SlideModel(imgUrl, null));
+        for (String imgUrl : productPicUrls) slideModelList.add(new SlideModel(imgUrl, null));
 
         imageSlider.setImageList(slideModelList);
 
@@ -212,13 +219,13 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // Set Price
         TextView priceImageView = findViewById(R.id.PriceText);
-        String priceText = "Rs."+ price +"/-";
+        String priceText = "Rs." + price + "/-";
         priceImageView.setText(priceText);
 
         TextView MRP = findViewById(R.id.cut_price);
         String mrpText = "Rs. " + Objects.requireNonNull(product.get("MRP")).toString() + "/-";
         MRP.setText(mrpText);
-        MRP.setPaintFlags(MRP.getPaintFlags()|Paint.STRIKE_THRU_TEXT_FLAG);
+        MRP.setPaintFlags(MRP.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         setProgressInRacingBars(findViewById(R.id.stars1), 1, product);
         setProgressInRacingBars(findViewById(R.id.stars2), 2, product);
@@ -246,21 +253,21 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private String getAvg(DocumentSnapshot product) {
         float sum = 0, temp;
-        for(int i=1;i<=5;i++) {
+        for (int i = 1; i <= 5; i++) {
             temp = Integer.parseInt(Objects.requireNonNull(product.get(i + "_star")).toString());
-            sum += i*temp;
+            sum += i * temp;
             total += temp;
         }
-        String average = ""+sum/total;
-        if(average.length()>3) average = average.substring(0,3);
-        totalRatings.setText(""+total);
+        String average = "" + sum / total;
+        if (average.length() > 3) average = average.substring(0, 3);
+        totalRatings.setText("" + total);
         return average;
     }
 
     void setProgressInRacingBars(ProgressBar progressBar, int starNo, DocumentSnapshot product) {
         int stars = Integer.parseInt(Objects.requireNonNull(product.get(starNo + "_star")).toString());
         progressBar.setMax(total);
-        Log.d("Rating",""+stars);
+        Log.d("Rating", "" + stars);
         progressBar.setProgress(stars);
     }
 

@@ -90,7 +90,7 @@ public class ViewAllActivity extends AppCompatActivity {
                         if (task1.isSuccessful()) {
                             Log.d("Itt",task1.getResult().getId());
                             DocumentSnapshot documentSnapshot = task1.getResult();
-                            String id = documentSnapshot.get("id").toString();
+                            String id = documentSnapshot.getId();
                             String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
                             String title = documentSnapshot.get("product title").toString();
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));

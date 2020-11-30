@@ -1,46 +1,35 @@
 package com.example.intigritirobotics.ui.MyCart;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.intigritirobotics.MainHomeActivity;
 import com.example.intigritirobotics.R;
-import com.example.intigritirobotics.ViewAllAdapter;
 import com.example.intigritirobotics.ViewAllModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
-import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
-import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class MyCartActivity extends AppCompatActivity {
 
     private RecyclerView cartItemRecycler;
     private LinearLayoutManager projectLinearLayoutManager;
-    private List<ViewAllModel> productList = new ArrayList<>();
+    private final List<ViewAllModel> productList = new ArrayList<>();
     private FirebaseFirestore firebaseFirestore;
     private List<ViewAllModel> recList;
-    private String ToolbarTitle, categoryId;
+    private String ToolbarTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +38,7 @@ public class MyCartActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.vie_all_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(ToolbarTitle);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(ToolbarTitle);
         firebaseFirestore  = FirebaseFirestore.getInstance();
         cartItemRecycler = findViewById(R.id.cart_recycler_view);
         projectLinearLayoutManager = new LinearLayoutManager(MyCartActivity.this);
@@ -73,28 +62,25 @@ public class MyCartActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadProject(){
+    private void loadProject() {
 
         String colPath = "/USERS/"+currentUserUId+"/My Cart";
-
-
-
 
         firebaseFirestore.collection(colPath).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 QuerySnapshot q = task.getResult();
 
-                for(DocumentSnapshot prodSnap : q.getDocuments()){
+                for(DocumentSnapshot prodSnap : Objects.requireNonNull(q).getDocuments()){
                     String productPath = "/PRODUCTS/"+ prodSnap.getId();
                     Log.d("Itt",productPath);
 
                     firebaseFirestore.document(productPath).get().addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            Log.d("Itt",task1.getResult().getId());
+                            Log.d("Itt", Objects.requireNonNull(task1.getResult()).getId());
                             DocumentSnapshot documentSnapshot = task1.getResult();
                             String id = documentSnapshot.getId();
-                            String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
-                            String title = documentSnapshot.get("product title").toString();
+                            String picUrl = Objects.requireNonNull(documentSnapshot.get("product_pic")).toString().split(", ")[0];
+                            String title = Objects.requireNonNull(documentSnapshot.get("product title")).toString();
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
                             int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
                             productList.add(new ViewAllModel(id, picUrl, title, rating, price));

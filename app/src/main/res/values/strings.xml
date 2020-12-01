@@ -125,4 +125,6 @@
     <string name="add_to_fav_button">Add to fav. button</string>
     <string name="in_stock">In Stock</string>
     <string name="ir_learn">IR Learn</string>
+    <string name="delivery">Delivery</string>
+    <string name="free">Free</string>
 </resources>

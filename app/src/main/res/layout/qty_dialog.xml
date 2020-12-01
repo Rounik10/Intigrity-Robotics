@@ -8,7 +8,7 @@
     android:background="@drawable/project_toolbar_background">
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/qty_dialog_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -26,14 +26,14 @@
         android:id="@+id/divider5"
         android:layout_width="1dp"
         android:layout_height="0dp"
-        android:background="?android:attr/listDivider"
+        android:background="@color/gen_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/qty_dialog_ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -66,7 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="10dp"
-        android:background="?android:attr/listDivider"
+        android:background="@color/gen_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qty_edit_text" />

@@ -64,6 +64,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         private LinearLayout delete_layout,qty_layout;
         private  TextView tv_qty;
         private Dialog qtyDialog;
+        private TextView qtyEditText, qtyDialogOk,qtyDialogCancel;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,11 +75,14 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             delete_layout = itemView.findViewById(R.id.delete_from_cart);
             tv_qty = itemView.findViewById(R.id.cart_item_qty_text);
             qty_layout = itemView.findViewById(R.id.cart_item_qty_layout);
+
             qtyDialog = new Dialog(itemView.getContext());
             qtyDialog.setContentView(R.layout.qty_dialog);
             qtyDialog.setCancelable(true);
             qtyDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-
+            qtyEditText =qtyDialog.findViewById(R.id.qty_edit_text);
+            qtyDialogOk =qtyDialog.findViewById(R.id.qty_dialog_ok);
+            qtyDialogCancel =qtyDialog.findViewById(R.id.qty_dialog_cancel);
             delete_layout.setVisibility(View.VISIBLE);
         }
         private void  setData( final String index, String resource, String title, int price, float rating)
@@ -110,6 +114,23 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     qtyDialog.show();
+                }
+            });
+            qtyDialogOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int qty = Integer.parseInt(qtyEditText.getText().toString());
+                    if (qty<=10)
+
+                    {
+                        tv_qty.setText(qty);
+                        qtyDialog.dismiss();
+                    }
+                    else
+                    {
+                        Toast.makeText(itemView.getContext(),"Max number is 10.",Toast.LENGTH_LONG).show();
+                    }
+
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {

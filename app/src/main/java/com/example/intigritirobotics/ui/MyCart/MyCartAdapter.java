@@ -19,6 +19,9 @@ import com.example.intigritirobotics.ViewAllModel;
 
 import java.util.List;
 
+import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
+import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
+
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder> {
 
     private List<ViewAllModel> ViewAllModelList;
@@ -80,8 +83,14 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             delete_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    itemView.setVisibility(View.GONE);
-                    Toast.makeText(itemView.getContext(),"Item Deleted", Toast.LENGTH_SHORT).show();
+                    firebaseFirestore.document("USERS/"+currentUserUId+"/My Cart/"+index).delete().addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            itemView.setVisibility(View.GONE);
+                            Toast.makeText(itemView.getContext(),"Item Deleted", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(itemView.getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             });
 

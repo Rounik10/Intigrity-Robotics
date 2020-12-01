@@ -40,7 +40,6 @@ public class ViewAllActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all);
-
         Toolbar toolbar = findViewById(R.id.vie_all_toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
@@ -51,7 +50,6 @@ public class ViewAllActivity extends AppCompatActivity {
         firebaseFirestore  = FirebaseFirestore.getInstance();
         productRecycler = findViewById(R.id.product_preview_recyclerview);
         projectLinearLayoutManager = new LinearLayoutManager(ViewAllActivity.this);
-
         loadProject();
     }
 
@@ -79,16 +77,12 @@ public class ViewAllActivity extends AppCompatActivity {
             if(task.isSuccessful()){
                 DocumentSnapshot products = task.getResult();
                 List<String> productId = (List<String>) products.get("Product Id Array");
-                Log.d("Itt", products.get("category_title").toString());
-                Log.d("Itt",productId.get(0));
 
                 for(String prod : productId){
                     String productPath = "/PRODUCTS/"+ prod;
-                    Log.d("Itt",productPath);
 
                     firebaseFirestore.document(productPath).get().addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            Log.d("Itt",task1.getResult().getId());
                             DocumentSnapshot documentSnapshot = task1.getResult();
                             String id = documentSnapshot.getId();
                             String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
@@ -105,13 +99,12 @@ public class ViewAllActivity extends AppCompatActivity {
                             MainHomeActivity.loadingDialog.dismiss();
                         }
                     }).addOnFailureListener(e -> {
-
+                        Log.e("Fail",e.getMessage());
                     });
                 }
 
             }
         });
-
 
     }
 }

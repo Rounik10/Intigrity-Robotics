@@ -34,7 +34,7 @@ public class MyCartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_all);
+        setContentView(R.layout.activity_my_cart);
 
         Toolbar toolbar = findViewById(R.id.vie_all_toolbar);
         setSupportActionBar(toolbar);
@@ -42,6 +42,8 @@ public class MyCartActivity extends AppCompatActivity {
         firebaseFirestore  = FirebaseFirestore.getInstance();
         cartItemRecycler = findViewById(R.id.cart_recycler_view);
         projectLinearLayoutManager = new LinearLayoutManager(MyCartActivity.this);
+        Log.d("Debug 11", "LinMan:"+projectLinearLayoutManager.toString());
+        Log.d("Debug 11", "RecView:"+String.valueOf(cartItemRecycler==null));
 
         loadProject();
     }
@@ -71,6 +73,7 @@ public class MyCartActivity extends AppCompatActivity {
                 QuerySnapshot q = task.getResult();
 
                 for(DocumentSnapshot prodSnap : Objects.requireNonNull(q).getDocuments()){
+                    if(!prodSnap.exists()) break;
                     String productPath = "/PRODUCTS/"+ prodSnap.getId();
                     Log.d("Itt",productPath);
 
@@ -84,7 +87,6 @@ public class MyCartActivity extends AppCompatActivity {
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
                             int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
                             productList.add(new ViewAllModel(id, picUrl, title, rating, price));
-
                             projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                             cartItemRecycler.setLayoutManager(projectLinearLayoutManager);
                             MyCartAdapter adapter1 = new MyCartAdapter(productList);

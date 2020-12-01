@@ -41,7 +41,7 @@
             android:layout_marginLeft="4dp"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:src="@drawable/star"/>
+            android:src="@drawable/vector_star"/>
     </LinearLayout>
 
     <TextView
@@ -157,7 +157,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/vector_star"/>
         </LinearLayout>
 
         <LinearLayout
@@ -181,7 +181,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/vector_star"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/rateStar3"
@@ -204,7 +204,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/vector_star"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/rateStar2"
@@ -227,7 +227,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/vector_star"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/rateStar1"
@@ -250,7 +250,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
-                android:src="@drawable/star"/>
+                android:src="@drawable/vector_star"/>
         </LinearLayout>
     </LinearLayout>
 

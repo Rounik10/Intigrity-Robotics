@@ -36,7 +36,7 @@ public class MyCartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cart);
 
-        Toolbar toolbar = findViewById(R.id.vie_all_toolbar);
+        Toolbar toolbar = findViewById(R.id.cart_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle(ToolbarTitle);
         firebaseFirestore  = FirebaseFirestore.getInstance();

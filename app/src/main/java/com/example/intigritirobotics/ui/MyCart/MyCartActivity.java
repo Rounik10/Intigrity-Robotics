@@ -28,8 +28,6 @@ public class MyCartActivity extends AppCompatActivity {
     private LinearLayoutManager projectLinearLayoutManager;
     private final List<ViewAllModel> productList = new ArrayList<>();
     private FirebaseFirestore firebaseFirestore;
-    private List<ViewAllModel> recList;
-    private String ToolbarTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,12 +36,10 @@ public class MyCartActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.cart_toolbar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(ToolbarTitle);
         firebaseFirestore  = FirebaseFirestore.getInstance();
         cartItemRecycler = findViewById(R.id.cart_recycler_view);
         projectLinearLayoutManager = new LinearLayoutManager(MyCartActivity.this);
-        Log.d("Debug 11", "LinMan:"+projectLinearLayoutManager.toString());
-        Log.d("Debug 11", "RecView:"+String.valueOf(cartItemRecycler==null));
+
 
         loadProject();
     }
@@ -75,11 +71,9 @@ public class MyCartActivity extends AppCompatActivity {
                 for(DocumentSnapshot prodSnap : Objects.requireNonNull(q).getDocuments()){
                     if(!prodSnap.exists()) break;
                     String productPath = "/PRODUCTS/"+ prodSnap.getId();
-                    Log.d("Itt",productPath);
 
                     firebaseFirestore.document(productPath).get().addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            Log.d("Itt", Objects.requireNonNull(task1.getResult()).getId());
                             DocumentSnapshot documentSnapshot = task1.getResult();
                             String id = documentSnapshot.getId();
                             String picUrl = Objects.requireNonNull(documentSnapshot.get("product_pic")).toString().split(", ")[0];

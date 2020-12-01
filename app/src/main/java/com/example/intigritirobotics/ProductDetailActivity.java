@@ -61,13 +61,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.rating_stars);
         totalRatings = (TextView) findViewById(R.id.number_of_rating_text);
 
-        Log.d("Deb", "Index:" + index + "\nid:" + id);
         userPath = "";
         loadProductDetails();
         addToCartButton = findViewById(R.id.addToCartButton);
         addToCartButton.setOnClickListener(view -> addItemToCart());
 
-        Log.d("Is rating null", "" + ratingBar.getRating());
 
         ratingBar.setOnRatingBarChangeListener((ratingBar, v, b) -> {
 
@@ -86,9 +84,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     String s = documentSnapshot.get((v + "").substring(0, 1) + "_star").toString();
                     int x = Integer.parseInt(s);
 
-                    Log.d("prev_rat", "Bahar" + prev_rating);
                     if (prev_rating != 0) {
-                        Log.d("prev_rat", "" + prev_rating);
                         int y = Integer.parseInt(documentSnapshot.get(prev_rating + "_star").toString()) - 1;
                         docRef.update(prev_rating + "_star", "" + y);
                     }
@@ -157,10 +153,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot doc = Objects.requireNonNull(task.getResult());
-                        Log.d("doc", doc.getId());
                         loadDataToProduct(doc);
                     } else {
-                        Log.w("Product", "Error getting documents.", task.getException());
                     }
                 });
 
@@ -169,7 +163,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     private void loadDataToProduct(DocumentSnapshot product) {
 
         if (product == null) {
-            Log.d("DebX", "Product in null");
             return;
         }
         /*String in_stock = Objects.requireNonNull(product.get("in stock")).toString();
@@ -267,7 +260,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     void setProgressInRacingBars(ProgressBar progressBar, int starNo, DocumentSnapshot product) {
         int stars = Integer.parseInt(Objects.requireNonNull(product.get(starNo + "_star")).toString());
         progressBar.setMax(total);
-        Log.d("Rating", "" + stars);
         progressBar.setProgress(stars);
     }
 

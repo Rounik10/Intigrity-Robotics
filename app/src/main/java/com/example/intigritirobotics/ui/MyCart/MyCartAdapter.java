@@ -1,5 +1,6 @@
 package com.example.intigritirobotics.ui.MyCart;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.intigritirobotics.MainHomeActivity;
 import com.example.intigritirobotics.ProductDetailActivity;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.ViewAllModel;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
+import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder> {
 
@@ -33,7 +36,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.product_preview_layout,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cart_item_layout,viewGroup,false);
         return new ViewHolder(view);
     }
 
@@ -58,7 +61,9 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         private TextView CategoryTitle;
         private TextView ProductPrice;
         private TextView ProductRating;
-        private LinearLayout delete_layout;
+        private LinearLayout delete_layout,qty_layout;
+        private  TextView tv_qty;
+        private Dialog qtyDialog;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -67,6 +72,13 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             ProductRating = itemView.findViewById(R.id.product_preview_rating);
             ProductPrice = itemView.findViewById(R.id.product_preview_price);
             delete_layout = itemView.findViewById(R.id.delete_from_cart);
+            tv_qty = itemView.findViewById(R.id.cart_item_qty_text);
+            qty_layout = itemView.findViewById(R.id.cart_item_qty_layout);
+            qtyDialog = new Dialog(itemView.getContext());
+            qtyDialog.setContentView(R.layout.qty_dialog);
+            qtyDialog.setCancelable(true);
+            qtyDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
             delete_layout.setVisibility(View.VISIBLE);
         }
         private void  setData( final String index, String resource, String title, int price, float rating)
@@ -94,6 +106,12 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                 }
             });
 
+            qty_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    qtyDialog.show();
+                }
+            });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

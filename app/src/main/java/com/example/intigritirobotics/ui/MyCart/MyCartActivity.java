@@ -48,7 +48,7 @@ public class MyCartActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_home, menu);
+        getMenuInflater().inflate(R.menu.menu_process_order, menu);
         return true;
     }
     @Override

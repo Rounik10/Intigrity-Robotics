@@ -2,10 +2,10 @@ package com.example.intigritirobotics;
 
 public class ViewAllModel {
     private String Id;
-    private String Image;
+    private final String Image;
     private String Title;
-    private float TotalRating;
-    private int FinalPrice;
+    private final float TotalRating;
+    private final int FinalPrice;
 
     public ViewAllModel(String id, String image, String title, float totalRating, int finalPrice) {
         Id = id;
@@ -16,9 +16,10 @@ public class ViewAllModel {
     }
 
     @Override
-    public String toString(){
-        return Id+"\n"+ Image +"\n" + Title +"\n" + TotalRating + "\n" + FinalPrice;
+    public String toString() {
+        return Id + "\n" + Image + "\n" + Title + "\n" + TotalRating + "\n" + FinalPrice;
     }
+
     public String getId() {
         return Id;
     }
@@ -29,10 +30,6 @@ public class ViewAllModel {
 
     public String getImage() {
         return Image;
-    }
-
-    public void setImage(String image) {
-        Image = image;
     }
 
     public String getTitle() {
@@ -47,16 +44,8 @@ public class ViewAllModel {
         return TotalRating;
     }
 
-    public void setTotalRating(int totalRating) {
-        TotalRating = totalRating;
-    }
-
     public int getFinalPrice() {
         return FinalPrice;
-    }
-
-    public void setFinalPrice(int finalPrice) {
-        FinalPrice = finalPrice;
     }
 
 }

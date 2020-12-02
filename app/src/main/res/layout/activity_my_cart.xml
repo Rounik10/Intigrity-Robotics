@@ -34,8 +34,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            android:padding="12dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cart_recycler_view"
@@ -45,14 +45,12 @@
 
             <include
                 layout="@layout/cart_price_details"
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layout_editor_absoluteX="26dp"
                 tools:layout_editor_absoluteY="394dp" />
         </LinearLayout>
     </ScrollView>
-
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -74,7 +72,7 @@
                 android:id="@+id/cart_bottom_total_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Rs.878/-"
+                android:text="@string/pricePlaceHolder"
                 android:textAlignment="center"
                 android:textColor="@color/gen_black"
                 android:textSize="25sp"
@@ -84,7 +82,7 @@
                 android:id="@+id/textView14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Price"
+                android:text="@string/total_price"
                 android:textAlignment="center"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -96,7 +94,7 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="#ED2020"
-            android:text="Check out"
+            android:text="@string/check_out"
             android:textColor="#fff"
             android:textStyle="bold" />
     </LinearLayout>

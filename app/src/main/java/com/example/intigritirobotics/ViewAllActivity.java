@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,27 +13,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
-import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class ViewAllActivity extends AppCompatActivity {
 
     private RecyclerView productRecycler;
     private LinearLayoutManager projectLinearLayoutManager;
-    private List<ViewAllModel> productList = new ArrayList<>();
+    private final List<ViewAllModel> productList = new ArrayList<>();
     private FirebaseFirestore firebaseFirestore;
     private List<ViewAllModel> recList;
-    private String ToolbarTitle, categoryId;
+    private String categoryId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,9 +36,9 @@ public class ViewAllActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
         categoryId = intent.getStringExtra("Index");
-        ToolbarTitle= intent.getStringExtra("Title");
+        String toolbarTitle = intent.getStringExtra("Title");
         Log.d("Cat Id", categoryId);
-        getSupportActionBar().setTitle(ToolbarTitle);
+        getSupportActionBar().setTitle(toolbarTitle);
         firebaseFirestore  = FirebaseFirestore.getInstance();
         productRecycler = findViewById(R.id.product_preview_recyclerview);
         projectLinearLayoutManager = new LinearLayoutManager(ViewAllActivity.this);
@@ -80,7 +72,6 @@ public class ViewAllActivity extends AppCompatActivity {
 
                 for(String prod : productId){
                     String productPath = "/PRODUCTS/"+ prod;
-
                     firebaseFirestore.document(productPath).get().addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
                             DocumentSnapshot documentSnapshot = task1.getResult();
@@ -90,7 +81,6 @@ public class ViewAllActivity extends AppCompatActivity {
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
                             int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
                             productList.add(new ViewAllModel(id, picUrl, title, rating, price));
-
                             projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                             productRecycler.setLayoutManager(projectLinearLayoutManager);
                             ViewAllAdapter adapter1 = new ViewAllAdapter(productList);
@@ -98,9 +88,7 @@ public class ViewAllActivity extends AppCompatActivity {
                             adapter1.notifyDataSetChanged();
                             MainHomeActivity.loadingDialog.dismiss();
                         }
-                    }).addOnFailureListener(e -> {
-                        Log.e("Fail",e.getMessage());
-                    });
+                    }).addOnFailureListener(e -> Log.e("Fail",e.getMessage()));
                 }
 
             }

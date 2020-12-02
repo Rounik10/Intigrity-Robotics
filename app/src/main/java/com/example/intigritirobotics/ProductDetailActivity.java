@@ -1,6 +1,7 @@
 package com.example.intigritirobotics;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +22,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +33,7 @@ import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 public class ProductDetailActivity extends AppCompatActivity {
 
     private final List<SlideModel> slideModelList = new ArrayList<>();
-    private String price, rating, index, title, id;
+    private String price, title, id;
     private int total, prev_rating;
     public FirebaseFirestore firebaseFirestore;
     Button addToCartButton;
@@ -50,9 +49,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
         price = intent.getStringExtra("Price");
-        rating = intent.getStringExtra("Rating");
         title = intent.getStringExtra("Title");
-        index = intent.getStringExtra("Index");
         id = intent.getStringExtra("ID");
         firebaseFirestore = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_product_detail);
@@ -66,11 +63,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         addToCartButton = findViewById(R.id.addToCartButton);
         addToCartButton.setOnClickListener(view -> addItemToCart());
 
-
         ratingBar.setOnRatingBarChangeListener((ratingBar, v, b) -> {
 
             is_app_starting++;
-
             Map<String, String> map = new HashMap<>();
             map.put("Rating", "" + v);
 
@@ -155,6 +150,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                         DocumentSnapshot doc = Objects.requireNonNull(task.getResult());
                         loadDataToProduct(doc);
                     } else {
+                        Log.d("Error", task.getException().toString());
                     }
                 });
 
@@ -165,17 +161,17 @@ public class ProductDetailActivity extends AppCompatActivity {
         if (product == null) {
             return;
         }
-        /*String in_stock = Objects.requireNonNull(product.get("in stock")).toString();
+        String in_stock = Objects.requireNonNull(product.get("in stock")).toString();
         // In stock
         if(in_stock.equals("false")) {
             TextView inStockText = findViewById(R.id.inStockText);
             inStockText.setBackgroundColor(Color.RED);
-            inStockText.setText("Out of Stock");
+            inStockText.setText(R.string.out_of_stock);
             Button buyNow = findViewById(R.id.buyNowButton);
             buyNow.setEnabled(false);
             Button addToCart = findViewById(R.id.addToCartButton);
             addToCart.setEnabled(false);
-        }*/
+        }
 
         // Slider
         ImageSlider imageSlider = findViewById(R.id.imgSlider);
@@ -187,7 +183,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         imageSlider.setImageList(slideModelList);
 
         TextView briefText = findViewById(R.id.itemBriefDetail);
-        briefText.setText(Objects.requireNonNull(product.get("product title")).toString());
+        briefText.setText(title);
 
         // Set Ratings
         TextView avgRatingText = findViewById(R.id.averageRatingText);
@@ -253,7 +249,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
         String average = "" + sum / total;
         if (average.length() > 3) average = average.substring(0, 3);
-        totalRatings.setText("" + total);
+        String totS = "" + total;
+        totalRatings.setText(totS);
         return average;
     }
 

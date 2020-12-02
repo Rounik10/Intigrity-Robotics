@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.intigritirobotics.ProductDetailActivity;
@@ -24,7 +25,7 @@ import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder> {
 
-    private List<ViewAllModel> ViewAllModelList;
+    private final List<ViewAllModel> ViewAllModelList;
 
     public MyCartAdapter(List<ViewAllModel> ViewAllModelList) {
         this.ViewAllModelList = ViewAllModelList;
@@ -33,7 +34,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.product_preview_layout,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.product_preview_layout, viewGroup, false);
         return new ViewHolder(view);
     }
 
@@ -44,7 +45,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         String title = ViewAllModelList.get(position).getTitle();
         int price = ViewAllModelList.get(position).getFinalPrice();
         float rating = ViewAllModelList.get(position).getTotalRating();
-        viewHolder.setData(index,resource,title, price, rating);
+        viewHolder.setData(index, resource, title, price, rating);
     }
 
     @Override
@@ -52,13 +53,13 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         return ViewAllModelList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView pic;
-        private TextView CategoryTitle;
-        private TextView ProductPrice;
-        private TextView ProductRating;
-        private LinearLayout delete_layout;
+        private final ImageView pic;
+        private final TextView CategoryTitle;
+        private final TextView ProductPrice;
+        private final TextView ProductRating;
+        private final LinearLayout delete_layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,47 +70,41 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             delete_layout = itemView.findViewById(R.id.delete_from_cart);
             delete_layout.setVisibility(View.VISIBLE);
         }
-        private void  setData( final String index, String resource, String title, int price, float rating)
-        {
+
+        private void setData(final String index, String resource, String title, int price, float rating) {
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions()
                     .placeholder(R.drawable.category_icon))
                     .into(pic);
             CategoryTitle.setText(title);
-            String priceText = "Rs." + price +"/-";
-            String ratingText = ""+ rating;
+            String priceText = "Rs." + price + "/-";
+            String ratingText = "" + rating;
             ProductPrice.setText(priceText);
             ProductRating.setText(ratingText);
 
-            delete_layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    firebaseFirestore.document("USERS/"+currentUserUId+"/My Cart/"+index).delete().addOnCompleteListener(task -> {
-                        if(task.isSuccessful()){
+            delete_layout.setOnClickListener(view -> firebaseFirestore
+                    .document("USERS/" + currentUserUId + "/My Cart/" + index)
+                    .delete()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
                             itemView.setVisibility(View.GONE);
-                            Toast.makeText(itemView.getContext(),"Item Deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(itemView.getContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(itemView.getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                }
-            });
+                    }));
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent( itemView.getContext(), ProductDetailActivity.class);
-                    intent.putExtra("Index",index);
-                    intent.putExtra("Title",title);
-                    intent.putExtra("ID", index);
-                    intent.putExtra("Category ID","");
-                    intent.putExtra("Price",""+price);
-                    intent.putExtra("Rating",""+rating);
-                    itemView.getContext().startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(itemView.getContext(), ProductDetailActivity.class);
+                intent.putExtra("Index", index);
+                intent.putExtra("Title", title);
+                intent.putExtra("ID", index);
+                intent.putExtra("Category ID", "");
+                intent.putExtra("Price", "" + price);
+                intent.putExtra("Rating", "" + rating);
+                itemView.getContext().startActivity(intent);
             });
 
         }
-
 
     }
 

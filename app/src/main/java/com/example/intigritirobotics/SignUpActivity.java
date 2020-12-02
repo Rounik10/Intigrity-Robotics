@@ -210,7 +210,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                     editor.putString("username", e);
                                                     editor.putString("password", p);
                                                     editor.apply();
-                                                    HomeShow();
+                                                    startUserDetail();
                                                     currentUID = fba.getUid();
                                                     finish();
                                                 }
@@ -245,6 +245,10 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(this, "Sign Up Successful", Toast.LENGTH_SHORT).show();
         Intent intt2 = new Intent(this, MainHomeActivity.class);
         startActivity(intt2);
+    }
+
+    public void startUserDetail() {
+        startActivity(new Intent(this, UpdateUserDetails.class));
     }
 
     public void PassView() {

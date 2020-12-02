@@ -10,21 +10,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.example.intigritirobotics.ui.MyAccount.UserProfileActivity;
 import com.example.intigritirobotics.ui.MyCart.MyCartActivity;
 import com.example.intigritirobotics.ui.Setting.SettingActivity;
 import com.example.intigritirobotics.ui.Support.SupportActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,13 +25,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.example.intigritirobotics.SignUpActivity.currentUID;
 import static com.example.intigritirobotics.SignUpActivity.pref;
 
 public class MainHomeActivity extends AppCompatActivity {
@@ -59,7 +45,7 @@ public class MainHomeActivity extends AppCompatActivity {
         firebaseFirestore  =FirebaseFirestore.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            Intent myIntent = new Intent(MainHomeActivity.this, ProductDetailActivity.class);
+            Intent myIntent = new Intent(MainHomeActivity.this, UpdateUserDetails.class);
             startActivity(myIntent);
         });
 

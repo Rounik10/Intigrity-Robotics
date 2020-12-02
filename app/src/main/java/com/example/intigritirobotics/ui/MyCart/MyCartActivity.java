@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 
 public class MyCartActivity extends AppCompatActivity {
@@ -27,20 +27,21 @@ public class MyCartActivity extends AppCompatActivity {
     private RecyclerView cartItemRecycler;
     private LinearLayoutManager projectLinearLayoutManager;
     private final List<ViewAllModel> productList = new ArrayList<>();
+    private TextView totalPriceTextView;
     private FirebaseFirestore firebaseFirestore;
+    private int totalPrice;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cart);
-
+        totalPriceTextView = findViewById(R.id.total_amount_number);
         Toolbar toolbar = findViewById(R.id.cart_toolbar);
         setSupportActionBar(toolbar);
         firebaseFirestore  = FirebaseFirestore.getInstance();
         cartItemRecycler = findViewById(R.id.cart_recycler_view);
         projectLinearLayoutManager = new LinearLayoutManager(MyCartActivity.this);
-
-
+        Log.d("Total Price", "1"+totalPrice);
         loadProject();
     }
 
@@ -74,12 +75,14 @@ public class MyCartActivity extends AppCompatActivity {
 
                     firebaseFirestore.document(productPath).get().addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
+                            Log.d("Total Price", ""+totalPrice);
                             DocumentSnapshot documentSnapshot = task1.getResult();
                             String id = documentSnapshot.getId();
                             String picUrl = Objects.requireNonNull(documentSnapshot.get("product_pic")).toString().split(", ")[0];
                             String title = Objects.requireNonNull(documentSnapshot.get("product title")).toString();
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
                             int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
+                            totalPrice+= price;
                             productList.add(new ViewAllModel(id, picUrl, title, rating, price));
                             projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                             cartItemRecycler.setLayoutManager(projectLinearLayoutManager);
@@ -88,7 +91,9 @@ public class MyCartActivity extends AppCompatActivity {
                             adapter1.notifyDataSetChanged();
                             MainHomeActivity.loadingDialog.dismiss();
                         }
-                    }).addOnFailureListener(e -> {
+                        totalPriceTextView.setText(""+totalPrice);
+                    }
+                    ).addOnFailureListener(e -> {
 
                     });
                 }
@@ -97,4 +102,5 @@ public class MyCartActivity extends AppCompatActivity {
         });
 
     }
+
 }

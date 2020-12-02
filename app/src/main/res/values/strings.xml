@@ -127,4 +127,13 @@
     <string name="ir_learn">IR Learn</string>
     <string name="delivery">Delivery</string>
     <string name="free">Free</string>
+    <string name="check_out">Check out</string>
+    <string name="total_price">Total Price</string>
+    <string name="price_details">Price Details</string>
+    <string name="price_delivery">Price Delivery</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="you_saved_rs_xyz">You Saved Rs.XYZ/-</string>
+    <string name="out_of_stock">Out of Stock</string>
+    <string name="skip_for_now">Skip for now</string>
+    <string name="submit">Submit</string>
 </resources>

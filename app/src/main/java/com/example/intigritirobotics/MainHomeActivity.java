@@ -119,25 +119,25 @@ public class MainHomeActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void cart(View view) {
+    public void cart(MenuItem item) {
         Intent myIntent = new Intent(MainHomeActivity.this, MyCartActivity.class);
         startActivity(myIntent);
 
     }
 
-    private void account(View view) {
+    public void account(MenuItem item) {
         Intent myIntent = new Intent(MainHomeActivity.this, UserProfileActivity.class);
         startActivity(myIntent);
 
     }
 
-    private void setting(View view) {
+    public void setting(MenuItem item) {
         Intent myIntent = new Intent(MainHomeActivity.this, SettingActivity.class);
         startActivity(myIntent);
 
     }
 
-    private void support(View view) {
+    public void support(MenuItem item) {
         Intent myIntent = new Intent(MainHomeActivity.this, SupportActivity.class);
         startActivity(myIntent);
 

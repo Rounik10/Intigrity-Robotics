@@ -17,7 +17,7 @@
         app:civ_border_color="@color/gen_black"
         app:civ_border_overlay="true"
         app:civ_border_width="1dp"
-        app:layout_constraintBottom_toTopOf="@+id/delete_from_cart"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +48,7 @@
         android:textColor="@color/gen_black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/delete_from_cart"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintStart_toEndOf="@+id/product_preview_pic"
         app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
@@ -58,8 +58,9 @@
         android:layout_height="1dp"
         android:layout_marginStart="50dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/delete_from_cart"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
@@ -67,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/delete_from_cart"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintStart_toEndOf="@+id/product_preview_price"
         app:layout_constraintTop_toBottomOf="@+id/divider3">
 
@@ -113,8 +114,8 @@
 
         <ImageView
             android:id="@+id/delete_button"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:contentDescription="@string/random_details"
             android:src="@drawable/ic_baseline_delete_24" />
 
@@ -136,7 +137,7 @@
         android:background="@drawable/project_toolbar_background"
         android:orientation="horizontal"
         android:padding="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/delete_from_cart"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3">
 

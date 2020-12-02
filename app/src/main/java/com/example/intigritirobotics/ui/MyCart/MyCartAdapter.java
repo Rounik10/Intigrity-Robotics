@@ -83,7 +83,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             qtyEditText =qtyDialog.findViewById(R.id.qty_edit_text);
             qtyDialogOk =qtyDialog.findViewById(R.id.qty_dialog_ok);
             qtyDialogCancel =qtyDialog.findViewById(R.id.qty_dialog_cancel);
-            delete_layout.setVisibility(View.VISIBLE);
+            tv_qty.setText("2");
+
         }
         private void  setData( final String index, String resource, String title, int price, float rating)
         {
@@ -128,7 +129,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                     }
                     else
                     {
-                        Toast.makeText(itemView.getContext(),"Max number is 10.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(itemView.getContext(),"Max number is 10 !",Toast.LENGTH_LONG).show();
                     }
 
                 }

@@ -113,8 +113,8 @@
 
         <ImageView
             android:id="@+id/delete_button"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:contentDescription="@string/random_details"
             android:src="@drawable/ic_baseline_delete_24" />
 
@@ -125,7 +125,7 @@
             android:layout_marginStart="8dp"
             android:text="Delete form cart"
             android:textColor="#D81400"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout

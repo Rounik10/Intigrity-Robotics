@@ -10,22 +10,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +46,6 @@ public class UpdateUserDetails extends AppCompatActivity {
         PIN = findViewById(R.id.PIN);
         state = findViewById(R.id.state);
         phone = findViewById(R.id.phone);
-
     }
 
     public void openDashboard(View view) {
@@ -62,12 +53,15 @@ public class UpdateUserDetails extends AppCompatActivity {
     }
 
     public void updateDataOpenDashboard(View view) {
+
+        if(!checkCorrectness()) return;
+
         SharedPreferences pref = getSharedPreferences("user_details",MODE_PRIVATE);
         String name = pref.getString("username", "Not A User");
         String address = ""+ addFstLine.getText() +",\n"
                 + addSecLine.getText()
                 +",\n" + city.getText()
-                +", " + PIN.getText()+ "\n"+ state.getText();
+                +", " + PIN.getText()+ ",\n"+ state.getText();
 
         String phoneNumber = ""+ phone.getText();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -80,7 +74,6 @@ public class UpdateUserDetails extends AppCompatActivity {
         map.put("Address", address);
         map.put("Phone",phoneNumber);
         map.put("PIN",PIN.getText().toString());
-        Log.d("User Id", "Hell: "+userId);
 
         DocumentReference docRef = firebaseFirestore.document("USERS/" + userId);
 
@@ -94,6 +87,15 @@ public class UpdateUserDetails extends AppCompatActivity {
         });
     }
 
+    private boolean checkCorrectness() {
+
+        if(PIN.getText() == null || PIN.getText().length() == 0) PIN.setError("PIN is Empty!");
+
+        //addFstLine addSecLine PIN city state phone;
+
+        return false;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -104,14 +106,15 @@ public class UpdateUserDetails extends AppCompatActivity {
         }
     }
 
-    private void uploadPic(){
+    private void uploadPic() {
         Uri file = imageUri;
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Image");
         pd.show();
-        StorageReference riversRef = storageReference.child("profileImg/"+currentUser);
+        pd.setCancelable(false);
+        StorageReference riversRef = storageReference.child("profileImg/"+ firebaseAuth.getUid());
 
         riversRef.putFile(file)
                 .addOnSuccessListener(taskSnapshot -> {
@@ -133,6 +136,5 @@ public class UpdateUserDetails extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
-
     }
 }

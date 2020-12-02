@@ -5,18 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UpdateUserDetails">
+    tools:context=".UpdateUserDetails"
+    android:background="@drawable/splashback">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/add_user_image"
-        android:layout_width="135dp"
-        android:layout_height="135dp"
-        android:layout_marginTop="28dp"
-        android:background="@color/gen_white"
-        android:src="@drawable/ic_baseline_person_24"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/rounded_shape"
+        android:onClick="handleImage"
+        android:src="@drawable/dummy_user"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
-        android:onClick="handleImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
         android:hint="Address Line 1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

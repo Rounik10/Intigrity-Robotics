@@ -21,7 +21,7 @@
         android:id="@+id/nav_offer"
         android:name="com.example.intigritirobotics.ui.offers.OfferFragment"
         android:label="@string/menu_offer"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_offers" />
 
 
     <fragment

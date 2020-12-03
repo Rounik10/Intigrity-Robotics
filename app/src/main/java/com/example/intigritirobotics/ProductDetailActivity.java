@@ -10,18 +10,15 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -162,6 +159,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             return;
         }
         String in_stock = Objects.requireNonNull(product.get("in stock")).toString();
+
         // In stock
         if(in_stock.equals("false")) {
             TextView inStockText = findViewById(R.id.inStockText);

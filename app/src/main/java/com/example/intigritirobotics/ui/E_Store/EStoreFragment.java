@@ -70,8 +70,15 @@ public class EStoreFragment extends Fragment {
                                     ScaleTypes.FIT));
                         }
                         imageSlider.setImageList(slideModels);
+
+                    }
+                    else {
+                        loadingDialog.dismiss();
+                        String error = task1.getException().getMessage();
+                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(e -> {
+                    loadingDialog.dismiss();
 
                 });
 
@@ -80,7 +87,7 @@ public class EStoreFragment extends Fragment {
                 CategoryAdapter adapter = new CategoryAdapter(projectList);
                 projectRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                loadingDialog.dismiss();
+
 
 
 
@@ -93,10 +100,13 @@ public class EStoreFragment extends Fragment {
         });
 
         /////////////////////////////////////////////////////////////////// HORIZONTAL ///////////////////////////////////////////////////////
-        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task1 -> {
+
+        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task2 -> {
             int i =1;
-            if (task1.isSuccessful()) {
-                for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+            if (task2.isSuccessful()) {
+                horizontalList.clear();
+
+                for (QueryDocumentSnapshot documentSnapshot : task2.getResult()) {
 
                     String id = documentSnapshot.getId();
                     String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
@@ -108,7 +118,13 @@ public class EStoreFragment extends Fragment {
                     i++;
                 }
             }
+            else {
+                loadingDialog.dismiss();
+                String error = task2.getException().getMessage();
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+            }
         }).addOnFailureListener(e -> {
+            loadingDialog.dismiss();
 
         });
 

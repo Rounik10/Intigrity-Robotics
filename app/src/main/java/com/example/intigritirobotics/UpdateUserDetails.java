@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +19,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +38,7 @@ public class UpdateUserDetails extends AppCompatActivity {
     private EditText phone;
     private ImageView profilePic;
     private Uri imageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,70 +59,113 @@ public class UpdateUserDetails extends AppCompatActivity {
     }
 
     public void updateDataOpenDashboard(View view) {
-        SharedPreferences pref = getSharedPreferences("user_details",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("user_details", MODE_PRIVATE);
         String name = pref.getString("username", "Not A User");
-        String address = ""+ addFstLine.getText() +",\n"
-                + addSecLine.getText()
-                +",\n" + city.getText()
-                +", " + PIN.getText()+ "\n"+ state.getText();
+        if (!addFstLine.getText().toString().equals("")) {
+            if (!city.getText().toString().equals("")) {
 
-        String phoneNumber = ""+ phone.getText();
-        firebaseAuth = FirebaseAuth.getInstance();
-        String userId = firebaseAuth.getUid();
+                if (!PIN.getText().toString().equals("") && PIN.getText().length() == 6) {
 
-        currentUser = new UserModel(name, address, phoneNumber, userId);
+                    if (!state.getText().toString().equals("")) {
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("Name", name);
-        map.put("Address", address);
-        map.put("Phone",phoneNumber);
-        map.put("PIN",PIN.getText().toString());
-        Log.d("User Id", "Hell: "+userId);
+                        if (!phone.getText().toString().equals("") && phone.getText().length() == 10) {
 
-        DocumentReference docRef = firebaseFirestore.document("USERS/" + userId);
+                            String address = "" + addFstLine.getText() + ",\n"
+                                    + addSecLine.getText()
+                                    + ",\n" + city.getText()
+                                    + ", " + PIN.getText() + "\n" + state.getText();
 
-        docRef.update(map).addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
-                startActivity(new Intent(this, MainHomeActivity.class));
+                            String phoneNumber = "" + phone.getText();
+
+                            firebaseAuth = FirebaseAuth.getInstance();
+                            String userId = firebaseAuth.getUid();
+
+                            currentUser = new UserModel(name, address, phoneNumber, userId);
+
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("Name", name);
+                            map.put("Address", address);
+                            map.put("Phone", phoneNumber);
+                            map.put("PIN", PIN.getText().toString());
+
+                            DocumentReference docRef = firebaseFirestore.document("USERS/" + userId);
+
+                            docRef.update(map).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    uploadPic();
+                                } else {
+                                    Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+
+                        } else {
+                            Toast.makeText(this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+                            phone.requestFocus();
+                        }
+
+                    } else {
+                        Toast.makeText(this, "Invalid state ", Toast.LENGTH_SHORT).show();
+
+                        state.requestFocus();
+
+                    }
+
+                } else {
+                    Toast.makeText(this, "Invalid Pincode", Toast.LENGTH_SHORT).show();
+
+                    PIN.requestFocus();
+
+                }
+
             } else {
-                Toast.makeText(this, "Update Failed", Toast.LENGTH_SHORT).show();
-                Log.d("fail", "Update failed");
+                Toast.makeText(this, "Invalid city", Toast.LENGTH_SHORT).show();
+                city.requestFocus();
+
             }
-        });
+
+
+        } else {
+            Toast.makeText(this, "Invalid address", Toast.LENGTH_SHORT).show();
+
+            addFstLine.requestFocus();
+
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1 && resultCode == RESULT_OK && data!= null && data.getData()!=null){
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             profilePic.setImageURI(imageUri);
-            uploadPic();
         }
     }
 
-    private void uploadPic(){
+    private void uploadPic() {
         Uri file = imageUri;
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Image");
+        pd.setCancelable(false);
         pd.show();
-        StorageReference riversRef = storageReference.child("profileImg/"+currentUser);
+        StorageReference riversRef = storageReference.child("profileImg/" + currentUser);
 
         riversRef.putFile(file)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Get a URL to the uploaded content
                     pd.dismiss();
-                    Snackbar.make(findViewById(android.R.id.content), "Image Uploaded", Snackbar.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, MainHomeActivity.class));
+                    Snackbar.make(findViewById(android.R.id.content), "Profile Uploaded", Snackbar.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(exception -> {
                     Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_SHORT).show();
                     pd.dismiss();
                 }).addOnProgressListener(snapshot -> {
-                    double progressPresent = (100.00 * snapshot.getBytesTransferred()/snapshot.getTotalByteCount());
-                    pd.setMessage("Percentage "+(int)progressPresent +"%");
-                });
+            double progressPresent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+            pd.setMessage("Percentage " + (int) progressPresent + "%");
+        });
     }
 
     public void handleImage(View view) {

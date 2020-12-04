@@ -53,8 +53,6 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         return offerViewModelList.size();
     }
 
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView Banner;
@@ -64,8 +62,6 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
             super(itemView);
             Banner = itemView.findViewById(R.id.offer_banner);
             Use = itemView.findViewById(R.id.offer_use_button);
-
-
         }
 
         private void  setData(String ID, String BANNER, boolean EXPIRED)
@@ -74,9 +70,11 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
             if(EXPIRED)
             {
-               Use.setBackgroundTintList(itemView.getResources().getColorStateList(R.color.grey_light));
+               Use.setBackgroundTintList(itemView.getResources().getColorStateList(R.color.dot_dark_screen2));
                Use.setText("EXPIRED");
-               Use.setTextColor(itemView.getResources().getColorStateList(R.color.dot_dark_screen2));
+               Use.setEnabled(false);
+                Use.setTextColor(itemView.getResources().getColorStateList(R.color.gen_white));
+
             }
             Use.setOnClickListener(new View.OnClickListener() {
                 @Override

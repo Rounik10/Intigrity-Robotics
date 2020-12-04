@@ -35,24 +35,21 @@ public class OfferFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_offers, container, false);
         offerRecyclerView = view.findViewById(R.id.offer_recyclerview);
-        offerLayoutManager  = new LinearLayoutManager(getContext());
-
+        offerLayoutManager = new LinearLayoutManager(getContext());
         loadOffer();
         return view;
+
     }
 
-    private  void loadOffer()
-    {
+    private void loadOffer() {
         firebaseFirestore.collection("OFFERS").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 offerslist.clear();
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                     offerslist.add(new OfferViewModel(
-
                             documentSnapshot.get("Banner").toString(),
                             documentSnapshot.get("Id").toString(),
                             (Boolean) documentSnapshot.get("Expired")));
-                    Toast.makeText(getContext(), documentSnapshot.get("Banner").toString(), Toast.LENGTH_SHORT).show();
 
                 }
                 offerLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -61,8 +58,7 @@ public class OfferFragment extends Fragment {
                 offerRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
-            }
-            else {
+            } else {
                 loadingDialog.dismiss();
                 String error = task.getException().getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();

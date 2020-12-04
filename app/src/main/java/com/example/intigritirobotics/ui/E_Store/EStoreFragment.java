@@ -64,6 +64,7 @@ public class EStoreFragment extends Fragment {
                 }
                 firebaseFirestore.collection("SLIDER").get().addOnCompleteListener(task1 -> {
                     if (task1.isSuccessful()) {
+                        slideModels.clear();
                         for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
                             slideModels.add(new SlideModel(
                                     documentSnapshot.get("pic").toString(),

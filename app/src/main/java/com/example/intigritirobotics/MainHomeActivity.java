@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.intigritirobotics.ui.MyAccount.UserProfileActivity;
 import com.example.intigritirobotics.ui.MyCart.MyCartActivity;
@@ -18,6 +19,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.okhttp.internal.framed.Header;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -34,6 +37,7 @@ public class MainHomeActivity extends AppCompatActivity {
     public static Dialog loadingDialog;
     public static String currentUserUId;
     public FirebaseAuth firebaseAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +56,6 @@ public class MainHomeActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserUId = firebaseAuth.getUid();
 
-        Log.d("CURRENT ID",currentUserUId);
 
         loadingDialog = new Dialog(MainHomeActivity.this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -87,6 +90,7 @@ public class MainHomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
 
 
     }

@@ -44,10 +44,10 @@
                 android:layout_margin="8dp" />
 
             <include
+                android:id="@+id/include_product_price"
                 layout="@layout/cart_price_details"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-               />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 
@@ -98,5 +98,19 @@
             android:textColor="#fff"
             android:textStyle="bold" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/nothing_to_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nothing_to_show"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        android:textColor="@color/gen_black"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

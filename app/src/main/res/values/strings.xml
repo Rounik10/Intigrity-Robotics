@@ -136,4 +136,5 @@
     <string name="out_of_stock">Out of Stock</string>
     <string name="skip_for_now">Skip for now</string>
     <string name="submit">Submit</string>
+    <string name="nothing_to_show">Nothing to Show, your cart is Empty</string>
 </resources>

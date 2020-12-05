@@ -21,6 +21,8 @@ import com.example.intigritirobotics.ViewAllModel;
 import java.util.List;
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
+import static com.example.intigritirobotics.ui.MyCart.MyCartActivity.calculatePrice;
+import static com.example.intigritirobotics.ui.MyCart.MyCartActivity.cartItemRecycler;
 import static com.example.intigritirobotics.ui.MyCart.MyCartActivity.deleteItem;
 
 public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder> {
@@ -77,8 +79,6 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             delete_layout = itemView.findViewById(R.id.delete_from_cart);
             qtyLayout =itemView.findViewById(R.id.cart_item_qty_layout);
             qtyText =itemView.findViewById(R.id.cart_item_qty_text);
-
-
         }
         private void  setData( final String index, String resource, String title, int price, float rating) {
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions()
@@ -94,8 +94,6 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                 deleteItem(itemView, index, price);
             });
 
-
-
             qtyLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -103,7 +101,7 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                     quantityDialog.setContentView(R.layout.qty_dialog);
                     quantityDialog.getWindow().setLayout( ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
                     quantityDialog.setCancelable(false);
-                     EditText quantityNo = quantityDialog.findViewById(R.id.qty_edit_text);
+                    EditText quantityNo = quantityDialog.findViewById(R.id.qty_edit_text);
                     Button cancelBtn = quantityDialog.findViewById(R.id.qty_dialog_cancel);
                     Button okBtn = quantityDialog.findViewById(R.id.qty_dialog_ok);
                     cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -118,40 +116,28 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                             public void onClick(View v) {
                                 if (quantityNo.getText().length()==0 || quantityNo.getText().equals("0")) {
                                     Toast.makeText(itemView.getContext(),"Invalid quantity!",Toast.LENGTH_LONG).show();
-
                                 }
-
                                 else
                                 {
-                                    if (Integer.parseInt(String.valueOf(quantityNo.getText()))>=11)
-                                    {
+                                    int quantity = Integer.parseInt(String.valueOf(quantityNo.getText()));
+                                    if (quantity>=11) {
                                         Toast.makeText(itemView.getContext(),"Max 10 !",Toast.LENGTH_LONG).show();
-
                                     }
-                                    else
-                                    {
+                                    else {
                                         qtyText.setText(quantityNo.getText());
                                         quantityDialog.dismiss();
-                                        int previousPrice = price;
-                                        int newPrice =  price*Integer.parseInt(String.valueOf(quantityNo.getText()));
-                                        int deference = newPrice-previousPrice;
-                                       int previousTotalCart=Integer.parseInt(String.valueOf(MyCartActivity.cartTotal.getText()));
-                                       int newTotalCart = previousTotalCart+deference;
-                                        MyCartActivity.cartTotal.setText(newTotalCart+"");
-                                        String delPrice = (newTotalCart>500)? "Free" : "Rs.60/-";
-                                        if(!delPrice.equals("Free")) newTotalCart += 60;
-                                        MyCartActivity.deliveryPriceTextView.setText(delPrice);
-                                        MyCartActivity.cartBottomTotal.setText(newTotalCart+"");
-                                        MyCartActivity.totalPriceTextView.setText(newTotalCart+"");
 
+                                        MyCartActivity.productList.get(getAdapterPosition()).setQuantity(quantity);
+
+                                        calculatePrice();
+
+//
                                     }
                                 }
 
                             }
                         });
                         quantityDialog.show();
-
-
                 }
             });
             itemView.setOnClickListener(v -> {

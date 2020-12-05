@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
     android:background="@drawable/border_background"
-    android:elevation="5dp">
+    android:elevation="5dp"
+    android:paddingVertical="4dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/product_preview_pic"
@@ -38,9 +39,9 @@
 
     <TextView
         android:id="@+id/product_preview_price"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="25dp"
         android:fontFamily="@font/nunito_semibold"
         android:text="Rs.449/-"
         android:textAlignment="textStart"
@@ -64,11 +65,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/divider2"
+        app:layout_constraintEnd_toStartOf="@+id/cart_item_qty_layout"
         app:layout_constraintStart_toEndOf="@+id/product_preview_price"
         app:layout_constraintTop_toBottomOf="@+id/divider3">
 

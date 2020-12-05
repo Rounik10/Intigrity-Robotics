@@ -39,9 +39,7 @@ public class MyCartActivity extends AppCompatActivity {
     public static FirebaseFirestore firebaseFirestore;
     public static int totalPrice;
     public static MyCartAdapter adapter1;
-    public  static  View v, text;
-
-
+    public static  View v, text;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,9 +111,7 @@ public class MyCartActivity extends AppCompatActivity {
                             float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
                             int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
 
-                            totalPrice+= price;
-
-                            productList.add(new ViewAllModel(id, picUrl, title, rating, price));
+                            productList.add(new ViewAllModel(id, picUrl, title, rating, price, 1));
                             projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                             cartItemRecycler.setLayoutManager(projectLinearLayoutManager);
 
@@ -124,16 +120,9 @@ public class MyCartActivity extends AppCompatActivity {
                             cartItemRecycler.setAdapter(adapter1);
                             adapter1.notifyDataSetChanged();
                             MainHomeActivity.loadingDialog.dismiss();
+
+                            calculatePrice();
                         }
-                                cartTotal.setText(totalPrice+"");
-
-                        String delPrice = (totalPrice>500)? "Free" : "Rs.60/-";
-                        if(!delPrice.equals("Free")) totalPrice += 60;
-                        String totalPriceStr = totalPrice+"";
-
-                        deliveryPriceTextView.setText(delPrice);
-                        totalPriceTextView.setText(totalPriceStr);
-                        cartBottomTotal.setText(totalPriceStr);
                     }
                     ).addOnFailureListener(e -> {
 
@@ -141,9 +130,28 @@ public class MyCartActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
+    static void  calculatePrice() {
+
+        int total = 0;
+
+        for(ViewAllModel product : productList) {
+            int price = product.getFinalPrice();
+            int quantity = product.getQuantity();
+            total += price * quantity;
+        }
+
+        MyCartActivity.cartTotal.setText(total+"");
+
+        String delPrice = (total>500)? "Free" : "Rs.60/-";
+        if(!delPrice.equals("Free")) total += 60;
+
+        MyCartActivity.deliveryPriceTextView.setText(delPrice);
+        MyCartActivity.cartBottomTotal.setText(total+"");
+        MyCartActivity.totalPriceTextView.setText(total+"");
+
+    }
 
     public static void deleteItem(View itemView, String index, int price) {
 

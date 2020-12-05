@@ -32,36 +32,16 @@ import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 
 public class MyCartActivity extends AppCompatActivity {
 
-    private static RecyclerView cartItemRecycler;
-    private static LinearLayoutManager projectLinearLayoutManager;
-    private final List<ViewAllModel> productList = new ArrayList<>();
-    private static TextView totalPriceTextView, deliveryPriceTextView, cartBottomTotal, cartTotal;
-    private static FirebaseFirestore firebaseFirestore;
-    private static int totalPrice;
-    private static MyCartAdapter adapter1;
+    public static RecyclerView cartItemRecycler;
+    public static LinearLayoutManager projectLinearLayoutManager;
+    public static final List<ViewAllModel> productList = new ArrayList<>();
+    public static TextView totalPriceTextView, deliveryPriceTextView, cartBottomTotal, cartTotal;
+    public static FirebaseFirestore firebaseFirestore;
+    public static int totalPrice;
+    public static MyCartAdapter adapter1;
+    public  static  View v, text;
 
-    public static void recalculateTotal(int price) {
 
-
-        totalPriceTextView.setText(totalPrice - price);
-
-    }
-
-    public static void deleteItem(View itemView, String index, int price) {
-
-        firebaseFirestore
-                .document("USERS/"+currentUserUId+"/My Cart/"+index).delete()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
-                        itemView.setVisibility(View.GONE);
-                        Toast.makeText(itemView.getContext(),"Item Deleted", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(itemView.getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        totalPriceTextView.setText("Rs."+price+"/-");
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +61,10 @@ public class MyCartActivity extends AppCompatActivity {
 
         projectLinearLayoutManager = new LinearLayoutManager(MyCartActivity.this);
         Log.d("Total Price", "1"+totalPrice);
+         v = findViewById(R.id.include_product_price);
+         text = findViewById(R.id.nothing_to_show);
+
+
         loadProject();
     }
 
@@ -100,19 +84,19 @@ public class MyCartActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadProject() {
+    public static void loadProject() {
 
         String colPath = "/USERS/"+currentUserUId+"/My Cart";
 
         firebaseFirestore.collection(colPath).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
+                productList.clear();
+
                 totalPrice = 0;
                 QuerySnapshot q = task.getResult();
                 assert q != null;
                 if(q.size() == 0) {
-                    View v = findViewById(R.id.include_product_price);
                     v.setVisibility(View.GONE);
-                    View text = findViewById(R.id.nothing_to_show);
                     text.setVisibility(View.VISIBLE);
                 }
                 for(DocumentSnapshot prodSnap : Objects.requireNonNull(q).getDocuments()){
@@ -121,7 +105,6 @@ public class MyCartActivity extends AppCompatActivity {
 
                     firebaseFirestore.document(productPath).get().addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
-                            Log.d("Total Price", ""+totalPrice);
                             DocumentSnapshot documentSnapshot = task1.getResult();
                             assert documentSnapshot != null;
                             String id = documentSnapshot.getId();
@@ -131,7 +114,6 @@ public class MyCartActivity extends AppCompatActivity {
                             int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
 
                             totalPrice+= price;
-                            Toast.makeText(this,"Price is"+price,Toast.LENGTH_SHORT).show();
 
                             productList.add(new ViewAllModel(id, picUrl, title, rating, price));
                             projectLinearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -143,24 +125,41 @@ public class MyCartActivity extends AppCompatActivity {
                             adapter1.notifyDataSetChanged();
                             MainHomeActivity.loadingDialog.dismiss();
                         }
+                                cartTotal.setText(totalPrice+"");
 
                         String delPrice = (totalPrice>500)? "Free" : "Rs.60/-";
                         if(!delPrice.equals("Free")) totalPrice += 60;
-                        String totalPriceStr = "Rs."+totalPrice+"/-";
+                        String totalPriceStr = totalPrice+"";
 
                         deliveryPriceTextView.setText(delPrice);
                         totalPriceTextView.setText(totalPriceStr);
                         cartBottomTotal.setText(totalPriceStr);
-                        cartTotal.setText(totalPriceStr);
                     }
                     ).addOnFailureListener(e -> {
 
                     });
                 }
-                Log.d("Total Price","2"+totalPrice);
             }
         });
 
+    }
+
+
+    public static void deleteItem(View itemView, String index, int price) {
+
+        firebaseFirestore
+                .document("USERS/"+currentUserUId+"/My Cart/"+index).delete()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        itemView.setVisibility(View.GONE);
+                        Toast.makeText(itemView.getContext(),"Item Deleted", Toast.LENGTH_SHORT).show();
+                        loadProject();
+                    } else {
+                        Toast.makeText(itemView.getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        totalPriceTextView.setText("Rs."+price+"/-");
     }
 
 }

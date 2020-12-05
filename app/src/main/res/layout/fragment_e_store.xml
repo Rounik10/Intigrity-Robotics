@@ -23,6 +23,8 @@
         android:layout_width="0dp"
         android:layout_height="250dp"
         android:elevation="5dp"
+        app:iss_auto_cycle="true"
+        app:iss_delay="2500"
         android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

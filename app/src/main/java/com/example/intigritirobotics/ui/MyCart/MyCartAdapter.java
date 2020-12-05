@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,12 +66,8 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
         private final TextView CategoryTitle;
         private final TextView ProductPrice;
         private final TextView ProductRating;
-        private final LinearLayout delete_layout,qty_layout;
-        private final TextView tv_qty;
-        private final Dialog qtyDialog;
-        private final TextView qtyEditText;
-        private final TextView qtyDialogOk;
-
+        private  LinearLayout delete_layout, qtyLayout;
+        private TextView qtyText;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             pic = itemView.findViewById(R.id.product_preview_pic);
@@ -77,16 +75,10 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
             ProductRating = itemView.findViewById(R.id.product_preview_rating);
             ProductPrice = itemView.findViewById(R.id.product_preview_price);
             delete_layout = itemView.findViewById(R.id.delete_from_cart);
-            tv_qty = itemView.findViewById(R.id.cart_item_qty_text);
-            qty_layout = itemView.findViewById(R.id.cart_item_qty_layout);
-            qtyDialog = new Dialog(itemView.getContext());
-            qtyDialog.setContentView(R.layout.qty_dialog);
-            qtyDialog.setCancelable(true);
-            qtyDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-            qtyEditText =qtyDialog.findViewById(R.id.qty_edit_text);
-            qtyDialogOk =qtyDialog.findViewById(R.id.qty_dialog_ok);
-            TextView qtyDialogCancel = qtyDialog.findViewById(R.id.qty_dialog_cancel);
-            tv_qty.setText("2");
+            qtyLayout =itemView.findViewById(R.id.cart_item_qty_layout);
+            qtyText =itemView.findViewById(R.id.cart_item_qty_text);
+
+
         }
         private void  setData( final String index, String resource, String title, int price, float rating) {
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions()
@@ -102,19 +94,66 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
                 deleteItem(itemView, index, price);
             });
 
-            qty_layout.setOnClickListener(v -> qtyDialog.show());
 
-            qtyDialogOk.setOnClickListener(v -> {
-                int qty = Integer.parseInt(qtyEditText.getText().toString());
-                if (qty <= 10) {
-                    tv_qty.setText(qty);
-                    qtyDialog.dismiss();
-                } else {
-                    Toast.makeText(itemView.getContext(), "Max number is 10 !", Toast.LENGTH_LONG).show();
+
+            qtyLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog quantityDialog = new Dialog(itemView.getContext());
+                    quantityDialog.setContentView(R.layout.qty_dialog);
+                    quantityDialog.getWindow().setLayout( ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    quantityDialog.setCancelable(false);
+                     EditText quantityNo = quantityDialog.findViewById(R.id.qty_edit_text);
+                    Button cancelBtn = quantityDialog.findViewById(R.id.qty_dialog_cancel);
+                    Button okBtn = quantityDialog.findViewById(R.id.qty_dialog_ok);
+                    cancelBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            quantityDialog.dismiss();
+                        }
+                    });
+
+                        okBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (quantityNo.getText().length()==0 || quantityNo.getText().equals("0")) {
+                                    Toast.makeText(itemView.getContext(),"Invalid quantity!",Toast.LENGTH_LONG).show();
+
+                                }
+
+                                else
+                                {
+                                    if (Integer.parseInt(String.valueOf(quantityNo.getText()))>=11)
+                                    {
+                                        Toast.makeText(itemView.getContext(),"Max 10 !",Toast.LENGTH_LONG).show();
+
+                                    }
+                                    else
+                                    {
+                                        qtyText.setText(quantityNo.getText());
+                                        quantityDialog.dismiss();
+                                        int previousPrice = price;
+                                        int newPrice =  price*Integer.parseInt(String.valueOf(quantityNo.getText()));
+                                        int deference = newPrice-previousPrice;
+                                       int previousTotalCart=Integer.parseInt(String.valueOf(MyCartActivity.cartTotal.getText()));
+                                       int newTotalCart = previousTotalCart+deference;
+                                        MyCartActivity.cartTotal.setText(newTotalCart+"");
+                                        String delPrice = (newTotalCart>500)? "Free" : "Rs.60/-";
+                                        if(!delPrice.equals("Free")) newTotalCart += 60;
+                                        MyCartActivity.deliveryPriceTextView.setText(delPrice);
+                                        MyCartActivity.cartBottomTotal.setText(newTotalCart+"");
+                                        MyCartActivity.totalPriceTextView.setText(newTotalCart+"");
+
+                                    }
+                                }
+
+                            }
+                        });
+                        quantityDialog.show();
+
+
                 }
-
             });
-
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(itemView.getContext(), ProductDetailActivity.class);
                 intent.putExtra("Index", index);
@@ -131,4 +170,3 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
     }
 
 }
-interface CartItemClicked { void onItemClick();}

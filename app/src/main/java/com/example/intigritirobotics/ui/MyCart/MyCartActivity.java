@@ -1,10 +1,12 @@
 package com.example.intigritirobotics.ui.MyCart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.intigritirobotics.CheckOutActivity;
 import com.example.intigritirobotics.MainHomeActivity;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.ViewAllModel;
@@ -40,6 +44,7 @@ public class MyCartActivity extends AppCompatActivity {
     public static int totalPrice;
     public static MyCartAdapter adapter1;
     public static  View v, text;
+    private Button checkoutBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,14 +61,26 @@ public class MyCartActivity extends AppCompatActivity {
         cartItemRecycler = findViewById(R.id.cart_recycler_view);
         cartBottomTotal = findViewById(R.id.cart_bottom_total_price);
         cartTotal = findViewById(R.id._total_price);
-
         projectLinearLayoutManager = new LinearLayoutManager(MyCartActivity.this);
         Log.d("Total Price", "1"+totalPrice);
          v = findViewById(R.id.include_product_price);
          text = findViewById(R.id.nothing_to_show);
 
+        checkoutBtn = findViewById(R.id.cart_checkout_btn);
 
         loadProject();
+
+        checkoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MyCartActivity.this, CheckOutActivity.class);
+                myIntent.putExtra("Products cost",cartTotal.getText().toString());
+                myIntent.putExtra("Delivery",deliveryPriceTextView.getText().toString());
+                myIntent.putExtra("Total cost",totalPriceTextView.getText().toString());
+                startActivity(myIntent);
+            }
+
+        });
     }
 
     @Override
@@ -139,17 +156,17 @@ public class MyCartActivity extends AppCompatActivity {
         for(ViewAllModel product : productList) {
             int price = product.getFinalPrice();
             int quantity = product.getQuantity();
-            total += price * quantity;
+            total += price*quantity;
         }
 
-        MyCartActivity.cartTotal.setText(total+"");
+        cartTotal.setText(total+"");
 
         String delPrice = (total>500)? "Free" : "Rs.60/-";
         if(!delPrice.equals("Free")) total += 60;
 
-        MyCartActivity.deliveryPriceTextView.setText(delPrice);
-        MyCartActivity.cartBottomTotal.setText(total+"");
-        MyCartActivity.totalPriceTextView.setText(total+"");
+        deliveryPriceTextView.setText(delPrice);
+        cartBottomTotal.setText(total+"");
+        totalPriceTextView.setText(total+"");
 
     }
 

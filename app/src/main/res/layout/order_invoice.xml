@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/intigriti_temp_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@drawable/circlular"
+        app:strokeColor="@color/gen_black" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tax_invoice_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tax_inv_placeholder"
+        android:textColor="@color/gen_black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/logo"
+        app:layout_constraintTop_toTopOf="@id/logo"
+        app:layout_constraintVertical_bias="0.225" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/original_for_recipient"
+        android:textColor="@color/gen_black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/logo"
+        app:layout_constraintEnd_toEndOf="@id/tax_invoice_text"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/logo"
+        app:layout_constraintTop_toBottomOf="@id/tax_invoice_text"
+        app:layout_constraintVertical_bias="0.125" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/sold_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/sold_by"
+        android:textColor="@color/gen_black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/sold_by_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/seller_address_placeholder"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sold_by"
+        android:textColor="@color/gen_black"/>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/shipping_ad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/shipping_address"
+        android:textColor="@color/gen_black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/sold_by"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sold_by" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/shipping_address_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="4dp"
+        android:gravity="end"
+        android:text="@string/shipping_address_placeholder"
+        android:textColor="@color/gen_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/shipping_ad" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/seller_pan_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/pan_placeholder"
+        android:textColor="@color/gen_black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/sold_by_text"
+        app:layout_constraintTop_toBottomOf="@id/sold_by_text" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/order_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/order_no_placeholder"
+        android:textColor="@color/gen_black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/sold_by_text"
+        app:layout_constraintTop_toBottomOf="@id/seller_pan_no" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/order_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/date_placeholder"
+        android:textColor="@color/gen_black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/sold_by_text"
+        app:layout_constraintTop_toBottomOf="@id/order_number" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/seller_pan_no2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/pan_placeholder"
+        android:textColor="@color/gen_black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shipping_address_text" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/order_number2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/order_no_placeholder"
+        android:textColor="@color/gen_black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seller_pan_no2" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/materialTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="@string/date_placeholder"
+        android:textColor="@color/gen_black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_number2" />
+
+    <include
+        layout="@layout/order_summary_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/order_date"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

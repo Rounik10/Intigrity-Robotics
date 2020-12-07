@@ -40,7 +40,7 @@ public class CheckOutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 payUsingUpi("Lencho", "lenchoss20@apl",
-                        "note.getText().toString()", "1");
+                        "note.getText().toString()", "5.0");
             }
         });
 

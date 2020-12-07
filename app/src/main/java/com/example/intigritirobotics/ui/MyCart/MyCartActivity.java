@@ -41,7 +41,6 @@ public class MyCartActivity extends AppCompatActivity {
     public static final List<ViewAllModel> productList = new ArrayList<>();
     public static TextView totalPriceTextView, deliveryPriceTextView, cartBottomTotal, cartTotal;
     public static FirebaseFirestore firebaseFirestore;
-    public static int totalPrice;
     public static MyCartAdapter adapter1;
     public static  View v, text;
     private Button checkoutBtn;
@@ -62,9 +61,9 @@ public class MyCartActivity extends AppCompatActivity {
         cartBottomTotal = findViewById(R.id.cart_bottom_total_price);
         cartTotal = findViewById(R.id._total_price);
         projectLinearLayoutManager = new LinearLayoutManager(MyCartActivity.this);
-        Log.d("Total Price", "1"+totalPrice);
-         v = findViewById(R.id.include_product_price);
-         text = findViewById(R.id.nothing_to_show);
+
+        v = findViewById(R.id.include_product_price);
+        text = findViewById(R.id.nothing_to_show);
 
         checkoutBtn = findViewById(R.id.cart_checkout_btn);
 
@@ -107,7 +106,6 @@ public class MyCartActivity extends AppCompatActivity {
             if(task.isSuccessful()) {
                 productList.clear();
 
-                totalPrice = 0;
                 QuerySnapshot q = task.getResult();
                 assert q != null;
                 if(q.size() == 0) {

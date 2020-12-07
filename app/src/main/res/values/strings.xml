@@ -137,4 +137,14 @@
     <string name="skip_for_now">Skip for now</string>
     <string name="submit">Submit</string>
     <string name="nothing_to_show">Nothing to Show, your cart is Empty</string>
+    <string name="seller_address_placeholder">Gamotech * SURVEY NO. 38/2, 39 AND 40, JADIGENAHALLI HOBLI,KACHARAKANAHALLI VILLAGE, HOSAKOTE TALUK, Bengaluru (Bangalore) Urban Bangalore, Karnataka, 562114 IN</string>
+    <string name="shipping_address_placeholder">Sumit sharma Iar institute of advance robotics, dehradun, Itbp road DEHRADUN, UTTARAKHAND, 248001 IN State/UT Code: 05</string>
+    <string name="pan_placeholder">PAN No: HMWPS9374G</string>
+    <string name="date_placeholder">Order Date: 01.01.2021</string>
+    <string name="order_no_placeholder">Order No: 403-3490108-6101</string>
+    <string name="tax_inv_placeholder">Tax Invoice/Bill of Supply/Cash Memo</string>
+    <string name="original_for_recipient">(Original for Recipient)</string>
+    <string name="sold_by">Sold By:</string>
+    <string name="shipping_address">Shipping Address:</string>
+    <string name="product_disc_placeholder">Alketron Dual Channel CL11 DDR3 RAM for Laptop 4GB 1600MHz SODIMM | B07MTPRKKP ( DDR3LAPTOP4GBRAM )</string>
 </resources>

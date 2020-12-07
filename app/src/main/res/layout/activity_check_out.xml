@@ -12,12 +12,13 @@
     <include
         layout="@layout/cart_price_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"/>
 
     <Button
         android:id="@+id/checkout_pay_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="Place Oreder" />
 
 </LinearLayout>

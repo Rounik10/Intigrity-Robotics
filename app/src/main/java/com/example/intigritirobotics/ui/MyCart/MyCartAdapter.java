@@ -131,7 +131,6 @@ public class MyCartAdapter extends RecyclerView.Adapter<MyCartAdapter.ViewHolder
 
                                         calculatePrice();
 
-//
                                     }
                                 }
 

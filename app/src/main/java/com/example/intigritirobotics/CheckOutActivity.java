@@ -15,8 +15,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.intigritirobotics.ui.MyCart.MyCartActivity;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
+import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
+import static com.example.intigritirobotics.ui.MyCart.MyCartActivity.productList;
 
 public class CheckOutActivity extends AppCompatActivity {
     private TextView totalPriceTextView, deliveryPriceTextView, cartBottomTotal, cartTotal;
@@ -132,9 +141,11 @@ public class CheckOutActivity extends AppCompatActivity {
                 }
             }
             if (status.equals("success")) {
-                //Code to handle successful transaction here.
+
+                loadProductsToMyOrders();
+
                 Toast.makeText(CheckOutActivity.this, "Transaction successful.", Toast.LENGTH_SHORT).show();
-                Log.e("UPI", "payment successfull: "+approvalRefNo);
+                Log.e("UPI", "payment successful: "+approvalRefNo);
             }
             else if("Payment cancelled by user.".equals(paymentCancel)) {
                 Toast.makeText(CheckOutActivity.this, "Payment cancelled by user.", Toast.LENGTH_SHORT).show();
@@ -149,6 +160,26 @@ public class CheckOutActivity extends AppCompatActivity {
             Toast.makeText(CheckOutActivity.this, "Internet connection is not available. Please check and try again", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void loadProductsToMyOrders() {
+
+        Map<String , Object> map = new HashMap<>();
+
+        for(ViewAllModel product: productList) {
+            map.put(product.getTitle().substring(0,15), product.getId());
+        }
+
+        CollectionReference collRef = firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart");
+        collRef.add(map).addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                productList.clear();
+            } else {
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     public static boolean isConnectionAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {

@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:layout_width="432dp"
             android:layout_height="wrap_content">
 
             <TextView
@@ -27,19 +27,21 @@
                 android:textColor="@color/gen_black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/description"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
                 android:layout_marginStart="8dp"
                 android:text="Description"
                 android:textColor="@color/gen_black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/unit_price"
+                app:layout_constraintHorizontal_bias="0.01"
                 app:layout_constraintStart_toEndOf="@id/serial_no"
-                app:layout_constraintTop_toTopOf="parent"
-                android:textSize="16sp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/unit_price"
@@ -47,10 +49,11 @@
                 android:layout_height="wrap_content"
                 android:layout_column="3"
                 android:layout_marginStart="92dp"
+                android:layout_marginEnd="3dp"
                 android:text="Unit Price"
                 android:textColor="@color/gen_black"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@id/description"
+                app:layout_constraintEnd_toStartOf="@+id/qty"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -58,24 +61,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="3"
-                android:layout_marginStart="8dp"
+                android:paddingHorizontal="2dp"
                 android:text="Qty"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/unit_price"
                 android:textColor="@color/gen_black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/total_amount"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/total_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:text="Total Amount"
                 android:textColor="@color/gen_black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.99"
-                app:layout_constraintStart_toEndOf="@id/qty"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </TableRow>
@@ -108,7 +108,7 @@
                 android:textColor="@color/gen_black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/total_amount_number"
@@ -120,7 +120,7 @@
                 android:textColor="@color/gen_black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.99"
+                app:layout_constraintHorizontal_bias="0.9999"
                 app:layout_constraintStart_toEndOf="@id/total_amount_text"
                 app:layout_constraintTop_toTopOf="parent" />
 

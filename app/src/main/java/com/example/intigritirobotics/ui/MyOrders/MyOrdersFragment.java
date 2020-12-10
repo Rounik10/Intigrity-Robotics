@@ -12,7 +12,6 @@ import com.example.intigritirobotics.R;
 
 public class MyOrdersFragment extends Fragment {
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

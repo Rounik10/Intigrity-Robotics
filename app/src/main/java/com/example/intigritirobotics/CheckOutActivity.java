@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,17 +14,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.intigritirobotics.ui.MyCart.MyCartActivity;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
@@ -77,9 +74,20 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         map.put("productQsIds", idStr.toString());
         map.put("productQty", qtyStr.toString());
 
-        CollectionReference collRef = firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart");
+        CollectionReference collRef = firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Orders");
         collRef.add(map).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
+
+                firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart")
+                        .get()
+                        .addOnCompleteListener(task1 -> {
+                            List<DocumentSnapshot> l = task1.getResult().getDocuments();
+                            for(int i=0; i<l.size(); i++) {
+                                firebaseFirestore
+                                        .document("USERS/"+currentUserUId+"/My Cart/"+l.get(i).getId()).delete();
+                                Log.d("dikkat", l.get(i).getId());
+                            }
+                });
                 productList.clear();
             } else {
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -125,8 +133,9 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             options.put("theme.color", "#3399cc");
             options.put("currency", "INR");
             options.put("amount", "100");//pass amount in currency subunits
-            options.put("prefill.email", "gaurav.kumar@example.com");
-            options.put("prefill.contact","9988776655");
+            options.put("prefill.email", "rpgamerindia@gmail.com");
+            options.put("prefill.contact","6299022603");
+
             checkout.open(activity, options);
         } catch(Exception e) {
             Log.e("Payment Failed", "Error in starting Razorpay Checkout", e);

@@ -149,6 +149,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         Toast.makeText(this, "Order Successful", Toast.LENGTH_SHORT).show();
         loadProductsToMyOrders();
 
+
     }
 
     @Override

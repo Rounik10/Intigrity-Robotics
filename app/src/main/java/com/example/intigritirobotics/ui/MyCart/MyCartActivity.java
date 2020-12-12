@@ -50,6 +50,8 @@ public class MyCartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cart);
 
+        productList.clear();
+
         totalPriceTextView = findViewById(R.id.total_amount_number);
         deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
 

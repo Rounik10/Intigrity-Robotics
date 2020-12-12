@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class UpdateUserDetails extends AppCompatActivity {
 
-    public UserModel currentUser;
+    public static UserModel currentUser;
     public FirebaseAuth firebaseAuth;
     public FirebaseFirestore firebaseFirestore;
     private EditText addFstLine;

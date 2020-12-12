@@ -53,6 +53,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         totalPriceTextView.setText(intent.getStringExtra("Total cost"));
         checkoutPayBtn = findViewById(R.id.checkout_pay_button);
 
+
         checkoutPayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

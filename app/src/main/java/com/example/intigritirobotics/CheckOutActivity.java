@@ -89,6 +89,12 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                             }
                 });
                 productList.clear();
+
+                Intent intent = new Intent(this, MainHomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("EXIT", true);
+                startActivity(intent);
+
             } else {
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }

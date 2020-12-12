@@ -111,6 +111,7 @@ public class MyCartActivity extends AppCompatActivity {
                 QuerySnapshot q = task.getResult();
                 assert q != null;
                 if(q.size() == 0) {
+
                     v.setVisibility(View.GONE);
                     text.setVisibility(View.VISIBLE);
                 }

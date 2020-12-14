@@ -40,7 +40,7 @@ public class MyOrdersFragment extends Fragment {
         return view;
     }
     private void loadOrders() {
-        firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(task -> {
+        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 myOrderModels.clear();
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {

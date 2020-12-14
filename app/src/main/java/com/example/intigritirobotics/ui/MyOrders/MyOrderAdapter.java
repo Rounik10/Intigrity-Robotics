@@ -16,8 +16,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.intigritirobotics.MyOrderDetailActivity;
 import com.example.intigritirobotics.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
+
+import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 
 public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHolder> {
 
@@ -38,11 +45,10 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         String orderId = myOrderModelList.get(position).getOrderID();
         String orderDate = myOrderModelList.get(position).getOrderDate();
-        String productTitle = myOrderModelList.get(position).getProductTitle();
-        String productPic = myOrderModelList.get(position).getProductPic();
+        String productID = myOrderModelList.get(position).getProductID();
         String productStatus = myOrderModelList.get(position).getProductStatus();
 
-        viewHolder.setData(orderId,orderDate,productTitle, productPic, productStatus);
+        viewHolder.setData(orderId,orderDate,productID, productStatus);
 
     }
 
@@ -71,10 +77,28 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
 
         }
 
-        private void  setData( String orderId, String orderDate, String productTitle,String  productPic, String productStatus)
+        private void  setData( String orderId, String orderDate, String productId, String productStatus)
         {
-            Glide.with(itemView.getContext()).load(productPic).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
-            ProductTitle.setText(productTitle);
+
+            firebaseFirestore.document("PRODUCTS/"+productId).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful())
+                    {
+                        DocumentSnapshot queryDocumentSnapshots = task.getResult();
+
+                        Glide.with(itemView.getContext()).load(queryDocumentSnapshots.get("product_pic").toString().split(", ")).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
+                        ProductTitle.setText(queryDocumentSnapshots.get("product title").toString());
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+
+                }
+            });
             OrderDate.setText(orderDate);
             OrderId.setText(orderId);
             OrderStatus.setText(productStatus);

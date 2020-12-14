@@ -3,16 +3,13 @@ package com.example.intigritirobotics.ui.MyOrders;
 public class MyOrderModel {
     private  String OrderID;
     private String OrderDate;
-    private  String ProductTitle;
-    private  String ProductPic;
+    private  String ProductID;
     private  String ProductStatus;
 
-
-    public MyOrderModel(String orderID, String orderDate, String productTitle, String productPic, String productStatus) {
+    public MyOrderModel(String orderID, String orderDate, String productID, String productStatus) {
         OrderID = orderID;
         OrderDate = orderDate;
-        ProductTitle = productTitle;
-        ProductPic = productPic;
+        ProductID = productID;
         ProductStatus = productStatus;
     }
 
@@ -32,20 +29,12 @@ public class MyOrderModel {
         OrderDate = orderDate;
     }
 
-    public String getProductTitle() {
-        return ProductTitle;
+    public String getProductID() {
+        return ProductID;
     }
 
-    public void setProductTitle(String productTitle) {
-        ProductTitle = productTitle;
-    }
-
-    public String getProductPic() {
-        return ProductPic;
-    }
-
-    public void setProductPic(String productPic) {
-        ProductPic = productPic;
+    public void setProductID(String productID) {
+        ProductID = productID;
     }
 
     public String getProductStatus() {

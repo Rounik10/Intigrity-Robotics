@@ -21,9 +21,13 @@ import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
@@ -62,6 +66,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     private void loadProductsToMyOrders() {
 
+        CollectionReference collRef = firebaseFirestore.collection("/ORDERS");
+
         Map<String , Object> map = new HashMap<>();
 
         StringBuilder idStr = new StringBuilder();
@@ -72,10 +78,22 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             qtyStr.append(product.getQuantity()).append(", ");
         }
 
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        AtomicInteger totalOrders = null;
+
+        collRef.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) totalOrders.set(task.getResult().size() + 1);
+        });
+        String orderId = "IR-" +   currentUserUId + "-" + totalOrders;
+
         map.put("productQsIds", idStr.toString());
         map.put("productQty", qtyStr.toString());
+        map.put("order by", currentUserUId);
+        map.put("order Id", orderId);
+        map.put("order date", date);
+        map.put("order status", "Order Successfully Placed");
 
-        CollectionReference collRef = firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Orders");
         collRef.add(map).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
 

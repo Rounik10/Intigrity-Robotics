@@ -116,6 +116,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Item was added to the cart", Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        Log.e("dikkat 2", task.getException().getMessage());
                         Toast.makeText(getApplicationContext(), "Dummy text", Toast.LENGTH_SHORT).show();
                     }
                 });

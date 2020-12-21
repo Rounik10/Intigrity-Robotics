@@ -43,7 +43,8 @@ public class CategoryFragment extends Fragment {
 
     private void loadcategory() {
         firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful())
+            {
                 projectList.clear();
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                     projectList.add(new CategoryModel(
@@ -59,7 +60,9 @@ public class CategoryFragment extends Fragment {
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
 
-            } else {
+            }
+            else
+            {
                 loadingDialog.dismiss();
                 String error = task.getException().getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();

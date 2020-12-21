@@ -35,7 +35,6 @@ import static com.example.intigritirobotics.ui.MyCart.MyCartActivity.productList
 
 public class CheckOutActivity extends AppCompatActivity implements PaymentResultListener {
     private TextView totalPriceTextView, deliveryPriceTextView, cartBottomTotal, cartTotal;
-    final int UPI_PAYMENT = 0;
     private Button checkoutPayBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     private void loadProductsToMyOrders() {
 
-        CollectionReference collRef = firebaseFirestore.collection("/ORDERS");
+        CollectionReference collRef = firebaseFirestore.collection("ORDERS");
 
         Map<String , Object> map = new HashMap<>();
 
@@ -92,7 +91,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         map.put("order by", currentUserUId);
         map.put("order Id", orderId);
         map.put("order date", date);
-        map.put("order status", "Order Successfully Placed");
+        map.put("order status", "Order Placed");
 
         collRef.add(map).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
@@ -135,19 +134,9 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     }
 
     public void startPayment() {
-        /**
-         * Instantiate Checkout
-         */
         Checkout checkout = new Checkout();
-
-        /**
-         * Reference to current activity
-         */
         final Activity activity = this;
 
-        /**
-         * Pass your payment options to the Razorpay Checkout as a JSONObject
-         */
         try {
             JSONObject options = new JSONObject();
 

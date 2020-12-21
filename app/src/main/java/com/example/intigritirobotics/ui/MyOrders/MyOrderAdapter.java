@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.intigritirobotics.MainHomeActivity;
 import com.example.intigritirobotics.MyOrderDetailActivity;
 import com.example.intigritirobotics.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -80,19 +82,18 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
         private void  setData( String orderId, String orderDate, String productId, String productStatus)
         {
 
-            firebaseFirestore.document("PRODUCTS/"+productId).get()
+            MainHomeActivity.firebaseFirestore.document("PRODUCTS/"+productId).get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful())
-                    {
-                        DocumentSnapshot queryDocumentSnapshots = task.getResult();
-
-                        Glide.with(itemView.getContext()).load(queryDocumentSnapshots.get("product_pic").toString().split(", ")).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
-                        ProductTitle.setText(queryDocumentSnapshots.get("product title").toString());
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful())
+                            {
+                                DocumentSnapshot queryDocumentSnapshots = task.getResult();
+                                Glide.with(itemView.getContext()).load(queryDocumentSnapshots.get("product_pic").toString().split(", ")).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
+                                  ProductTitle.setText(queryDocumentSnapshots.get("product title").toString());
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
 

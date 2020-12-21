@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -21,7 +20,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tax_invoice_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/tax_inv_placeholder"
         android:textColor="@color/gen_black"
@@ -65,10 +64,10 @@
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="4dp"
         android:text="@string/seller_address_placeholder"
+        android:textColor="@color/gen_black"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sold_by"
-        android:textColor="@color/gen_black"/>
+        app:layout_constraintTop_toBottomOf="@id/sold_by" />
 
 
     <com.google.android.material.textview.MaterialTextView
@@ -172,8 +171,12 @@
 
     <include
         layout="@layout/order_summary_table"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="24dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/order_date"/>
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/order_date" />
 </androidx.constraintlayout.widget.ConstraintLayout>

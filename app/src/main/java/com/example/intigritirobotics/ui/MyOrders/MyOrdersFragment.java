@@ -32,7 +32,7 @@ public class MyOrdersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_orders, container, false);
-        recyclerView =view.findViewById(R.id.category_fragment_recyclerview);
+        recyclerView =view.findViewById(R.id.my_orders_recyclerview);
         linearLayoutManager = new LinearLayoutManager(getContext());
 
         loadOrders();
@@ -40,12 +40,12 @@ public class MyOrdersFragment extends Fragment {
         return view;
     }
     private void loadOrders() {
-        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task -> {
+        firebaseFirestore.collection("ORDERS").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 myOrderModels.clear();
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
                     myOrderModels.add(new MyOrderModel(
-                            documentSnapshot.get("order id").toString(),
+                            documentSnapshot.get("order Id").toString(),
                             documentSnapshot.get("order date").toString(),
                             documentSnapshot.get("productQsIds").toString(),
                             documentSnapshot.get("order status").toString()));

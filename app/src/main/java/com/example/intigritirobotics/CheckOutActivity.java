@@ -79,42 +79,43 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-        AtomicInteger totalOrders = null;
-
         collRef.get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) totalOrders.set(task.getResult().size() + 1);
-        });
-        String orderId = "IR-" +   currentUserUId + "-" + totalOrders;
-
-        map.put("productQsIds", idStr.toString());
-        map.put("productQty", qtyStr.toString());
-        map.put("order by", currentUserUId);
-        map.put("order Id", orderId);
-        map.put("order date", date);
-        map.put("order status", "Order Placed");
-
-        collRef.add(map).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
+                int totalOrders = task.getResult().size() + 1;
 
-                firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart")
-                        .get()
-                        .addOnCompleteListener(task1 -> {
-                            List<DocumentSnapshot> l = task1.getResult().getDocuments();
-                            for(int i=0; i<l.size(); i++) {
-                                firebaseFirestore
-                                        .document("USERS/"+currentUserUId+"/My Cart/"+l.get(i).getId()).delete();
-                                Log.d("dikkat", l.get(i).getId());
-                            }
+                String orderId = "IR-" +   currentUserUId + "-" + totalOrders;
+
+                map.put("productQsIds", idStr.toString());
+                map.put("productQty", qtyStr.toString());
+                map.put("order by", currentUserUId);
+                map.put("order Id", orderId);
+                map.put("order date", date);
+                map.put("order status", "Order Placed");
+
+                collRef.add(map).addOnCompleteListener(task1 -> {
+                    if(task.isSuccessful()) {
+
+                        firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart")
+                                .get()
+                                .addOnCompleteListener(task2 -> {
+                                    List<DocumentSnapshot> l = task2.getResult().getDocuments();
+                                    for(int i=0; i<l.size(); i++) {
+                                        firebaseFirestore
+                                                .document("USERS/"+currentUserUId+"/My Cart/"+l.get(i).getId()).delete();
+                                        Log.d("dikkat", l.get(i).getId());
+                                    }
+                                });
+                        productList.clear();
+
+                        Intent intent = new Intent(this, MainHomeActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("EXIT", true);
+                        startActivity(intent);
+
+                    } else {
+                        Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
                 });
-                productList.clear();
-
-                Intent intent = new Intent(this, MainHomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("EXIT", true);
-                startActivity(intent);
-
-            } else {
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
 

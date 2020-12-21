@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,13 @@ import android.widget.Toast;
 import com.example.intigritirobotics.CategoryModel;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.ui.Category.CategoryFragmentAdapter;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
@@ -40,23 +43,36 @@ public class MyOrdersFragment extends Fragment {
         return view;
     }
     private void loadOrders() {
-        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task -> {
+        firebaseFirestore.collection("/USERS/"+ currentUserUId +"/My Orders").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 myOrderModels.clear();
+
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    myOrderModels.add(new MyOrderModel(
-                            documentSnapshot.get("order id").toString(),
-                            documentSnapshot.get("order date").toString(),
-                            documentSnapshot.get("productQsIds").toString(),
-                            documentSnapshot.get("order status").toString()));
+
+                    firebaseFirestore.document("/ORDERS/"+ documentSnapshot.get("order Id"))
+                            .get()
+                            .addOnCompleteListener(task1 -> {
+                                if(task1.isSuccessful()) {
+                                    DocumentSnapshot orderSnap = task1.getResult();
+                                    myOrderModels.add(new MyOrderModel(
+                                            orderSnap.get("order Id").toString(),
+                                            orderSnap.get("order date").toString(),
+                                            orderSnap.get("productQsIds").toString(),
+                                            orderSnap.get("order status").toString()
+                                            )
+                                    );
+
+                                    Log.d("dikkat__", ""+ (linearLayoutManager == null));
+//////////////////////////////////////////////////////////////////////// ERROR AA RAHA HAI IDHAR ///////////////////////////////////////////////////////////////////////////
+                                    linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+                                    recyclerView.setLayoutManager(linearLayoutManager); // <-- Null Pointer Exception
+                                    MyOrderAdapter adapter = new MyOrderAdapter(myOrderModels);
+                                    recyclerView.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+
                 }
-
-
-                linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-                recyclerView.setLayoutManager(linearLayoutManager);
-                MyOrderAdapter adapter = new MyOrderAdapter(myOrderModels);
-                recyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
 
             } else {
                 loadingDialog.dismiss();

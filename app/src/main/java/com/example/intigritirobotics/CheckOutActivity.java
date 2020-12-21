@@ -65,8 +65,6 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     private void loadProductsToMyOrders() {
 
-        CollectionReference collRef = firebaseFirestore.collection("ORDERS");
-
         Map<String , Object> map = new HashMap<>();
 
         StringBuilder idStr = new StringBuilder();
@@ -78,6 +76,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         }
 
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        CollectionReference collRef = firebaseFirestore.collection("ORDERS");
 
         collRef.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
@@ -92,7 +92,13 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 map.put("order date", date);
                 map.put("order status", "Order Placed");
 
-                collRef.add(map).addOnCompleteListener(task1 -> {
+                Map<String, Object> m2 = new HashMap<>();
+                m2.put("order Id", orderId);
+
+                firebaseFirestore.collection("/USERS/"+ currentUserUId +"/My Orders").add(m2);
+
+                collRef.document(orderId).set(map).addOnCompleteListener(task1 -> {
+
                     if(task.isSuccessful()) {
 
                         firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart")

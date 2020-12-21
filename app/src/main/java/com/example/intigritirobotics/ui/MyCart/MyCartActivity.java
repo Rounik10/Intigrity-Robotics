@@ -114,6 +114,7 @@ public class MyCartActivity extends AppCompatActivity {
 
                     v.setVisibility(View.GONE);
                     text.setVisibility(View.VISIBLE);
+
                 }
                 for(DocumentSnapshot prodSnap : Objects.requireNonNull(q).getDocuments()){
                     if(!prodSnap.exists()) break;
@@ -135,6 +136,7 @@ public class MyCartActivity extends AppCompatActivity {
 
                             adapter1 = new MyCartAdapter(productList);
                             adapter1.notifyDataSetChanged();
+
                             cartItemRecycler.setAdapter(adapter1);
                             adapter1.notifyDataSetChanged();
                             MainHomeActivity.loadingDialog.dismiss();

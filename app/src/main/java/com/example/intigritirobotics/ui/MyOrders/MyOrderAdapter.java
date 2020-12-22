@@ -89,7 +89,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
                             if (task.isSuccessful())
                             {
                                 DocumentSnapshot queryDocumentSnapshots = task.getResult();
-                                Glide.with(itemView.getContext()).load(queryDocumentSnapshots.get("product_pic").toString().split(", ")).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
+                                Glide.with(itemView.getContext()).load(queryDocumentSnapshots.get("product_pic").toString().split(", ")[0]).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
                                   ProductTitle.setText(queryDocumentSnapshots.get("product title").toString());
                             }
                         }

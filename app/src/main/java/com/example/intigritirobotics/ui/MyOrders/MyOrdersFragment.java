@@ -35,7 +35,7 @@ public class MyOrdersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_orders, container, false);
-        recyclerView =view.findViewById(R.id.category_fragment_recyclerview);
+        recyclerView =view.findViewById(R.id.my_orders_recyclerview);
         linearLayoutManager = new LinearLayoutManager(getContext());
 
         loadOrders();
@@ -57,7 +57,7 @@ public class MyOrdersFragment extends Fragment {
                                     myOrderModels.add(new MyOrderModel(
                                             orderSnap.get("order Id").toString(),
                                             orderSnap.get("order date").toString(),
-                                            orderSnap.get("productQsIds").toString(),
+                                            orderSnap.get("productQsIds").toString().split(", ")[0],
                                             orderSnap.get("order status").toString()
                                             )
                                     );

@@ -6,15 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.intigritirobotics.CategoryModel;
 import com.example.intigritirobotics.R;
-import com.example.intigritirobotics.ui.Category.CategoryFragmentAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -31,8 +28,7 @@ public class MyOrdersFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_orders, container, false);
         recyclerView =view.findViewById(R.id.my_orders_recyclerview);
@@ -62,8 +58,6 @@ public class MyOrdersFragment extends Fragment {
                                             )
                                     );
 
-                                    Log.d("dikkat__", ""+ (linearLayoutManager == null));
-//////////////////////////////////////////////////////////////////////// ERROR AA RAHA HAI IDHAR ///////////////////////////////////////////////////////////////////////////
                                     linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                                     recyclerView.setLayoutManager(linearLayoutManager); // <-- Null Pointer Exception
                                     MyOrderAdapter adapter = new MyOrderAdapter(myOrderModels);

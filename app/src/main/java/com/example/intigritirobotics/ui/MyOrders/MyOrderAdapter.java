@@ -1,3 +1,4 @@
+
 package com.example.intigritirobotics.ui.MyOrders;
 
 
@@ -109,6 +110,13 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent( itemView.getContext(), MyOrderDetailActivity.class);
+
+                    MyOrderModel clickedOrder = myOrderModelList.get(getAdapterPosition());
+
+                    intent.putExtra("date", clickedOrder.getOrderDate());
+                    intent.putExtra("order id", clickedOrder.getOrderID());
+                    intent.putExtra("productId", clickedOrder.getProductID());
+                    intent.putExtra("status", clickedOrder.getProductStatus());
 
                     itemView.getContext().startActivity(intent);
                 }

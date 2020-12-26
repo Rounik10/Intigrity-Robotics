@@ -90,7 +90,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
                 map.put("productQsIds", idStr.toString());
                 map.put("productQty", qtyStr.toString());
-                map.put("productQty", priceStr.toString());
+                map.put("productPrice", priceStr.toString());
                 map.put("order by", currentUserUId);
                 map.put("order Id", orderId);
                 map.put("order date", date);
@@ -148,13 +148,12 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         Checkout checkout = new Checkout();
         final Activity activity = this;
 
-        try {
+        try
+        {
             JSONObject options = new JSONObject();
-
             options.put("name", "Merchant Name");
             options.put("description", "Test Order");
             options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
-
             options.put("theme.color", "#3399cc");
             options.put("currency", "INR");
             options.put("amount", "100");//pass amount in currency subunits
@@ -162,7 +161,9 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             options.put("prefill.contact","6299022603");
 
             checkout.open(activity, options);
-        } catch(Exception e) {
+        }
+        catch(Exception e)
+        {
             Log.e("Payment Failed", "Error in starting Razorpay Checkout", e);
         }
     }

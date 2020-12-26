@@ -69,10 +69,13 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         StringBuilder idStr = new StringBuilder();
         StringBuilder qtyStr = new StringBuilder();
+        StringBuilder priceStr = new StringBuilder();
 
         for(ViewAllModel product: productList) {
             idStr.append(product.getId()).append(", ");
             qtyStr.append(product.getQuantity()).append(", ");
+            priceStr.append(product.getFinalPrice()).append(", ");
+
         }
 
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -87,6 +90,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
                 map.put("productQsIds", idStr.toString());
                 map.put("productQty", qtyStr.toString());
+                map.put("productQty", priceStr.toString());
                 map.put("order by", currentUserUId);
                 map.put("order Id", orderId);
                 map.put("order date", date);

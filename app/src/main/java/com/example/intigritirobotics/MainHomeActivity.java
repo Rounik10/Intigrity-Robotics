@@ -49,7 +49,7 @@ public class MainHomeActivity extends AppCompatActivity {
         firebaseFirestore  =FirebaseFirestore.getInstance();
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            Intent myIntent = new Intent(MainHomeActivity.this, UpdateUserDetails.class);
+            Intent myIntent = new Intent(MainHomeActivity.this, MyOrderDetailActivity.class);
             startActivity(myIntent);
         });
 

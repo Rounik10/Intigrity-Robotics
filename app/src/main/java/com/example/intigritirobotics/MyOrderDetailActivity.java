@@ -17,7 +17,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MyOrderDetailActivity extends AppCompatActivity {
 
@@ -25,7 +28,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
     private Button saveInvoiceButton;
     private String orderId;
-    private String productId[];
+    private String productId;
     private String date;
     private String status;
     private List<Product> prodList;
@@ -49,6 +52,8 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 //        date = myIntent.getStringExtra("date");
 //        status = myIntent.getStringExtra("status");
 
+        date = Calendar.getInstance().getTime().toString();
+
         pdfHelper = new PdfHelper(this);
         sqLiteDatabase = pdfHelper.getWritableDatabase();
 
@@ -60,8 +65,9 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         prodList.add(new Product("title 1", 1, 50));
         prodList.add(new Product("title 2", 2, 100));
+        prodList.add(new Product("title 2", 2, 100));
 
-        orderId = "Iddd";
+        orderId = "#1001";
 
         pdfHelper.insert("Name", "9999999", 5L,"55", 11,111);
 
@@ -83,7 +89,6 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         PdfDocument pdfDocument = new PdfDocument();
         Paint paint = new Paint();
 
-        String[] columns = {"invoiceNo", "customerName", "contactNo", "date", "item", "qty", "amount"};
         Cursor cursor = sqLiteDatabase.query("myTable", null, null, null, null, null, null);
 
         cursor.move(cursor.getCount());
@@ -94,22 +99,21 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         Canvas canvas = page.getCanvas();
 
         paint.setTextSize(80);
-        canvas.drawText("Intigriti Robotics", 30, 30, paint);
+        canvas.drawText("Intigriti Robotics", 30, 100, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
 
         paint.setTextSize(30);
         canvas.drawText("Invoice Id", canvas.getWidth()-40, 40, paint);
-        canvas.drawText(orderId, canvas.getWidth()-40, 40, paint);
+        canvas.drawText(orderId, canvas.getWidth()-40, 80, paint);
 
         paint.setTextAlign(Paint.Align.LEFT);
 
         paint.setColor(Color.rgb(150, 150, 150));
-        canvas.drawRect(30, 150, canvas.getWidth()-40, 160, paint);
+        canvas.drawRect(30, 160, canvas.getWidth()-40, 165, paint);
 
         paint.setColor(Color.BLACK);
-        canvas.drawText("date", 50, 200, paint);
-
+        canvas.drawText("Order date: "+ date, 50, 200, paint);
 
         paint.setColor(Color.rgb(150, 150, 150));
         canvas.drawRect(30, 250, 280, 300, paint);
@@ -119,17 +123,17 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         paint.setColor(Color.BLACK);
         canvas.drawText("Consumer Name: ", 30 , 350, paint);
-        canvas.drawText("Dummy Name", 150 , 350, paint);
+        canvas.drawText("Dummy Name", 280 , 350, paint);
 
-        canvas.drawText("Contact No: ", 650 , 350, paint);
-        canvas.drawText("Dummy Name", 850 , 350, paint);
+        canvas.drawText("Contact No: ", 550 , 350, paint);
+        canvas.drawText("+91 629902260X", 720 , 350, paint);
 
         paint.setColor(Color.rgb(150, 150, 150));
         canvas.drawRect(30, 400, canvas.getWidth()-30, 450, paint);
 
         paint.setColor(Color.WHITE);
         canvas.drawText("S/No.", 50, 435, paint);
-        canvas.drawText("Item", 90, 435, paint);
+        canvas.drawText("Items", 300, 435, paint);
         canvas.drawText("Qty", 550, 435, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
@@ -140,25 +144,29 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         int low = 500;
         int s_no = 0;
-
         int sum = 0;
 
         for(Product product: prodList) {
 
             sum += product.price * product.qty;
 
-            canvas.drawText(""+ ++s_no, 50, low, paint);
-            canvas.drawText(product.title, 90, low, paint);
+            paint.setTextAlign(Paint.Align.LEFT);
+
+            canvas.drawText(""+ ++s_no, 60, low, paint);
+            canvas.drawText(product.title, 160, low, paint);
             canvas.drawText(""+product.qty, 550 ,low, paint);
+
             paint.setTextAlign(Paint.Align.RIGHT);
             canvas.drawText(product.qty + " x " + product.price, canvas.getWidth() - 40, low, paint);
             paint.setTextAlign(Paint.Align.LEFT);
+
             low += 50;
         }
 
         paint.setColor(Color.rgb(150,150, 150));
-        canvas.drawRect(30, low+50, canvas.getWidth(), low+100, paint);
+        canvas.drawRect(30, low+50, canvas.getWidth()-40, low+55, paint);
 
+        paint.setColor(Color.BLACK);
         low += 100;
 
         canvas.drawText("SUBTOTAL", 550, low, paint);
@@ -178,7 +186,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         pdfDocument.finishPage(page);
 
-        File file = new File(this.getExternalFilesDir("/"), Math.random()*1000+"Testing Invoice.pdf");
+        File file = new File(this.getExternalFilesDir("/"), date.substring(10,20)+"Testing Invoice.pdf");
 
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
@@ -189,6 +197,8 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         }
 
         pdfDocument.close();
+        sqLiteDatabase.close();
+        cursor.close();
 
     }
 }

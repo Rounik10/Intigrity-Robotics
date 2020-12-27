@@ -144,6 +144,8 @@ public class UpdateUserDetails extends AppCompatActivity {
 
     private void uploadPic() {
         Uri file = imageUri;
+        if(file == null) return;
+
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
         final ProgressDialog pd = new ProgressDialog(this);

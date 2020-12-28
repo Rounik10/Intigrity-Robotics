@@ -1,6 +1,7 @@
 package com.example.intigritirobotics;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -163,10 +164,10 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         // In stock
         if(in_stock.equals("false")) {
-            TextView inStockText = findViewById(R.id.inStockText);
-            inStockText.setBackgroundColor(Color.RED);
-            inStockText.setText(R.string.out_of_stock);
-            Button buyNow = findViewById(R.id.buyNowButton);
+//            TextView inStockText = findViewById(R.id.inStockText);
+//            inStockText.setBackgroundColor(Color.RED);
+//            inStockText.setText(R.string.out_of_stock);
+              Button buyNow = findViewById(R.id.buyNowButton);
             buyNow.setEnabled(false);
             Button addToCart = findViewById(R.id.addToCartButton);
             addToCart.setEnabled(false);
@@ -257,6 +258,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         int stars = Integer.parseInt(Objects.requireNonNull(product.get(starNo + "_star")).toString());
         progressBar.setMax(total);
         progressBar.setProgress(stars);
+
     }
 
 }

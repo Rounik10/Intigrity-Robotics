@@ -1,59 +1,332 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/project_toolbar_background">
 
     <TextView
         android:id="@+id/ratingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ratings"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/ratings"
+        android:textColor="#000"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/stars2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:max="100"
+        android:progress="30"
+        android:progressTint="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="@+id/stars3"
+        app:layout_constraintStart_toStartOf="@+id/stars3"
+        app:layout_constraintTop_toBottomOf="@+id/stars3" />
+
+    <ProgressBar
+        android:id="@+id/stars3"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:max="100"
+        android:progress="20"
+        android:progressTint="#ffff00"
+        app:layout_constraintEnd_toEndOf="@+id/stars4"
+        app:layout_constraintStart_toStartOf="@+id/stars4"
+        app:layout_constraintTop_toBottomOf="@+id/stars4" />
+
+    <ProgressBar
+        android:id="@+id/stars1"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:max="100"
+        android:progress="15"
+        android:progressTint="#ff0000"
+        app:layout_constraintEnd_toEndOf="@+id/stars2"
+        app:layout_constraintStart_toStartOf="@+id/stars2"
+        app:layout_constraintTop_toBottomOf="@+id/stars2" />
+
+    <ProgressBar
+        android:id="@+id/stars5"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:max="100"
+        android:progress="80"
+        android:progressTint="@color/green_light"
+        app:layout_constraintEnd_toEndOf="@+id/averageRating"
+        app:layout_constraintStart_toStartOf="@+id/averageRating"
+        app:layout_constraintTop_toBottomOf="@+id/number_of_rating_text" />
+
+    <ProgressBar
+        android:id="@+id/stars4"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:max="100"
+        android:progress="64"
+        android:progressTint="@color/first"
+        app:layout_constraintEnd_toEndOf="@+id/stars5"
+        app:layout_constraintStart_toStartOf="@+id/stars5"
+        app:layout_constraintTop_toBottomOf="@+id/stars5" />
+
+    <LinearLayout
+        android:id="@+id/rateStar4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars4"
+        app:layout_constraintEnd_toStartOf="@+id/stars4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stars4">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/vector_star" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rateStar3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars3"
+        app:layout_constraintEnd_toStartOf="@+id/stars3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stars3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/vector_star" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rateStar5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars5"
+        app:layout_constraintEnd_toStartOf="@+id/stars5"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stars5">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/vector_star" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rateStar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars2"
+        app:layout_constraintEnd_toStartOf="@+id/stars2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stars2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/vector_star" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rateStar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="6dp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars1"
+        app:layout_constraintEnd_toStartOf="@+id/stars1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stars1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/vector_star" />
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/averageRating"
-        android:paddingHorizontal="6dp"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="6dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ratingText"
         tools:ignore="UseCompoundDrawables">
+
         <TextView
             android:id="@+id/averageRatingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4.6"
-            android:textStyle="bold"
             android:textColor="#000"
-            android:textSize="28sp" />
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
         <ImageView
-            android:layout_marginLeft="4dp"
             android:layout_width="28dp"
             android:layout_height="28dp"
-            android:src="@drawable/vector_star"/>
+            android:layout_marginLeft="4dp"
+            android:src="@drawable/vector_star" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/number_of_rating_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="69 ratings"
         android:layout_marginTop="2dp"
+        android:text="69 ratings"
         android:textSize="12sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/averageRating"/>
+        app:layout_constraintTop_toBottomOf="@id/averageRating" />
+
+    <TextView
+        android:id="@+id/num_of_1_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="5"
+        android:textColor="@color/black_overlay"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars1"
+        app:layout_constraintStart_toEndOf="@+id/stars1"
+        app:layout_constraintTop_toTopOf="@+id/stars1" />
+
+    <TextView
+        android:id="@+id/num_of_2_stars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="15"
+        android:textColor="@color/black_overlay"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars2"
+        app:layout_constraintStart_toEndOf="@+id/stars2"
+        app:layout_constraintTop_toTopOf="@+id/stars2" />
+
+    <TextView
+        android:id="@+id/num_of_3_stars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="8"
+        android:textColor="@color/black_overlay"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars3"
+        app:layout_constraintStart_toEndOf="@+id/stars3"
+        app:layout_constraintTop_toTopOf="@+id/stars3" />
+
+    <TextView
+        android:id="@+id/num_of_5_stars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="35"
+        android:textColor="@color/black_overlay"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars5"
+        app:layout_constraintStart_toEndOf="@+id/stars5"
+        app:layout_constraintTop_toTopOf="@+id/stars5" />
+
+    <TextView
+        android:id="@+id/num_of_4_stars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="21"
+        android:textColor="@color/black_overlay"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stars4"
+        app:layout_constraintStart_toEndOf="@+id/stars4"
+        app:layout_constraintTop_toTopOf="@+id/stars4" />
 
     <LinearLayout
         android:id="@+id/ratingBars"
@@ -66,259 +339,57 @@
         app:layout_constraintStart_toStartOf="@+id/averageRating"
         app:layout_constraintTop_toBottomOf="@id/number_of_rating_text">
 
-        <ProgressBar
-            android:id="@+id/stars5"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="80"
-            android:progressTint="@color/green_light" />
-
-        <ProgressBar
-            android:id="@+id/stars4"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="64"
-            android:progressTint="@color/green_light" />
-
-        <ProgressBar
-            android:id="@+id/stars3"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="20"
-            android:progressTint="#ffff00" />
-
-        <ProgressBar
-            android:id="@+id/stars2"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="30"
-            android:progressTint="#ffff00" />
-
-        <ProgressBar
-            android:id="@+id/stars1"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:max="100"
-            android:progress="15"
-            android:progressTint="#ff0000" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginRight="8dp"
-        app:layout_constraintTop_toTopOf="@id/ratingBars"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@id/ratingBars"
-        app:layout_constraintRight_toLeftOf="@id/ratingBars">
+        app:layout_constraintRight_toLeftOf="@id/ratingBars"
+        app:layout_constraintTop_toTopOf="@id/ratingBars">
 
-        <LinearLayout
-            android:id="@+id/rateStar5"
-            android:paddingHorizontal="6dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingText">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5"
-                android:textStyle="bold"
-                android:textColor="#000"
-                android:textSize="14sp" />
-            <ImageView
-                android:layout_marginLeft="4dp"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/vector_star"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rateStar4"
-            android:paddingHorizontal="6dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingText">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4"
-                android:textStyle="bold"
-                android:textColor="#000"
-                android:textSize="14sp" />
-            <ImageView
-                android:layout_marginLeft="4dp"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/vector_star"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/rateStar3"
-            android:paddingHorizontal="6dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingText">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3"
-                android:textStyle="bold"
-                android:textColor="#000"
-                android:textSize="14sp" />
-            <ImageView
-                android:layout_marginStart="4dp"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/vector_star"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/rateStar2"
-            android:paddingHorizontal="6dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingText">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2"
-                android:textStyle="bold"
-                android:textColor="#000"
-                android:textSize="14sp" />
-            <ImageView
-                android:layout_marginStart="4dp"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/vector_star"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/rateStar1"
-            android:paddingHorizontal="6dp"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingText">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textStyle="bold"
-                android:textColor="#000"
-                android:textSize="14sp" />
-            <ImageView
-                android:layout_marginStart="4dp"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/vector_star"/>
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="@id/ratingBars"
         app:layout_constraintBottom_toBottomOf="@id/ratingBars"
         app:layout_constraintLeft_toRightOf="@id/ratingBars"
-        android:layout_marginStart="8dp"
-        android:gravity="center">
+        app:layout_constraintTop_toTopOf="@id/ratingBars">
 
-        <TextView
-            android:id="@+id/num_of_5_stars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:text="35"
-            android:textColor="@color/black_overlay"/>
-        <TextView
-            android:id="@+id/num_of_4_stars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="21"
-            android:textSize="14sp"
-            android:textColor="@color/black_overlay"/>
-        <TextView
-            android:id="@+id/num_of_3_stars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="8"
-            android:textSize="14sp"
-            android:textColor="@color/black_overlay"/>
-        <TextView
-            android:id="@+id/num_of_2_stars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="15"
-            android:textSize="14sp"
-            android:textColor="@color/black_overlay"/>
-        <TextView
-            android:id="@+id/num_of_1_star"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5"
-            android:textSize="14sp"
-            android:textColor="@color/black_overlay"/>
     </LinearLayout>
+
     <TextView
         android:id="@+id/yourRatingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="172dp"
+        android:text="Your Rating"
+        android:textColor="#000"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="#000"
-        android:text= "Your Rating"
-        app:layout_constraintTop_toBottomOf="@id/ratingBars"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/ratingBars" />
+
     <RatingBar
         android:id="@+id/rating_stars"
-        android:stepSize="1.0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:progressTint="@color/green_light"
+        android:stepSize="1.0"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.409"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/yourRatingText"
-        android:progressTint="#FFFF00"
-        android:elevation="5dp"/>
+        app:layout_constraintTop_toBottomOf="@id/yourRatingText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

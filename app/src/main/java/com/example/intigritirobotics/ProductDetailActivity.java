@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -34,7 +35,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private String price, title, id;
     private int total, prev_rating;
     public FirebaseFirestore firebaseFirestore;
-    Button addToCartButton;
+    LinearLayout addToCartButton;
     String userPath;
     int is_app_starting;
     private TextView totalRatings;
@@ -169,7 +170,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 //            inStockText.setText(R.string.out_of_stock);
               Button buyNow = findViewById(R.id.buyNowButton);
             buyNow.setEnabled(false);
-            Button addToCart = findViewById(R.id.addToCartButton);
+            LinearLayout addToCart = findViewById(R.id.addToCartButton);
             addToCart.setEnabled(false);
         }
 

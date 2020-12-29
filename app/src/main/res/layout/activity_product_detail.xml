@@ -10,10 +10,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/grey_light"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/addToCartButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:scrollbars="none"
         tools:context=".ProductDetailActivity">
 
         <LinearLayout
@@ -169,70 +170,131 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/project_toolbar_background">
+
+                <ImageView
+                    android:id="@+id/pd_offer_banner"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:elevation="5dp"
+                    android:layout_margin="5dp"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/coupon_1" />
+
+                <LinearLayout
+                    android:id="@+id/pd_use_offer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pd_offer_banner">
+
+                    <TextView
+                        android:id="@+id/textView24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_weight="1"
+                        android:text="USE THIS COUPON"
+                        android:textAlignment="center"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/pd_more_offer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:backgroundTint="@color/colorPrimaryDark"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:text="More"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+
+                        />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/detailTabs"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/project_toolbar_background"
+                android:contextClickable="true"
+                android:padding="5dp"
+                app:tabIndicatorColor="@color/dot_dark_screen4"
+                app:tabSelectedTextColor="@color/green_light"
+                app:tabTextColor="@color/gen_black" />
 
-                app:tabIndicatorColor="@color/colorPrimary" />
+
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_weight="1"
-                android:padding="12dp"
-                android:background="@drawable/project_toolbar_background"
-
-                android:layout_marginBottom="5dp"
                 android:layout_marginHorizontal="5dp"
-
-
-
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/project_toolbar_background"
+                android:padding="12dp"
                 />
 
             <include
                 layout="@layout/product_ratings_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_margin="5dp"
-                />
+                android:layout_weight="1" />
 
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/addToCartButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:background="#FFC107"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/addToCartButton"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_margin="2dp"
             android:layout_weight="1"
-            android:backgroundTint="#A11F1F"
-            android:text="@string/add_to_cart" />
+            android:text="@string/add_to_cart"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+
+            android:textColor="@color/gen_white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/buyNowButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_margin="2dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:backgroundTint="#06810B"
-
-            android:text="@string/buy_now" />
+            android:background="@drawable/rounded_shape"
+            android:text="@string/buy_now"
+            />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

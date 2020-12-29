@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntigritiRobotics">
-        <activity android:name=".MyOrderDetailActivity"></activity>
+        <activity android:name=".ProjectPdfActivity"></activity>
+        <activity android:name=".MyOrderDetailActivity" />
         <activity android:name=".CheckOutActivity" />
         <activity android:name=".UpdateUserDetails" />
         <activity

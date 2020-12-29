@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -38,8 +39,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     LinearLayout addToCartButton;
     String userPath;
     int is_app_starting;
-    private TextView totalRatings;
+    private TextView totalRatings,tvOutOfStock;
     private RatingBar ratingBar;
+    private LinearLayout getHelpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +54,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         id = intent.getStringExtra("ID");
         firebaseFirestore = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_product_detail);
-
+        tvOutOfStock = findViewById(R.id.tv_out_of_stock);
         is_app_starting = 0;
         ratingBar = (RatingBar) findViewById(R.id.rating_stars);
         totalRatings = (TextView) findViewById(R.id.number_of_rating_text);
 
+        getHelpButton = findViewById(R.id.pd_project_help_btn);
         userPath = "";
         loadProductDetails();
         addToCartButton = findViewById(R.id.addToCartButton);
@@ -99,6 +102,13 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+        getHelpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProductDetailActivity.this, ProjectPdfActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void addItemToCart() {
@@ -172,6 +182,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             buyNow.setEnabled(false);
             LinearLayout addToCart = findViewById(R.id.addToCartButton);
             addToCart.setEnabled(false);
+            tvOutOfStock.setVisibility(View.VISIBLE);
         }
 
         // Slider
@@ -260,5 +271,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         progressBar.setMax(total);
         progressBar.setProgress(stars);
     }
+
 
 }

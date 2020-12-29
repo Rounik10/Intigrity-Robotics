@@ -53,8 +53,10 @@ public class MyOrdersFragment extends Fragment {
                                     myOrderModels.add(new MyOrderModel(
                                             orderSnap.get("order Id").toString(),
                                             orderSnap.get("order date").toString(),
-                                            orderSnap.get("productQsIds").toString().split(", ")[0],
-                                            orderSnap.get("order status").toString()
+                                            orderSnap.get("productQsIds").toString(),
+                                            orderSnap.get("order status").toString(),
+                                            orderSnap.get("productQty").toString(),
+                                            orderSnap.get("productPrice").toString()
                                             )
                                     );
 

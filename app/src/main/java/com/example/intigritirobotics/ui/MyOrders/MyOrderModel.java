@@ -5,13 +5,25 @@ public class MyOrderModel {
     private String OrderDate;
     private  String ProductID;
     private  String ProductStatus;
+    private String ProductQty;
+    private String ProductPrices;
 
-    public MyOrderModel(String orderID, String orderDate, String productID, String productStatus) {
+    public MyOrderModel(String orderID, String orderDate, String productID, String productStatus, String productQty, String productPrices) {
         OrderID = orderID;
         OrderDate = orderDate;
         ProductID = productID;
         ProductStatus = productStatus;
+        ProductQty =  productQty;
+        ProductPrices = productPrices;
     }
+
+    public String getProductPrices() {return ProductPrices;}
+
+    public void setProductPrices(String productPrices) {ProductPrices = productPrices;}
+
+    public String getProductQty() {return ProductQty;}
+
+    public void setProductQty(String productQty) {ProductQty = productQty;}
 
     public String getOrderID() {
         return OrderID;

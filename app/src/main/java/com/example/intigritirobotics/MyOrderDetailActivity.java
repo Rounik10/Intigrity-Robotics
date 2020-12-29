@@ -2,6 +2,7 @@ package com.example.intigritirobotics;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -17,6 +18,10 @@ import android.text.TextPaint;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -28,8 +33,9 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
     private String orderId;
     private String date;
-    private String address, soldBy, payment;
+    private String address, soldBy, payment, status;
     TextView randomTest;
+    private String[] productQty, productId, productPrices;
     private List<Product> prodList;
 
     @Override
@@ -37,19 +43,14 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_order_detail);
 
-   //     Intent myIntent = getIntent();
+        Intent myIntent = getIntent();
 
-        /*
-            intent.putExtra("date", clickedOrder.getOrderDate());
-            intent.putExtra("order id", clickedOrder.getOrderID());
-            intent.putExtra("productId", clickedOrder.getProductID());
-            intent.putExtra("status", clickedOrder.getProductStatus());
-        */
-
-//        orderId = myIntent.getStringExtra("order id");
-//        productId = myIntent.getStringExtra("productId").split(", ");
-//        date = myIntent.getStringExtra("date");
-//        status = myIntent.getStringExtra("status");
+        orderId = myIntent.getStringExtra("order id");
+        date = myIntent.getStringExtra("date");
+        status = myIntent.getStringExtra("status");
+        productId = myIntent.getStringExtra("productId").split(", ");
+        productQty = myIntent.getStringExtra("product qty").split(", ");
+        productPrices = myIntent.getStringExtra("product price").split(", ");
 
         date = Calendar.getInstance().getTime().toString();
 
@@ -59,21 +60,33 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         sqLiteDatabase = pdfHelper.getWritableDatabase();
         payment = "UPI";
 
-        // Product list banana hai jsime ki products honge saare
-
         prodList = new ArrayList<>();
 
-        prodList.add(new Product("title 1", 1, 50));
-        prodList.add(new Product("title 2", 2, 100));
-        prodList.add(new Product("title 2", 2, 100));
+        for(int i=0; i< productId.length; i++) {
+            String prodId = productId[i];
+            int prodQty = Integer.parseInt(productQty[i]);
+            int prodPrice = Integer.parseInt(productPrices[i]);
 
-        address = "Sumit sharma Iar institute of advance robotics, dehradun, Itbp road DEHRADUN, UTTARAKHAND, 248001 IN State/UT Code: 05";
-        orderId = "#1001";
-        soldBy = "Gamotech * SURVEY NO. 38/2, 39 AND 40, JADIGENAHALLI HOBLI,KACHARAKANAHALLI VILLAGE, HOSAKOTE TALUK, Bengaluru (Bangalore) Urban Bangalore, Karnataka, 562114 IN";
+            FirebaseFirestore.getInstance().document("PRODUCTS/" + prodId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+               if(task.isSuccessful()) {
+                   DocumentSnapshot productSnap = task.getResult();
+                   String title = productSnap.get("product title").toString();
+                   prodList.add(new Product(title, prodQty, prodPrice));
 
-        pdfHelper.insert("Name", "9999999", 5L,"55", 11,111);
+                   address = "Sumit sharma Iar institute of advance robotics, dehradun, Itbp road DEHRADUN, UTTARAKHAND, 248001 IN State/UT Code: 05";
+                   orderId = "#1001";
+                   soldBy = "Gamotech * SURVEY NO. 38/2, 39 AND 40, JADIGENAHALLI HOBLI,KACHARAKANAHALLI VILLAGE, HOSAKOTE TALUK, Bengaluru (Bangalore) Urban Bangalore, Karnataka, 562114 IN";
 
-        saveInvoiceAsPDF();
+                   pdfHelper.insert("Name", "9999999", 5L,"55", 11,111);
+
+                   saveInvoiceAsPDF();
+
+               }
+            });
+        }
+
     }
 
     static class Product {
@@ -92,9 +105,9 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         PdfDocument pdfDocument = new PdfDocument();
         Paint paint = new Paint();
 
-        Cursor cursor = sqLiteDatabase.query("myTable", null, null, null, null, null, null);
-
-        cursor.move(cursor.getCount());
+//        Cursor cursor = sqLiteDatabase.query("myTable", null, null, null, null, null, null);
+//
+//        cursor.move(cursor.getCount());
 
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1000,1300,1).create();
 
@@ -203,7 +216,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
             canvas.drawText(""+product.qty, 550 ,low, paint);
 
             paint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(product.qty + " x " + product.price, canvas.getWidth() - 40, low, paint);
+            canvas.drawText(product.qty + " x " + (int)(0.82 * product.price), canvas.getWidth() - 40, low, paint);
             paint.setTextAlign(Paint.Align.LEFT);
 
             low += 50;
@@ -224,12 +237,12 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Rs." + sum + "/-", canvas.getWidth()-40, low, paint);
+        canvas.drawText("Rs." + 0.82 * sum + "/-", canvas.getWidth()-40, low, paint);
         canvas.drawText( "Rs."+0.18 * sum+"/-", canvas.getWidth()-40, low+50, paint);
 
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         canvas.drawText("Payment Method: ",270, low, paint);
-        canvas.drawText( "Rs."+(0.18 * sum + sum )+"/-", canvas.getWidth()-40, low+100, paint);
+        canvas.drawText( "Rs."+(0.18 * sum + 0.82*sum )+"/-", canvas.getWidth()-40, low+100, paint);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
         page.getCanvas().drawBitmap(bitmap, 0, 0, paint);
@@ -251,7 +264,6 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         pdfDocument.close();
         sqLiteDatabase.close();
-        cursor.close();
 
     }
 }

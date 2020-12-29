@@ -259,7 +259,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         int stars = Integer.parseInt(Objects.requireNonNull(product.get(starNo + "_star")).toString());
         progressBar.setMax(total);
         progressBar.setProgress(stars);
-
     }
 
 }

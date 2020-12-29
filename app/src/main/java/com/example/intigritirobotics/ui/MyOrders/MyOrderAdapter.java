@@ -83,7 +83,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
         private void  setData( String orderId, String orderDate, String productId, String productStatus)
         {
 
-            MainHomeActivity.firebaseFirestore.document("PRODUCTS/"+productId).get()
+            MainHomeActivity.firebaseFirestore.document("PRODUCTS/"+productId.split(", ")[0]).get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -91,13 +91,12 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
                             {
                                 DocumentSnapshot queryDocumentSnapshots = task.getResult();
                                 Glide.with(itemView.getContext()).load(queryDocumentSnapshots.get("product_pic").toString().split(", ")[0]).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
-                                  ProductTitle.setText(queryDocumentSnapshots.get("product title").toString());
+                                ProductTitle.setText(queryDocumentSnapshots.get("product title").toString());
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-
 
                 }
             });
@@ -117,13 +116,14 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
                     intent.putExtra("order id", clickedOrder.getOrderID());
                     intent.putExtra("productId", clickedOrder.getProductID());
                     intent.putExtra("status", clickedOrder.getProductStatus());
+                    intent.putExtra("product qty", clickedOrder.getProductQty());
+                    intent.putExtra("product price", clickedOrder.getProductPrices());
 
                     itemView.getContext().startActivity(intent);
                 }
             });
 
         }
-
 
     }
 

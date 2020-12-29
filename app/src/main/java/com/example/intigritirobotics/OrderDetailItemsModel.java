@@ -6,7 +6,6 @@ public class OrderDetailItemsModel {
     private  String ProductQty;
     private String ProductRating;
 
-
     public OrderDetailItemsModel(String productID, String productPrice, String productQty, String productRating) {
         ProductID = productID;
         ProductPrice = productPrice;

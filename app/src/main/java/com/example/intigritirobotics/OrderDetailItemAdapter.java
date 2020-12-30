@@ -9,19 +9,16 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.RawRes;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.List;
 import java.util.Objects;
 
 public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItemAdapter.ODIViewHolder> {
 
-    private List<OrderDetailItemsModel>OrderDetailItemAdapterList;
+    private final List<OrderDetailItemsModel>OrderDetailItemAdapterList;
 
     public OrderDetailItemAdapter(List<OrderDetailItemsModel> orderDetailItemAdapterList) {
         OrderDetailItemAdapterList = orderDetailItemAdapterList;
@@ -48,13 +45,13 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
         return OrderDetailItemAdapterList.size();
     }
 
-    public class ODIViewHolder extends RecyclerView.ViewHolder {
+    public static class ODIViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView pic;
-        private TextView title;
-        private TextView qty;
-        private TextView price;
-        private RatingBar ProductRating;
+        private final ImageView pic;
+        private final TextView title;
+        private final TextView qty;
+        private final TextView price;
+        private final RatingBar ProductRating;
 
         public ODIViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,19 +63,19 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
         }
         private void  setData(String  ID,String Price, String Qty, String Rating)
         {
-            Log.d("Dikkat: OrderAdapter", "null hai " + (title == null));
-
             FirebaseFirestore.getInstance().document("/PRODUCTS/"+ID).get().addOnCompleteListener(task -> {
                if(task.isSuccessful()) {
                    DocumentSnapshot prodSnap = task.getResult();
                    assert prodSnap != null;
 
                    Glide.with(itemView.getContext())
-                           .load(prodSnap.get("product_pic").toString().split(", ")[0])
+                           .load(Objects.requireNonNull(prodSnap.get("product_pic")).toString().split(", ")[0])
                            .placeholder(R.drawable.category_icon)
                            .into(pic);
 
                    String titleText = Objects.requireNonNull(prodSnap.get("product title")).toString();
+                   assert title != null;
+
                    title.setText(titleText);
                    String qtyText = "Qty: "+Qty;
                    qty.setText(qtyText);
@@ -88,14 +85,11 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                }
             });
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent( itemView.getContext(),ProductDetailActivity.class);
-                    intent.putExtra("ID", ID);
-                    intent.putExtra("Price",""+price);
-                    itemView.getContext().startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent( itemView.getContext(),ProductDetailActivity.class);
+                intent.putExtra("ID", ID);
+                intent.putExtra("Price",""+price);
+                itemView.getContext().startActivity(intent);
             });
 
         }

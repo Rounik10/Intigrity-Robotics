@@ -49,11 +49,7 @@ public class MainHomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         firebaseFirestore  =FirebaseFirestore.getInstance();
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            Intent myIntent = new Intent(MainHomeActivity.this, MyOrderDetailActivity.class);
-            startActivity(myIntent);
-        });
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserUId = firebaseAuth.getUid();
@@ -78,18 +74,6 @@ public class MainHomeActivity extends AppCompatActivity {
                 .setDrawerLayout(drawer)
                 .build();
 
-/*
-        navigationView.setNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.nav_my_account:
-                    Toast.makeText(getApplicationContext(), "Account Clicked", Toast.LENGTH_SHORT).show();
-
-                case R.id.action_settings:
-                    Toast.makeText(getApplicationContext(), "Account Clicked", Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        });
-*/
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);

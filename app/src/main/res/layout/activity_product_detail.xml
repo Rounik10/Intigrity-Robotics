@@ -64,7 +64,7 @@
                     app:srcCompat="@drawable/razer_pay" />
 
                 <TextView
-                    android:id="@+id/textView23"
+                    android:id="@+id/img_total_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -103,6 +103,7 @@
                         android:id="@+id/img_averageRatingText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="4.6"
                         android:textColor="#fff"
                         android:textSize="20sp" />
@@ -111,7 +112,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="4dp"
+                        android:layout_weight="1"
                         android:src="@drawable/vector_star"
                         app:tint="#fff" />
                 </LinearLayout>
@@ -172,6 +173,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pd_use_offer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp">
@@ -179,51 +181,29 @@
                 <ImageView
                     android:id="@+id/pd_offer_banner"
                     android:layout_width="0dp"
-                    android:layout_height="100dp"
+                    android:layout_height="120dp"
                     android:scaleType="fitXY"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/coupon_1" />
+                    app:srcCompat="@drawable/coupon_3" />
 
-                <LinearLayout
-                    android:id="@+id/pd_use_offer"
-                    android:layout_width="0dp"
+                <Button
+                    android:id="@+id/pd_more_offer"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#E3E2E1"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:text="More"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#0E0D0D"
+                    android:elevation="3dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pd_offer_banner">
-
-                    <TextView
-                        android:id="@+id/textView24"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_weight="1"
-                        android:text="USE THIS COUPON"
-                        android:textAlignment="center"
-                        android:textSize="25sp"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/pd_more_offer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:backgroundTint="@color/colorPrimaryDark"
-                        android:fontFamily="@font/nunito_semibold"
-                        android:text="More"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-
-                        />
-
-                </LinearLayout>
+                    />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -239,10 +219,10 @@
                     android:id="@+id/textView27"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:text="Get Project Help"
                     android:textAlignment="center"
-                    android:layout_gravity="center"
                     android:textColor="#fff"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -262,11 +242,7 @@
                 app:tabTextColor="@color/gen_black" />
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
+
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
@@ -275,8 +251,33 @@
                 android:layout_marginHorizontal="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
+
                 android:background="@drawable/project_toolbar_background"
                 android:padding="12dp" />
+
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Related Product"
+                android:textColor="#000000"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textAlignment="textStart"
+                android:textAllCaps="true"
+                android:layout_marginStart="20dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/related_product_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/project_toolbar_background"
+                android:layout_margin="5dp"/>
+
 
             <include
                 layout="@layout/product_ratings_layout"

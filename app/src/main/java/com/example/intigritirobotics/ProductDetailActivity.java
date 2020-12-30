@@ -13,15 +13,22 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,40 +36,49 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
+import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
+import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     private final List<SlideModel> slideModelList = new ArrayList<>();
-    private String price, title, id;
-    private int total, prev_rating;
+    private String price, title, id, userPath;
+    private int total, prev_rating, is_app_starting;
     public FirebaseFirestore firebaseFirestore;
-    LinearLayout addToCartButton;
-    String userPath;
-    int is_app_starting;
-    private TextView totalRatings,tvOutOfStock;
+    private TextView totalRatings, tvOutOfStock, imgAverageRating, imgTotalRating;
     private RatingBar ratingBar;
-    private LinearLayout getHelpButton;
+    private LinearLayout getHelpButton, addToCartButton;
+    private List<ViewAllModel> horizontalList = new ArrayList<>();
+    private LinearLayoutManager horizontalLinearLayoutManager;
+    private RecyclerView RelatedProductRecyclerview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_product_detail);
+
         Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
+
         Intent intent = getIntent();
         price = intent.getStringExtra("Price");
         title = intent.getStringExtra("Title");
         id = intent.getStringExtra("ID");
         firebaseFirestore = FirebaseFirestore.getInstance();
-        setContentView(R.layout.activity_product_detail);
         tvOutOfStock = findViewById(R.id.tv_out_of_stock);
-        is_app_starting = 0;
         ratingBar = (RatingBar) findViewById(R.id.rating_stars);
         totalRatings = (TextView) findViewById(R.id.number_of_rating_text);
-
+        RelatedProductRecyclerview = findViewById(R.id.related_product_recyclerview);
+        horizontalLinearLayoutManager = new LinearLayoutManager(this);
+        imgAverageRating = findViewById(R.id.img_averageRatingText);
+        imgTotalRating = findViewById(R.id.img_total_rating);
         getHelpButton = findViewById(R.id.pd_project_help_btn);
+        addToCartButton = findViewById(R.id.addToCartButton);
+
+
+        is_app_starting = 0;
         userPath = "";
         loadProductDetails();
-        addToCartButton = findViewById(R.id.addToCartButton);
         addToCartButton.setOnClickListener(view -> addItemToCart());
 
         ratingBar.setOnRatingBarChangeListener((ratingBar, v, b) -> {
@@ -85,7 +101,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                         int y = Integer.parseInt(documentSnapshot.get(prev_rating + "_star").toString()) - 1;
                         docRef.update(prev_rating + "_star", "" + y);
                     }
-                    Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
                     x++;
                     docRef.update((v + "").substring(0, 1) + "_star", "" + x);
                 }
@@ -120,16 +135,15 @@ public class ProductDetailActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         if (documentSnapshot.exists()) {
-                            Toast.makeText(getApplicationContext(), "Item is already added in the cart", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Already added to cart ;)", Toast.LENGTH_SHORT).show();
                         } else {
                             firebaseFirestore.collection("USERS")
                                     .document(currentUserUId)
                                     .collection("My Cart").document(id).set(map);
-                            Toast.makeText(getApplicationContext(), "Item was added to the cart", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Added to cart :)", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Log.e("dikkat 2", task.getException().getMessage());
-                        Toast.makeText(getApplicationContext(), "Dummy text", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Something went wrong!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -160,7 +174,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                         DocumentSnapshot doc = Objects.requireNonNull(task.getResult());
                         loadDataToProduct(doc);
                     } else {
-                        Log.d("Error", task.getException().toString());
+                        Toast.makeText(getApplicationContext(), task.getException().toString(), Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -174,18 +189,15 @@ public class ProductDetailActivity extends AppCompatActivity {
         String in_stock = Objects.requireNonNull(product.get("in stock")).toString();
 
         // In stock
-        if(in_stock.equals("false")) {
-//            TextView inStockText = findViewById(R.id.inStockText);
-//            inStockText.setBackgroundColor(Color.RED);
-//            inStockText.setText(R.string.out_of_stock);
-              Button buyNow = findViewById(R.id.buyNowButton);
+        if (in_stock.equals("false")) {
+            Button buyNow = findViewById(R.id.buyNowButton);
             buyNow.setEnabled(false);
             LinearLayout addToCart = findViewById(R.id.addToCartButton);
             addToCart.setEnabled(false);
             tvOutOfStock.setVisibility(View.VISIBLE);
         }
 
-        // Slider
+        ///////////////////////////////////////////////////////// Slider/////////////////////////////////////////////////////////////////
         ImageSlider imageSlider = findViewById(R.id.imgSlider);
 
         String[] productPicUrls = product.get("product_pic").toString().split(", ");
@@ -196,13 +208,16 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         TextView briefText = findViewById(R.id.itemBriefDetail);
         briefText.setText(title);
+        ///////////////////////////////////////////////////////// Slider/////////////////////////////////////////////////////////////////
 
-        // Set Ratings
+
+        ////////////////////////////////////////////////////////// Set Ratings//////////////////////////////////////////////////////////////
         TextView avgRatingText = findViewById(R.id.averageRatingText);
         avgRatingText.setText(getAvg(product));
+        ////////////////////////////////////////////////////////// Set Ratings//////////////////////////////////////////////////////////////
 
 
-        // Tabs
+        ///////////////////////////////////////////////////////////// Tabs//////////////////////////////////////////////////////////////////
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("Some Details");
         arrayList.add("Specs");
@@ -217,8 +232,10 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         prepareViewPager(viewPager, arrayList, details, spec, other);
         tabLayout.setupWithViewPager(viewPager);
+        ///////////////////////////////////////////////////////////// Tabs//////////////////////////////////////////////////////////////////
 
-        // Set Price
+
+        ///////////////////////////////////////////////////////////// Set Price/////////////////////////////////////////////////////////////////////////
         TextView priceImageView = findViewById(R.id.PriceText);
         String priceText = "Rs." + price + "/-";
         priceImageView.setText(priceText);
@@ -250,6 +267,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         s5.setText(product.get("5_star").toString());
 
         prev_rating = (int) ratingBar.getRating();
+
+        ///////////////////////////////////////////////////////////// Set Price/////////////////////////////////////////////////////////////////////////
+
     }
 
     private String getAvg(DocumentSnapshot product) {
@@ -262,7 +282,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         String average = "" + sum / total;
         if (average.length() > 3) average = average.substring(0, 3);
         String totS = "" + total;
-        totalRatings.setText(totS);
+        totalRatings.setText("(" + totS + ") Rating");
         return average;
     }
 
@@ -272,5 +292,42 @@ public class ProductDetailActivity extends AppCompatActivity {
         progressBar.setProgress(stars);
     }
 
+    private void loadRelatedProduct() {
+        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task2 -> {
+            int i = 1;
+            if (task2.isSuccessful()) {
+                horizontalList.clear();
 
+                for (QueryDocumentSnapshot documentSnapshot : task2.getResult()) {
+
+                    String id = documentSnapshot.getId();
+                    String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
+                    String title = documentSnapshot.get("product title").toString();
+                    float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
+                    int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
+                    horizontalList.add(new ViewAllModel(id, picUrl, title, rating, price));
+                    i++;
+                }
+            } else {
+                loadingDialog.dismiss();
+                String error = task2.getException().getMessage();
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> {
+            loadingDialog.dismiss();
+
+        });
+
+        horizontalLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        RelatedProductRecyclerview.setLayoutManager(horizontalLinearLayoutManager);
+        RelatedProductAdapter adapter1 = new RelatedProductAdapter(horizontalList);
+        RelatedProductRecyclerview.setAdapter(adapter1);
+        adapter1.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onStart() {
+        loadRelatedProduct();
+        super.onStart();
+    }
 }

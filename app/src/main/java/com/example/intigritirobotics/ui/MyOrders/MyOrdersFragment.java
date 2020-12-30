@@ -56,8 +56,7 @@ public class MyOrdersFragment extends Fragment {
                                             orderSnap.get("productQsIds").toString(),
                                             orderSnap.get("order status").toString(),
                                             orderSnap.get("productQty").toString(),
-                                            orderSnap.get("productPrice").toString()
-                                            )
+                                            orderSnap.get("productPrice").toString())
                                     );
 
                                     linearLayoutManager.setOrientation(RecyclerView.VERTICAL);

@@ -241,7 +241,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         prev_rating = (int) ratingBar.getRating();
     }
 
-    private String getAvg(DocumentSnapshot product) {
+    public String getAvg(DocumentSnapshot product) {
         float sum = 0, temp;
         for (int i = 1; i <= 5; i++) {
             temp = Integer.parseInt(Objects.requireNonNull(product.get(i + "_star")).toString());

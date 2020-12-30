@@ -18,7 +18,9 @@ import com.example.intigritirobotics.ui.Support.SupportActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 import com.squareup.okhttp.internal.framed.Header;
 
 import androidx.navigation.NavController;
@@ -37,7 +39,7 @@ public class MainHomeActivity extends AppCompatActivity {
     public static Dialog loadingDialog;
     public static String currentUserUId;
     public FirebaseAuth firebaseAuth;
-
+    public static UserModel TheUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class MainHomeActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserUId = firebaseAuth.getUid();
 
+        loadUserDetails();
 
         loadingDialog = new Dialog(MainHomeActivity.this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -93,6 +96,21 @@ public class MainHomeActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void loadUserDetails() {
+
+        firebaseFirestore.document("USERS/" + currentUserUId).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                DocumentSnapshot userSnap = task.getResult();
+                TheUser = new UserModel(
+                    userSnap.get("User Name").toString(),
+                    userSnap.get("Address").toString(),
+                    userSnap.get("Phone").toString(),
+                    currentUserUId
+                );
+            }
+        });
     }
 
     @Override

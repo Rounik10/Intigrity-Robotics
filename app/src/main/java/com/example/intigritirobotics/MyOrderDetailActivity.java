@@ -1,6 +1,8 @@
 package com.example.intigritirobotics;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,7 +17,9 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +31,15 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
+
+import static com.example.intigritirobotics.MainHomeActivity.TheUser;
+import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
+import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 
 public class MyOrderDetailActivity extends AppCompatActivity {
 
+    private static final String TAG = "Dikkat: MyOrderDetail";
     private SQLiteDatabase sqLiteDatabase;
     private String orderId;
     private String date;
@@ -37,6 +47,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     TextView randomTest;
     private String[] productQty, productId, productPrices;
     private List<Product> prodList;
+    RecyclerView orderRecycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +62,8 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         productId = myIntent.getStringExtra("productId").split(", ");
         productQty = myIntent.getStringExtra("product qty").split(", ");
         productPrices = myIntent.getStringExtra("product price").split(", ");
+
+        setRecycler();
 
         date = Calendar.getInstance().getTime().toString();
 
@@ -75,16 +88,62 @@ public class MyOrderDetailActivity extends AppCompatActivity {
                    String title = productSnap.get("product title").toString();
                    prodList.add(new Product(title, prodQty, prodPrice));
 
-                   address = "Sumit sharma Iar institute of advance robotics, dehradun, Itbp road DEHRADUN, UTTARAKHAND, 248001 IN State/UT Code: 05";
+                   address = MainHomeActivity.TheUser.address;
                    orderId = "#1001";
                    soldBy = "Gamotech * SURVEY NO. 38/2, 39 AND 40, JADIGENAHALLI HOBLI,KACHARAKANAHALLI VILLAGE, HOSAKOTE TALUK, Bengaluru (Bangalore) Urban Bangalore, Karnataka, 562114 IN";
 
                    pdfHelper.insert("Name", "9999999", 5L,"55", 11,111);
 
                    saveInvoiceAsPDF();
-
                }
             });
+        }
+
+    }
+
+    private void setRecycler() {
+
+        List<OrderDetailItemsModel> orderDetailItemsModelList = new ArrayList<>();
+
+        for(int i=0; i<productId.length; i++) {
+
+            String prodId = productId[i];
+            String prodPrice = productPrices[i];
+            String prodQty = productQty[i];
+
+            firebaseFirestore
+                    .document("PRODUCTS/"+productId[i])
+                    .get()
+                    .addOnCompleteListener(task -> {
+
+                if(task.isSuccessful()) {
+
+                    DocumentSnapshot product =  task.getResult();
+                    int total = 0;
+                    float sum = 0, temp;
+                    for (int j = 1; j <= 5; j++) {
+                        temp = Integer.parseInt(Objects.requireNonNull(product.get(j + "_star")).toString());
+                        sum += j * temp;
+                        total += temp;
+                    }
+                    String average = "" + sum / total;
+                    if (average.length() > 3) average = average.substring(0, 3);
+
+                    orderDetailItemsModelList.add(new OrderDetailItemsModel(prodId, prodPrice, prodQty, average));
+
+                    Log.d(TAG, average);
+
+                    orderRecycler = findViewById(R.id.order_detail_recyclerView);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+                    orderRecycler.setLayoutManager(linearLayoutManager);
+
+                    OrderDetailItemAdapter orderDetailItemAdapter = new OrderDetailItemAdapter(orderDetailItemsModelList);
+                    orderRecycler.setAdapter(orderDetailItemAdapter);
+
+                }
+
+            });
+
         }
 
     }
@@ -104,10 +163,6 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         PdfDocument pdfDocument = new PdfDocument();
         Paint paint = new Paint();
-
-//        Cursor cursor = sqLiteDatabase.query("myTable", null, null, null, null, null, null);
-//
-//        cursor.move(cursor.getCount());
 
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1000,1300,1).create();
 
@@ -180,10 +235,10 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         paint.setColor(Color.BLACK);
         canvas.drawText("Consumer Name: ", 30 , row + 120, paint);
-        canvas.drawText("Dummy Name", 280 , row + 120, paint);
+        canvas.drawText(TheUser.name, 280 , row + 120, paint);
 
         canvas.drawText("Contact No: ", 550 , row + 120, paint);
-        canvas.drawText("+91 629902260X", 720 , row + 120, paint);
+        canvas.drawText(TheUser.phoneNumber, 720 , row + 120, paint);
 
         paint.setColor(Color.rgb(150, 150, 150));
         canvas.drawRect(30, row + 150, canvas.getWidth()-30, row + 200, paint);
@@ -253,7 +308,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         pdfDocument.finishPage(page);
 
         File file = new File(this.getExternalFilesDir("/PDF/"), date.substring(10,20)+"Testing Invoice.pdf");
-
+/*
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
             Toast.makeText(this, "File Saved", Toast.LENGTH_SHORT).show();
@@ -261,7 +316,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Failed To Save", Toast.LENGTH_SHORT).show();
         }
-
+*/
         pdfDocument.close();
         sqLiteDatabase.close();
 

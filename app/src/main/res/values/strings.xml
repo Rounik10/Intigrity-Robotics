@@ -9,7 +9,7 @@
     <string name="about_activity_description"><b>Boost Your Brand and Company Image with Premium Online Printing Services from Us ! </b></string>
     <string name="title_activity_main">MainActivity</string>
     <string name="domain">Domain</string>
-    <string name="website"></string>
+    <string name="website">"www.website.com"</string>
     <string name="licence">License</string>
     <string name="licencedesc">Lorem Ipsum</string>
     <string name="changelog">Changelog</string>
@@ -32,7 +32,7 @@
     <string name="rate">Rate Us</string>
     <string name="helpcentre">Help Center</string>
     <string name="noconnection">Kindly connect to a WIFI network or enable Mobile Data</string>
-    <string name="help">In case of any query feel free to reach us at : \n    beingdev.com@gmail.com\n\nYou can also Call us at our helpline numbers : \n     +91-9291299322 \n     +91-8732883291</string>
+    <string name="help">In case of any query feel free to reach us at : \n    beingdev.com@gmail.com\n\nYou can also Call us at our helpline numbers : \n     +91&#8211;9291299322 \n     +91&#8211;8732883291</string>
     <string name="magic_points">Magic Points</string>
     <string name="orders_placed">Orders Placed</string>
     <string name="items_incart">Items inCart</string>
@@ -55,7 +55,7 @@
     Email : beingdevofficial@gmail.com\n
     Address : 424 Lorem Ipsum , Pune , Maharashtra ( 226025 )</string>
     <string name="title_activity_process_order">ProcessOrder</string>
-    <string name="orderdetails">Your Order has been Placed Succesfully. \n Here is your Unique Order Id !</string>
+    <string name="orderdetails">Your Order has been Placed Successfully. \n Here is your Unique Order Id !</string>
 
 
     <string name="title_activity_welcome">Home Screen</string>
@@ -142,10 +142,13 @@
     <string name="shipping_address_placeholder">Sumit sharma Iar institute of advance robotics, dehradun, Itbp road DEHRADUN, UTTARAKHAND, 248001 IN State/UT Code: 05</string>
     <string name="pan_placeholder">PAN No: HMWPS9374G</string>
     <string name="date_placeholder">Order Date: 01.01.2021</string>
-    <string name="order_no_placeholder">Order No: 403-3490108-6101</string>
+    <string name="order_no_placeholder">Order No: 403&#8211;3490108&#8211;6101</string>
     <string name="tax_inv_placeholder">Tax Invoice/Bill of Supply/Cash Memo</string>
     <string name="original_for_recipient">(Original for Recipient)</string>
     <string name="sold_by">Sold By:</string>
     <string name="shipping_address">Shipping Address:</string>
     <string name="product_disc_placeholder">Alketron Dual Channel CL11 DDR3 RAM for Laptop 4GB 1600MHz SODIMM | B07MTPRKKP ( DDR3LAPTOP4GBRAM )</string>
+    <string name="prod_title_placeholder">Arduino Uno R3 Micro controller , Getting started with arduino</string>
+    <string name="your_rating_text">Your Rating</string>
+    <string name="qty_placeholder">Qty:6</string>
 </resources>

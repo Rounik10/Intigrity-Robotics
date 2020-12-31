@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHolder> {
 
-    private List<ViewAllModel> ViewAllModelList;
+    private final List<ViewAllModel> ViewAllModelList;
 
     public ViewAllAdapter(List<ViewAllModel> ViewAllModelList) {
         this.ViewAllModelList = ViewAllModelList;
@@ -43,12 +43,12 @@ public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHold
         return ViewAllModelList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView pic;
-        private TextView CategoryTitle;
-        private TextView ProductPrice;
-        private TextView ProductRating;
+        private final ImageView pic;
+        private final TextView CategoryTitle;
+        private final TextView ProductPrice;
+        private final TextView ProductRating;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,22 +68,18 @@ public class ViewAllAdapter extends RecyclerView.Adapter<ViewAllAdapter.ViewHold
             ProductPrice.setText(priceText);
             ProductRating.setText(ratingText);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent( itemView.getContext(),ProductDetailActivity.class);
-                    intent.putExtra("Index",index);
-                    intent.putExtra("Title",title);
-                    intent.putExtra("ID", index);
-                    intent.putExtra("Category ID","");
-                    intent.putExtra("Price",""+price);
-                    intent.putExtra("Rating",""+rating);
-                    itemView.getContext().startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent( itemView.getContext(),ProductDetailActivity.class);
+                intent.putExtra("Index",index);
+                intent.putExtra("Title",title);
+                intent.putExtra("ID", index);
+                intent.putExtra("Category ID","");
+                intent.putExtra("Price",""+price);
+                intent.putExtra("Rating",""+rating);
+                itemView.getContext().startActivity(intent);
             });
 
         }
-
 
     }
 

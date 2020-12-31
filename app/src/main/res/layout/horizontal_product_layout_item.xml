@@ -74,7 +74,7 @@
 
         <TextView
             android:id="@+id/horizontal_product_preview_rating"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="2dp"
@@ -88,6 +88,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:layout_gravity="center"
+            android:contentDescription="@string/saved_items"
             app:srcCompat="@android:drawable/btn_star_big_on" />
     </LinearLayout>
 

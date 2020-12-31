@@ -60,7 +60,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        
         Intent intent = getIntent();
         price = intent.getStringExtra("Price");
         title = intent.getStringExtra("Title");

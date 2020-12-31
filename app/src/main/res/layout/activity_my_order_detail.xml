@@ -19,6 +19,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/order_detail_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <ImageView
                 android:id="@+id/invoice_img"
                 android:layout_width="match_parent"
@@ -26,12 +32,6 @@
                 android:layout_marginHorizontal="4dp"
                 android:layout_marginVertical="4dp"
                 android:background="@drawable/rzp_border"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/order_detail_recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
 
             <com.github.barteksc.pdfviewer.PDFView
                 android:id="@+id/order_detail_invoice_viewer"

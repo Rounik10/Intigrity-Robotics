@@ -10,7 +10,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/grey_light"
+        android:background="#FBF3F3"
         android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/addToCartButton"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -47,12 +47,22 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:background="@drawable/project_toolbar_background"
                 android:elevation="3dp"
                 android:padding="5dp">
 
+
+                <View
+                    android:id="@+id/divider12"
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:layout_marginHorizontal="60dp"
+                    android:background="@color/gen_black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/itemBriefDetail" />
 
                 <ImageView
                     android:id="@+id/imageView11"
@@ -89,14 +99,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/roundedbutton"
                     android:backgroundTint="#2196F3"
                     android:orientation="horizontal"
                     android:paddingHorizontal="6dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/itemBriefDetail"
-                    app:layout_constraintTop_toBottomOf="@+id/itemBriefDetail"
+                    app:layout_constraintTop_toBottomOf="@+id/divider12"
                     tools:ignore="UseCompoundDrawables">
 
                     <TextView
@@ -136,7 +146,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/pricePlaceHolder"
                     android:textColor="#000"
                     android:textSize="23sp"
                     android:textStyle="bold"
@@ -149,9 +158,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_semibold"
                     android:padding="5dp"
-                    android:text="@string/productBriefPlaceHolder"
                     android:textColor="#191818"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="@+id/imgSlider"
                     app:layout_constraintStart_toStartOf="@+id/imgSlider"
                     app:layout_constraintTop_toBottomOf="@id/imgSlider" />
@@ -164,13 +172,35 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="5dp"
                     android:layout_toEndOf="@+id/PriceText"
-                    android:text="@string/MrpSavingText"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="@+id/PriceText"
                     app:layout_constraintStart_toStartOf="@+id/PriceText"
                     app:layout_constraintTop_toBottomOf="@+id/PriceText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_black"
+                android:shadowColor="#0C0C0C"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                android:text="Offer for you"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#222121"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/gen_black" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/pd_use_offer"
@@ -195,15 +225,14 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:backgroundTint="#E3E2E1"
+                    android:elevation="3dp"
                     android:fontFamily="@font/nunito_semibold"
                     android:text="More"
+                    android:textColor="#0E0D0D"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:textColor="#0E0D0D"
-                    android:elevation="3dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintEnd_toEndOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
@@ -228,58 +257,112 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_black"
+                android:shadowColor="#0C0C0C"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                android:text="About the Product"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#222121"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/gen_black" />
+
+
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/detailTabs"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/project_toolbar_background"
+                android:background="@color/colorAccent"
                 android:contextClickable="true"
+                android:elevation="3dp"
                 android:padding="5dp"
-                app:tabIndicatorColor="@color/dot_dark_screen4"
-                app:tabSelectedTextColor="@color/green_light"
-                app:tabTextColor="@color/gen_black" />
-
-
+                app:tabIndicatorColor="@color/design_default_color_primary_dark"
+                app:tabSelectedTextColor="@color/design_default_color_primary_dark"
+                app:tabTextAppearance="@style/TabTextStyle" />
 
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
 
-                android:background="@drawable/project_toolbar_background"
+                android:background="@color/gen_white"
+                android:elevation="3dp"
                 android:padding="12dp" />
 
 
             <TextView
-                android:id="@+id/textView23"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/roboto_black"
+                android:shadowColor="#0C0C0C"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
                 android:text="Related Product"
-                android:textColor="#000000"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textAlignment="textStart"
+                android:textAlignment="center"
                 android:textAllCaps="true"
-                android:layout_marginStart="20dp"
-                />
+                android:textColor="#222121"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/gen_black" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/related_product_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginVertical="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/project_toolbar_background"
-                android:layout_margin="5dp"
-                android:paddingVertical="4dp"
-                android:paddingHorizontal="4dp"/>
+                android:background="@color/gen_white"
+                android:elevation="3dp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto_black"
+                android:shadowColor="#0C0C0C"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="5"
+                android:text="Ratings"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#222121"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/gen_black" />
 
             <include
                 layout="@layout/product_ratings_layout"
@@ -334,7 +417,7 @@
         android:text="Out of Stock"
         android:textAlignment="center"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="30sp"
+        android:textSize="30dp"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

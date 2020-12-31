@@ -81,7 +81,8 @@
                 android:id="@+id/horizontal_items_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
+                android:layout_marginVertical="5dp"
+                android:elevation="3dp"
                 android:background="@drawable/project_toolbar_background"
                 android:orientation="horizontal" />
         </LinearLayout>

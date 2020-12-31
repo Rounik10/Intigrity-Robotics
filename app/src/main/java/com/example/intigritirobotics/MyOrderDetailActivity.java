@@ -307,16 +307,6 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         pdfDocument.finishPage(page);
 
-        File file = new File(this.getExternalFilesDir("/PDF/"), date.substring(10,20)+"Testing Invoice.pdf");
-/*
-        try {
-            pdfDocument.writeTo(new FileOutputStream(file));
-            Toast.makeText(this, "File Saved", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Failed To Save", Toast.LENGTH_SHORT).show();
-        }
-*/
         pdfDocument.close();
         sqLiteDatabase.close();
 

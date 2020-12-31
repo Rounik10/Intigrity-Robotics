@@ -69,6 +69,7 @@
         android:background="@drawable/roundedbutton"
         android:orientation="horizontal"
         android:padding="2dp"
+        android:layout_margin="5dp"
         app:layout_constraintEnd_toEndOf="@+id/horizontal_product_preview_pic"
         app:layout_constraintTop_toTopOf="@+id/horizontal_product_preview_pic">
 

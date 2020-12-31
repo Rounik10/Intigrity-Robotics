@@ -70,7 +70,6 @@ public class MyOrdersFragment extends Fragment {
                 }
 
             } else {
-                loadingDialog.dismiss();
                 String error = task.getException().getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
             }

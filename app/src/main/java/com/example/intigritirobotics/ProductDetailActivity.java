@@ -132,7 +132,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     String prevRating = task1.getResult().get("Rating").toString();
                                     int pre_num = Integer.parseInt(prodSnap.get(prevRating.substring(0,1)+"_star").toString());
 
-                                    Log.d("Prev num is: ",""+pre_num);
 
                                     productUpdateMap.put(prevRating.substring(0,1)+"_star", (pre_num-1)+"");
                                 }
@@ -140,8 +139,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 firebaseFirestore.document("USERS/" + currentUserUId + "/My Ratings/" + id).set(userRatingMap);
                                 productUpdateMap.put((int)v+"_star", x+1+"");
 
-                                Log.d("Map Me kya hai",productUpdateMap.keySet().toString());
-                                Log.d("Map Values", productUpdateMap.values().toString());
 
                                 productRef.update(productUpdateMap);
                             }

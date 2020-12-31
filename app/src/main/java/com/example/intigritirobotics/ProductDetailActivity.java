@@ -141,6 +141,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 Log.d("Map Me kya hai",productUpdateMap.keySet().toString());
                                 Log.d("Map Values", productUpdateMap.values().toString());
 
+                                productUpdateMap.put("product rating",getAvg(prodSnap));
                                 productRef.update(productUpdateMap);
                             }
                         });
@@ -236,7 +237,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         ////////////////////////////////////////////////////////// Set Ratings//////////////////////////////////////////////////////////////
         TextView avgRatingText = findViewById(R.id.averageRatingText);
-        avgRatingText.setText(getAvg(product));
+        String avgRating = getAvg(product);
+        avgRatingText.setText(avgRating);
+        imgAverageRating.setText(avgRating);
         ////////////////////////////////////////////////////////// Set Ratings//////////////////////////////////////////////////////////////
 
 
@@ -304,8 +307,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
         String average = "" + sum / total;
         if (average.length() > 3) average = average.substring(0, 3);
-        String totS = "" + total;
-        totalRatings.setText("(" + totS + ") Rating");
+        String totS = "(" + total +")" + " Ratings";
+        totalRatings.setText(totS);
+        imgTotalRating.setText(totS);
         return average;
     }
 

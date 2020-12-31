@@ -276,7 +276,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/project_toolbar_background"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="4dp"/>
 
 
             <include
@@ -332,7 +334,7 @@
         android:text="Out of Stock"
         android:textAlignment="center"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

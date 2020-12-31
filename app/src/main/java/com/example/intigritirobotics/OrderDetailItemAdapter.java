@@ -71,6 +71,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
             price = itemView.findViewById(R.id.order_detail_product_price);
             qty = itemView.findViewById(R.id.order_detail_product_qty);
         }
+
         private void  setData(String  ID,String Price, String Qty, String Rating)
         {
             FirebaseFirestore.getInstance().document("/PRODUCTS/"+ID).get().addOnCompleteListener(task -> {
@@ -136,6 +137,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                                         Log.d("Map Me kya hai",productUpdateMap.keySet().toString());
                                         Log.d("Map Values", productUpdateMap.values().toString());
 
+                                        productUpdateMap.put("product rating", getAvg(prodSnap));
                                         productRef.update(productUpdateMap);
                                     }
                                 });
@@ -153,6 +155,21 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                 itemView.getContext().startActivity(intent);
             });
 
+        }
+
+        private String getAvg(DocumentSnapshot prodSnap) {
+            float sum = 0, temp;
+            int total = 0;
+
+            for (int i = 1; i <= 5; i++) {
+                temp = Integer.parseInt(Objects.requireNonNull(prodSnap.get(i + "_star")).toString());
+                sum += i * temp;
+                total += temp;
+            }
+            String average = "" + sum / total;
+            if (average.length() > 3) average = average.substring(0, 3);
+
+            return average;
         }
 
     }

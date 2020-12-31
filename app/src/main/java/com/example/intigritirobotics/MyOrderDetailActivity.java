@@ -157,6 +157,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
             this.price = price;
             this.qty = qty;
         }
+
     }
 
     public void saveInvoiceAsPDF() {
@@ -252,8 +253,8 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         canvas.drawText("Qty", 550, row + 185, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Amount", canvas.getWidth()-40, 435, paint);
-        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Amount", canvas.getWidth()-40, row+185, paint);
+        paint.setTextAlign(Paint.Align.LEFT);
 
         paint.setColor(Color.BLACK);
 
@@ -266,8 +267,11 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
             paint.setTextAlign(Paint.Align.LEFT);
 
+            String title = product.title;
+            if(title.length()>20) title = title.substring(0,20)+"...";
+
             canvas.drawText(""+ ++s_no, 60, low, paint);
-            canvas.drawText(product.title, 160, low, paint);
+            canvas.drawText(title, 160, low, paint);
             canvas.drawText(""+product.qty, 550 ,low, paint);
 
             paint.setTextAlign(Paint.Align.RIGHT);

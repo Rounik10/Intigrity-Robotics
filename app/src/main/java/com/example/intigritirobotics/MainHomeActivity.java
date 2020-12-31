@@ -30,6 +30,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.Objects;
+
 import static com.example.intigritirobotics.SignUpActivity.pref;
 
 public class MainHomeActivity extends AppCompatActivity {
@@ -87,12 +90,19 @@ public class MainHomeActivity extends AppCompatActivity {
         firebaseFirestore.document("USERS/" + currentUserUId).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 DocumentSnapshot userSnap = task.getResult();
-                TheUser = new UserModel(
-                    userSnap.get("User Name").toString(),
-                    userSnap.get("Address").toString(),
-                    userSnap.get("Phone").toString(),
-                    currentUserUId
-                );
+
+                try{
+                    String name =  Objects.requireNonNull(userSnap.get("User Name")).toString();
+                    String address = Objects.requireNonNull(userSnap.get("Address")).toString();
+                    String phone = Objects.requireNonNull(userSnap.get("Phone")).toString();
+
+                    if(name!=null && address!=null && phone !=null){
+                        TheUser = new UserModel(name, address, phone, currentUserUId);
+                    }
+                } catch (Exception e) {
+                //    Toast.makeText(, "", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

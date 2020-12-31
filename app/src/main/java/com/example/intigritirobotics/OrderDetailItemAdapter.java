@@ -108,7 +108,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                 DocumentReference productRef = firebaseFirestore.document("PRODUCTS/" + ID);
 
                 productRef.get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && is_app_starting > 1) {
+                    if (task.isSuccessful() && is_app_starting > 2) {
                         DocumentSnapshot prodSnap = task.getResult();
                         assert prodSnap != null;
                         String s = prodSnap.get((v + "").substring(0, 1) + "_star").toString();

@@ -143,6 +143,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                                 Log.d("Map Me kya hai",productUpdateMap.keySet().toString());
                                 Log.d("Map Values", productUpdateMap.values().toString());
 
+                                String d1 = getAvg(prodSnap);
+
+                                Log.d("Some Error",d1);
+
                                 productUpdateMap.put("product rating",getAvg(prodSnap));
                                 productRef.update(productUpdateMap);
                             }
@@ -302,16 +306,21 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     public String getAvg(DocumentSnapshot product) {
         float sum = 0, temp;
+        int total = 0;
+
         for (int i = 1; i <= 5; i++) {
             temp = Integer.parseInt(Objects.requireNonNull(product.get(i + "_star")).toString());
+            Log.d("Some Error",""+temp);
             sum += i * temp;
             total += temp;
         }
         String average = "" + sum / total;
         if (average.length() > 3) average = average.substring(0, 3);
+
         String totS = "(" + total +")" + " Ratings";
         totalRatings.setText(totS);
         imgTotalRating.setText(totS);
+        Log.d("Some Error",average);
         return average;
     }
 

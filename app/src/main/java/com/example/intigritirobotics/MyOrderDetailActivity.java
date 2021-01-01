@@ -39,7 +39,6 @@ import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 
 public class MyOrderDetailActivity extends AppCompatActivity {
 
-    private static final String TAG = "Dikkat: MyOrderDetail";
     private SQLiteDatabase sqLiteDatabase;
     private String orderId;
     private String date;
@@ -131,7 +130,6 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
                     orderDetailItemsModelList.add(new OrderDetailItemsModel(prodId, prodPrice, prodQty, average));
 
-                    Log.d(TAG, average);
 
                     orderRecycler = findViewById(R.id.order_detail_recyclerView);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

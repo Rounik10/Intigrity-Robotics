@@ -141,9 +141,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
                                 String d1 = getAvg(prodSnap);
-
-                                Log.d("Some Error",d1);
-
                                 productUpdateMap.put("product rating",getAvg(prodSnap));
                                 productRef.update(productUpdateMap);
                             }

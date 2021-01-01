@@ -300,18 +300,20 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     public String getAvg(DocumentSnapshot product) {
         float sum = 0, temp;
-        int total = 0;
+        int temp_total = 0;
 
         for (int i = 1; i <= 5; i++) {
             temp = Integer.parseInt(Objects.requireNonNull(product.get(i + "_star")).toString());
             Log.d("Some Error",""+temp);
             sum += i * temp;
-            total += temp;
+            temp_total += temp;
         }
-        String average = "" + sum / total;
+        String average = "" + sum / temp_total;
         if (average.length() > 3) average = average.substring(0, 3);
 
-        String totS = "(" + total +")" + " Ratings";
+        total = temp_total;
+
+        String totS = "(" + temp_total +")" + " Ratings";
         totalRatings.setText(totS);
         imgTotalRating.setText(totS);
         Log.d("Some Error",average);

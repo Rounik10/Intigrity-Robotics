@@ -44,7 +44,6 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private String orderId;
     private String date;
     private String address, soldBy, payment, status;
-    TextView randomTest;
     private String[] productQty, productId, productPrices;
     private List<Product> prodList;
     RecyclerView orderRecycler;
@@ -67,7 +66,6 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         date = Calendar.getInstance().getTime().toString();
 
-        randomTest = findViewById(R.id.textView16);
 
         PdfHelper pdfHelper = new PdfHelper(this);
         sqLiteDatabase = pdfHelper.getWritableDatabase();
@@ -310,11 +308,9 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         pdfImg.setImageBitmap(bitmap);
 
         pdfDocument.finishPage(page);
-/*
-        For saving the file.
 
         File file = new File(this.getExternalFilesDir("/PDF/"), date.substring(10,20)+"Testing Invoice.pdf");
-
+/*
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
             Toast.makeText(this, "File Saved", Toast.LENGTH_SHORT).show();

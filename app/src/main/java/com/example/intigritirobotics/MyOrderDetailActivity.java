@@ -310,9 +310,11 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         pdfImg.setImageBitmap(bitmap);
 
         pdfDocument.finishPage(page);
+/*
+        For saving the file.
 
         File file = new File(this.getExternalFilesDir("/PDF/"), date.substring(10,20)+"Testing Invoice.pdf");
-/*
+
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
             Toast.makeText(this, "File Saved", Toast.LENGTH_SHORT).show();

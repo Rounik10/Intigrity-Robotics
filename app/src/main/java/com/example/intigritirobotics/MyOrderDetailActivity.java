@@ -18,6 +18,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,35 +45,54 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private String orderId;
     private String date;
     private String address, soldBy, payment, status;
-    private String[] productQty, productId, productPrices;
-    private List<Product> prodList;
+    TextView randomTest;
+    private String productQty[], productId[], productPrices[];
     RecyclerView orderRecycler;
+    List<Product> prodList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_order_detail);
-
         Intent myIntent = getIntent();
 
+        date = myIntent.getStringExtra("date");
         orderId = myIntent.getStringExtra("order id");
         date = myIntent.getStringExtra("date");
         status = myIntent.getStringExtra("status");
-        productId = myIntent.getStringExtra("productId").split(", ");
-        productQty = myIntent.getStringExtra("product qty").split(", ");
-        productPrices = myIntent.getStringExtra("product price").split(", ");
+        String productIdStr = myIntent.getStringExtra("productId");
+        String productQtyStr = myIntent.getStringExtra("product qty");
+        String productPricesStr = myIntent.getStringExtra("product price");
 
+        productId = productIdStr.split(", ");
+        productQty = productQtyStr.split(", ");
+        productPrices = productPricesStr.split(", ");
         setRecycler();
 
         date = Calendar.getInstance().getTime().toString();
 
+        //randomTest = findViewById(R.id.textView16);
 
         PdfHelper pdfHelper = new PdfHelper(this);
         sqLiteDatabase = pdfHelper.getWritableDatabase();
         payment = "UPI";
 
-        prodList = new ArrayList<>();
+        Button toPdfAct = findViewById(R.id.pdf_act_button);
+        toPdfAct.setOnClickListener(l->{
+            Intent intent = new Intent(this, ProjectPdfActivity.class);
+            intent.putExtra("orderId", orderId);
+            intent.putExtra("payment", payment);
+            intent.putExtra("address",address);
+            intent.putExtra("soldBy",soldBy);
+            intent.putExtra("date",date);
+            intent.putExtra("productId", productIdStr);
+            intent.putExtra("productQty", productQtyStr);
+            intent.putExtra("productPrices", productPricesStr);
+            startActivity(intent);
+        });
 
+        prodList = new ArrayList<>();
+/*
         for(int i=0; i< productId.length; i++) {
             String prodId = productId[i];
             int prodQty = Integer.parseInt(productQty[i]);
@@ -81,83 +101,22 @@ public class MyOrderDetailActivity extends AppCompatActivity {
             FirebaseFirestore.getInstance().document("PRODUCTS/" + prodId)
                     .get()
                     .addOnCompleteListener(task -> {
-               if(task.isSuccessful()) {
-                   DocumentSnapshot productSnap = task.getResult();
-                   String title = productSnap.get("product title").toString();
-                   prodList.add(new Product(title, prodQty, prodPrice));
+                        if(task.isSuccessful()) {
+                            DocumentSnapshot productSnap = task.getResult();
+                            String title = productSnap.get("product title").toString();
+                            prodList.add(new MyOrderDetailActivity.Product(title, prodQty, prodPrice));
 
-                   address = MainHomeActivity.TheUser.address;
-                   orderId = "#1001";
-                   soldBy = "Gamotech * SURVEY NO. 38/2, 39 AND 40, JADIGENAHALLI HOBLI,KACHARAKANAHALLI VILLAGE, HOSAKOTE TALUK, Bengaluru (Bangalore) Urban Bangalore, Karnataka, 562114 IN";
+                            address = MainHomeActivity.TheUser.address;
+                            orderId = "#1001";
+                            soldBy = "Gamotech * SURVEY NO. 38/2, 39 AND 40, JADIGENAHALLI HOBLI,KACHARAKANAHALLI VILLAGE, HOSAKOTE TALUK, Bengaluru (Bangalore) Urban Bangalore, Karnataka, 562114 IN";
 
-                   pdfHelper.insert("Name", "9999999", 5L,"55", 11,111);
-
-                   saveInvoiceAsPDF();
-               }
-            });
+                            saveInvoiceAsPDF();
+                        }
+                    });
         }
-
+*/
     }
-
-    private void setRecycler() {
-
-        List<OrderDetailItemsModel> orderDetailItemsModelList = new ArrayList<>();
-
-        for(int i=0; i<productId.length; i++) {
-
-            String prodId = productId[i];
-            String prodPrice = productPrices[i];
-            String prodQty = productQty[i];
-
-            firebaseFirestore
-                    .document("PRODUCTS/"+productId[i])
-                    .get()
-                    .addOnCompleteListener(task -> {
-
-                if(task.isSuccessful()) {
-
-                    DocumentSnapshot product =  task.getResult();
-                    int total = 0;
-                    float sum = 0, temp;
-                    for (int j = 1; j <= 5; j++) {
-                        temp = Integer.parseInt(Objects.requireNonNull(product.get(j + "_star")).toString());
-                        sum += j * temp;
-                        total += temp;
-                    }
-                    String average = "" + sum / total;
-                    if (average.length() > 3) average = average.substring(0, 3);
-
-                    orderDetailItemsModelList.add(new OrderDetailItemsModel(prodId, prodPrice, prodQty, average));
-
-                    Log.d(TAG, average);
-
-                    orderRecycler = findViewById(R.id.order_detail_recyclerView);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-                    orderRecycler.setLayoutManager(linearLayoutManager);
-
-                    OrderDetailItemAdapter orderDetailItemAdapter = new OrderDetailItemAdapter(orderDetailItemsModelList);
-                    orderRecycler.setAdapter(orderDetailItemAdapter);
-
-                }
-
-            });
-
-        }
-
-    }
-
-    static class Product {
-        String title;
-        int qty;
-        int price;
-         Product(String title, int qty, int price) {
-            this.title = title;
-            this.price = price;
-            this.qty = qty;
-        }
-
-    }
-
+/*
     public void saveInvoiceAsPDF() {
 
         PdfDocument pdfDocument = new PdfDocument();
@@ -259,7 +218,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         int s_no = 0;
         int sum = 0;
 
-        for(Product product: prodList) {
+        for(MyOrderDetailActivity.Product product: prodList) {
 
             sum += product.price * product.qty;
 
@@ -310,7 +269,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         pdfDocument.finishPage(page);
 
         File file = new File(this.getExternalFilesDir("/PDF/"), date.substring(10,20)+"Testing Invoice.pdf");
-/*
+
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
             Toast.makeText(this, "File Saved", Toast.LENGTH_SHORT).show();
@@ -318,9 +277,69 @@ public class MyOrderDetailActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Failed To Save", Toast.LENGTH_SHORT).show();
         }
-*/
+
         pdfDocument.close();
-        sqLiteDatabase.close();
 
     }
+    */
+
+    private void setRecycler() {
+
+        List<OrderDetailItemsModel> orderDetailItemsModelList = new ArrayList<>();
+
+        for(int i=0; i<productId.length; i++) {
+
+            String prodId = productId[i];
+            String prodPrice = productPrices[i];
+            String prodQty = productQty[i];
+
+            firebaseFirestore
+                    .document("PRODUCTS/"+productId[i])
+                    .get()
+                    .addOnCompleteListener(task -> {
+
+                if(task.isSuccessful()) {
+
+                    DocumentSnapshot product =  task.getResult();
+                    int total = 0;
+                    float sum = 0, temp;
+                    for (int j = 1; j <= 5; j++) {
+                        temp = Integer.parseInt(Objects.requireNonNull(product.get(j + "_star")).toString());
+                        sum += j * temp;
+                        total += temp;
+                    }
+                    String average = "" + sum / total;
+                    if (average.length() > 3) average = average.substring(0, 3);
+
+                    orderDetailItemsModelList.add(new OrderDetailItemsModel(prodId, prodPrice, prodQty, average));
+
+                    Log.d(TAG, average);
+
+                    orderRecycler = findViewById(R.id.order_detail_recyclerView);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+                    orderRecycler.setLayoutManager(linearLayoutManager);
+
+                    OrderDetailItemAdapter orderDetailItemAdapter = new OrderDetailItemAdapter(orderDetailItemsModelList);
+                    orderRecycler.setAdapter(orderDetailItemAdapter);
+
+                }
+
+            });
+
+        }
+
+    }
+
+    static class Product {
+        String title;
+        int qty;
+        int price;
+         Product(String title, int qty, int price) {
+            this.title = title;
+            this.price = price;
+            this.qty = qty;
+        }
+
+    }
+
 }

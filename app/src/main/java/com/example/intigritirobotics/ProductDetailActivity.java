@@ -1,10 +1,12 @@
 package com.example.intigritirobotics;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -92,6 +94,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     public void updateRating(float v) {
+
         is_app_starting++;
 
         Map<String, String> userRatingMap = new HashMap<>();
@@ -120,7 +123,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     int pre_num = Integer.parseInt(prodSnap.get(prevRating.substring(0,1)+"_star").toString());
 
                                     Log.d("Prev num is: ",""+pre_num);
-
+                                    if(pre_num == 0) return;
                                     productUpdateMap.put(prevRating.substring(0,1)+"_star", (pre_num-1)+"");
                                 }
 
@@ -150,6 +153,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                     productRef.update(productUpdateMap);
 
                                                     setRatings(p2);
+
+                                                    loadingDialog.cancel();
                                                 }
                                         );
 
@@ -161,7 +166,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void addItemToCart() {

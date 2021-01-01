@@ -166,6 +166,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                 sum += i * temp;
                 total += temp;
             }
+
             String average = "" + sum / total;
             if (average.length() > 3) average = average.substring(0, 3);
 

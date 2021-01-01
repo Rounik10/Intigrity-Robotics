@@ -1,8 +1,6 @@
 package com.example.intigritirobotics;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,14 +11,11 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.google.android.material.tabs.TabLayout;
@@ -28,28 +23,24 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.Source;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
-import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     private final List<SlideModel> slideModelList = new ArrayList<>();
-    private String price, title, id, userPath;
-    private int total, prev_rating, is_app_starting;
+    private String price, title, id;
+    private int total;
+    private int is_app_starting;
     public FirebaseFirestore firebaseFirestore;
     private TextView totalRatings, tvOutOfStock, imgAverageRating, imgTotalRating;
     private RatingBar ratingBar;
-    private LinearLayout getHelpButton, addToCartButton;
-    private List<ViewAllModel> horizontalList = new ArrayList<>();
+    private final List<ViewAllModel> horizontalList = new ArrayList<>();
     private LinearLayoutManager horizontalLinearLayoutManager;
     private RecyclerView RelatedProductRecyclerview;
 
@@ -75,9 +66,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         horizontalLinearLayoutManager = new LinearLayoutManager(this);
         imgAverageRating = findViewById(R.id.img_averageRatingText);
         imgTotalRating = findViewById(R.id.img_total_rating);
-        getHelpButton = findViewById(R.id.pd_project_help_btn);
-        addToCartButton = findViewById(R.id.addToCartButton);
-
+        LinearLayout getHelpButton = findViewById(R.id.pd_project_help_btn);
+        LinearLayout addToCartButton = findViewById(R.id.addToCartButton);
 
         is_app_starting = 0;
 
@@ -95,12 +85,9 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        getHelpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProductDetailActivity.this, ProjectPdfActivity.class);
-                startActivity(intent);
-            }
+        getHelpButton.setOnClickListener(view -> {
+            Intent intent1 = new Intent(ProductDetailActivity.this, ProjectPdfActivity.class);
+            startActivity(intent1);
         });
     }
 
@@ -118,7 +105,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             if (task.isSuccessful() && is_app_starting > 1) {
                 DocumentSnapshot prodSnap = task.getResult();
                 assert prodSnap != null;
-                String s = prodSnap.get((v + "").substring(0, 1) + "_star").toString();
+                String s = prodSnap.get((v + "").substring(0, 1) + "_star") == null ? "0" : prodSnap.get((v + "").substring(0, 1) + "_star").toString();
 
                 int x = s==null ? 0 : Integer.parseInt(s);
 
@@ -132,22 +119,49 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     String prevRating = task1.getResult().get("Rating").toString();
                                     int pre_num = Integer.parseInt(prodSnap.get(prevRating.substring(0,1)+"_star").toString());
 
+                                    Log.d("Prev num is: ",""+pre_num);
 
                                     productUpdateMap.put(prevRating.substring(0,1)+"_star", (pre_num-1)+"");
                                 }
 
                                 firebaseFirestore.document("USERS/" + currentUserUId + "/My Ratings/" + id).set(userRatingMap);
-                                productUpdateMap.put((int)v+"_star", x+1+"");
+                                productUpdateMap.put((int)v+"_star", (x+1)+"");
 
+                                Log.d("Map Me kya hai",productUpdateMap.keySet().toString());
+                                Log.d("Map Values", productUpdateMap.values().toString());
 
-                                String d1 = getAvg(prodSnap);
-                                productUpdateMap.put("product rating",getAvg(prodSnap));
-                                productRef.update(productUpdateMap);
+                                productRef.update(productUpdateMap).addOnCompleteListener(task2 -> {
+                                    if(task2.isSuccessful()) {
+
+                                        firebaseFirestore.document("PRODUCTS/" + id).get().addOnCompleteListener(
+                                                task3 -> {
+
+                                                    DocumentSnapshot p2 = task3.getResult();
+
+                                                    String d1 = getAvg(p2);
+
+                                                    TextView avg = findViewById(R.id.averageRatingText);
+                                                    avg.setText(d1);
+
+                                                    productUpdateMap.clear();
+
+                                                    productUpdateMap.put("product rating",getAvg(p2));
+
+                                                    productRef.update(productUpdateMap);
+
+                                                    setRatings(p2);
+                                                }
+                                        );
+
+                                    }
+                                });
                             }
+
                         });
 
             }
         });
+
     }
 
     private void addItemToCart() {
@@ -258,8 +272,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         prepareViewPager(viewPager, arrayList, details, spec, other);
         tabLayout.setupWithViewPager(viewPager);
-        ///////////////////////////////////////////////////////////// Tabs//////////////////////////////////////////////////////////////////
-
 
         ///////////////////////////////////////////////////////////// Set Price/////////////////////////////////////////////////////////////////////////
         TextView priceImageView = findViewById(R.id.PriceText);
@@ -271,6 +283,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         MRP.setText(mrpText);
         MRP.setPaintFlags(MRP.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
+        setRatings(product);
+
+        ////////////`///////////////////////////////////////////////// Set Price/////////////////////////////////////////////////////////////////////////
+
+    }
+
+    void setRatings(DocumentSnapshot product) {
+
         setProgressInRacingBars(findViewById(R.id.stars1), 1, product);
         setProgressInRacingBars(findViewById(R.id.stars2), 2, product);
         setProgressInRacingBars(findViewById(R.id.stars3), 3, product);
@@ -278,23 +298,19 @@ public class ProductDetailActivity extends AppCompatActivity {
         setProgressInRacingBars(findViewById(R.id.stars5), 5, product);
 
         TextView s1 = findViewById(R.id.num_of_1_star);
-        s1.setText(product.get("1_star").toString());
+        s1.setText(product.get("1_star") == null ? "0" : product.get("1_star").toString());
 
         TextView s2 = findViewById(R.id.num_of_2_stars);
-        s2.setText(product.get("2_star").toString());
+        s2.setText(product.get("2_star") == null ? "0" : product.get("2_star").toString());
 
         TextView s3 = findViewById(R.id.num_of_3_stars);
-        s3.setText(product.get("3_star").toString());
+        s3.setText(product.get("3_star") == null ? "0" : product.get("3_star").toString());
 
         TextView s4 = findViewById(R.id.num_of_4_stars);
-        s4.setText(product.get("4_star").toString());
+        s4.setText(product.get("4_star") == null ? "0" : product.get("4_star").toString());
 
         TextView s5 = findViewById(R.id.num_of_5_stars);
-        s5.setText(product.get("5_star").toString());
-
-        prev_rating = (int) ratingBar.getRating();
-
-        ///////////////////////////////////////////////////////////// Set Price/////////////////////////////////////////////////////////////////////////
+        s5.setText(product.get("5_star") == null ? "0" : product.get("5_star").toString());
 
     }
 
@@ -303,7 +319,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         int temp_total = 0;
 
         for (int i = 1; i <= 5; i++) {
-            temp = Integer.parseInt(Objects.requireNonNull(product.get(i + "_star")).toString());
+            String star = product.get(i + "_star") == null ? "0" : product.get(i + "_star").toString();
+            temp = Integer.parseInt(star);
+
             Log.d("Some Error",""+temp);
             sum += i * temp;
             temp_total += temp;
@@ -321,14 +339,15 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     void setProgressInRacingBars(ProgressBar progressBar, int starNo, DocumentSnapshot product) {
-        int stars = Integer.parseInt(Objects.requireNonNull(product.get(starNo + "_star")).toString());
+        String val = product.get(starNo + "_star")==null ? "0" : product.get(starNo+"_star").toString();
+        int stars = Integer.parseInt(val);
         progressBar.setMax(total);
         progressBar.setProgress(stars);
     }
 
     private void loadRelatedProduct() {
         firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task2 -> {
-            int i = 1;
+
             if (task2.isSuccessful()) {
                 horizontalList.clear();
 
@@ -340,17 +359,13 @@ public class ProductDetailActivity extends AppCompatActivity {
                     float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
                     int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
                     horizontalList.add(new ViewAllModel(id, picUrl, title, rating, price));
-                    i++;
                 }
             } else {
                 loadingDialog.dismiss();
                 String error = task2.getException().getMessage();
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
             }
-        }).addOnFailureListener(e -> {
-            loadingDialog.dismiss();
-
-        });
+        }).addOnFailureListener(e -> loadingDialog.dismiss());
 
         horizontalLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         RelatedProductRecyclerview.setLayoutManager(horizontalLinearLayoutManager);

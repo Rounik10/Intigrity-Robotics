@@ -51,7 +51,7 @@ public class MyOrdersFragment extends Fragment {
                                 if(task1.isSuccessful()) {
                                     DocumentSnapshot orderSnap = task1.getResult();
                                     myOrderModels.add(new MyOrderModel(
-                                            orderSnap.get("order Id").toString(),
+                                            orderSnap.getId(),
                                             orderSnap.get("order date").toString(),
                                             orderSnap.get("productQsIds").toString(),
                                             orderSnap.get("order status").toString(),

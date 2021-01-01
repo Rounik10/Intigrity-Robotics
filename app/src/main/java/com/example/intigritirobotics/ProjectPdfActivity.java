@@ -90,7 +90,6 @@ public class ProjectPdfActivity extends AppCompatActivity {
             try {
                 pdfDocument.writeTo(new FileOutputStream(file));
                 Toast.makeText(this, "File Saved ", Toast.LENGTH_SHORT).show();
-                //pdfView.fromFile(file);
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Failed To Save", Toast.LENGTH_SHORT).show();
@@ -105,12 +104,7 @@ public class ProjectPdfActivity extends AppCompatActivity {
         pdfDocument = new PdfDocument();
         Paint paint = new Paint();
 
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1000,1300,1).create();
-
-        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
-
         Bitmap bitmap = Bitmap.createBitmap(1000, 1300, Bitmap.Config.RGB_565);
-
         Canvas canvas = new Canvas(bitmap);
 
         paint.setColor(Color.WHITE);
@@ -244,14 +238,15 @@ public class ProjectPdfActivity extends AppCompatActivity {
         canvas.drawText( "Rs."+(0.18 * sum + 0.82*sum )+"/-", canvas.getWidth()-40, low+100, paint);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(canvas.getWidth(),low+250,1).create();
+        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+
         page.getCanvas().drawBitmap(bitmap, 0, 0, paint);
 
         pdfView.setImageBitmap(bitmap);
 
-
         pdfDocument.finishPage(page);
 
-        pdfDocument.close();
-
     }
+
 }

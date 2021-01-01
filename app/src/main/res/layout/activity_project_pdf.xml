@@ -6,4 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ProjectPdfActivity">
 
+    <ImageView
+        android:id="@+id/pdf_viewer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/save_pdf_button"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Save PDF"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

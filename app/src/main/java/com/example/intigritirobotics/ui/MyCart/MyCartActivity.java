@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class MyCartActivity extends AppCompatActivity {
     public static final List<ViewAllModel> productList = new ArrayList<>();
     public static TextView totalPriceTextView, deliveryPriceTextView, cartBottomTotal, cartTotal;
     public static FirebaseFirestore firebaseFirestore;
+    private static LinearLayout buyNowLinLayout;
     public static MyCartAdapter adapter1;
     public static  View v, text;
     private Button checkoutBtn;
@@ -52,6 +54,7 @@ public class MyCartActivity extends AppCompatActivity {
 
         productList.clear();
 
+        buyNowLinLayout = findViewById(R.id.linearLayout);
         totalPriceTextView = findViewById(R.id.total_amount_number);
         deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
 
@@ -105,7 +108,7 @@ public class MyCartActivity extends AppCompatActivity {
 
         String colPath = "/USERS/"+currentUserUId+"/My Cart";
 
-        firebaseFirestore.collection(colPath).get().addOnCompleteListener(task -> {
+                firebaseFirestore.collection(colPath).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 productList.clear();
 
@@ -115,6 +118,7 @@ public class MyCartActivity extends AppCompatActivity {
 
                     v.setVisibility(View.GONE);
                     text.setVisibility(View.VISIBLE);
+                    buyNowLinLayout.setVisibility(View.GONE);
 
                 }
                 for(DocumentSnapshot prodSnap : Objects.requireNonNull(q).getDocuments()){

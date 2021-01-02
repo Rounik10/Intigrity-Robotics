@@ -16,6 +16,7 @@ import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -27,6 +28,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -111,15 +116,15 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             if(task.isSuccessful()) {
                 int totalOrders = task.getResult().size() + 1;
 
-                orderId = "IR-" +   currentUserUId + "-" + totalOrders;
+                orderId = "IR-00000" + totalOrders;
 
                 map.put("productQsIds", idStr.toString());
                 map.put("productQty", qtyStr.toString());
                 map.put("productPrice", priceStr.toString());
                 map.put("order by", currentUserUId);
-                map.put("order Id", orderId);
                 map.put("order date", date);
                 map.put("order status", "Order Placed");
+                map.put("invoice token", "x");
 
                 Map<String, Object> m2 = new HashMap<>();
                 m2.put("order Id", orderId);
@@ -317,16 +322,31 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         UploadTask uploadTask = firebaseStorage.getReference("invoices").child(orderId).putBytes(data);
 
-        uploadTask.addOnCompleteListener(
-                task -> {
-                    if(task.isSuccessful()) {
-                        Log.d("File Upload","Done");
-                        exit();
-                    } else {
-                        Log.d("File Upload", "Invoice upload failed");
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                StorageReference dateRef = storageRef.child("invoices").child(orderId);
+                Toast.makeText(CheckOutActivity.this,dateRef.toString(),Toast.LENGTH_LONG).show();
+
+                dateRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                {
+                    @Override
+                    public void onSuccess(Uri downloadUrl)
+                    {
+                        //do something with downloadurl
+                        firebaseFirestore.collection("ORDERS").document(orderId).update("invoice token",downloadUrl.toString());
                     }
-                }
-        ).addOnProgressListener(snapshot -> {
+                });
+                exit();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("File Upload", "Invoice upload failed");
+
+            }
+        }).addOnProgressListener(snapshot -> {
             ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.show();
         });

@@ -1,27 +1,47 @@
 package com.example.intigritirobotics;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +49,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.example.intigritirobotics.MainHomeActivity.TheUser;
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
 import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 import static com.example.intigritirobotics.ui.MyCart.MyCartActivity.productList;
@@ -36,6 +57,9 @@ import static com.example.intigritirobotics.ui.MyCart.MyCartActivity.productList
 public class CheckOutActivity extends AppCompatActivity implements PaymentResultListener {
     private TextView totalPriceTextView, deliveryPriceTextView, cartBottomTotal, cartTotal;
     private Button checkoutPayBtn;
+    private String orderId, date, address;
+    private String paymentMethod;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +77,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         totalPriceTextView.setText(intent.getStringExtra("Total cost"));
         checkoutPayBtn = findViewById(R.id.checkout_pay_button);
 
+        address = TheUser.getAddress();
 
         checkoutPayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +103,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         }
 
-        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         CollectionReference collRef = firebaseFirestore.collection("ORDERS");
 
@@ -86,7 +111,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             if(task.isSuccessful()) {
                 int totalOrders = task.getResult().size() + 1;
 
-                String orderId = "IR-" +   currentUserUId + "-" + totalOrders;
+                orderId = "IR-" +   currentUserUId + "-" + totalOrders;
 
                 map.put("productQsIds", idStr.toString());
                 map.put("productQty", qtyStr.toString());
@@ -104,7 +129,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 collRef.document(orderId).set(map).addOnCompleteListener(task1 -> {
 
                     if(task.isSuccessful()) {
-
+                        uploadPdf(productList);
                         firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart")
                                 .get()
                                 .addOnCompleteListener(task2 -> {
@@ -115,18 +140,195 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                                         Log.d("dikkat", l.get(i).getId());
                                     }
                                 });
-                        productList.clear();
-
-                        Intent intent = new Intent(this, MainHomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("EXIT", true);
-                        startActivity(intent);
 
                     } else {
                         Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
+        });
+
+    }
+
+    void exit() {
+        productList.clear();
+
+        Intent intent = new Intent(this, MainHomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
+    }
+
+    private void uploadPdf(List<ViewAllModel> productList) {
+
+        PdfDocument pdfDocument = new PdfDocument();
+        Paint paint = new Paint();
+
+        Bitmap bitmap = Bitmap.createBitmap(1000, 1300, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(0,0, canvas.getWidth(), canvas.getHeight(), paint);
+        paint.setColor(Color.BLACK);
+
+        paint.setTextSize(80);
+        canvas.drawText("Intigriti Robotics", 30, 80, paint);
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+
+        paint.setTextSize(30);
+        canvas.drawText("Invoice Id", canvas.getWidth()-40, 40, paint);
+        canvas.drawText("1001", canvas.getWidth()-40, 80, paint);
+
+        paint.setTextAlign(Paint.Align.LEFT);
+
+        paint.setColor(Color.rgb(150, 150, 150));
+        canvas.drawRect(30, 130, canvas.getWidth()-40, 135, paint);
+
+        paint.setColor(Color.BLACK);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
+        canvas.drawText("Order date: "+ date, 50, 200, paint);
+        canvas.drawText("Shipping Address: ", 50, 250, paint);
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Sold By: ", 665, 250,paint);
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+        TextPaint mTextPaint=new TextPaint();
+
+        mTextPaint.setTextSize(28);
+
+        StaticLayout mTextLayout = new StaticLayout(address, mTextPaint, canvas.getWidth()/2-50, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+        canvas.save();
+
+        canvas.translate(50, 270);
+        mTextLayout.draw(canvas);
+
+        int t1 = mTextLayout.getHeight();
+        canvas.restore();
+
+        canvas.save();
+        mTextLayout = new StaticLayout("soldBy", mTextPaint, canvas.getWidth()/2-50, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        canvas.translate(550,270);
+        mTextLayout.draw(canvas);
+
+        int t2 = mTextLayout.getHeight();
+        canvas.restore();
+
+        int row = 270 + Math.max(t1,t2);
+
+        paint.setColor(Color.rgb(150, 150, 150));
+        canvas.drawRect(30, row+30, 280, row+80, paint);
+
+        paint.setColor(Color.WHITE);
+        canvas.drawText("BILL TO", 50, row + 65, paint);
+
+        paint.setColor(Color.BLACK);
+        canvas.drawText("Consumer Name: ", 30 , row + 120, paint);
+        canvas.drawText(TheUser.name, 280 , row + 120, paint);
+
+        canvas.drawText("Contact No: ", 550 , row + 120, paint);
+        canvas.drawText(TheUser.phoneNumber, 720 , row + 120, paint);
+
+        paint.setColor(Color.rgb(150, 150, 150));
+        canvas.drawRect(30, row + 150, canvas.getWidth()-30, row + 200, paint);
+
+        paint.setColor(Color.WHITE);
+
+        int low = row + 250;
+
+        canvas.drawText("S/No.", 50, row + 185, paint);
+        canvas.drawText("Items", 300, row + 185, paint);
+        canvas.drawText("Qty", 550, row + 185, paint);
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Amount", canvas.getWidth()-40, row+185, paint);
+        paint.setTextAlign(Paint.Align.LEFT);
+
+        paint.setColor(Color.BLACK);
+
+        int s_no = 0;
+        int sum = 0;
+
+        for(ViewAllModel product: productList) {
+
+            sum += product.getFinalPrice() * product.getQuantity();
+
+            paint.setTextAlign(Paint.Align.LEFT);
+
+            String title = product.getTitle();
+            if(title.length()>20) title = title.substring(0,20)+"...";
+
+            canvas.drawText(""+ ++s_no, 60, low, paint);
+            canvas.drawText(title, 160, low, paint);
+            canvas.drawText(""+product.getQuantity(), 550 ,low, paint);
+
+            paint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText(product.getQuantity() + " x " + (int)(0.82 * product.getFinalPrice()), canvas.getWidth() - 40, low, paint);
+            paint.setTextAlign(Paint.Align.LEFT);
+
+            low += 50;
+        }
+
+        paint.setColor(Color.rgb(150,150, 150));
+        canvas.drawRect(30, low+50, canvas.getWidth()-40, low+55, paint);
+
+        paint.setColor(Color.BLACK);
+        low += 100;
+
+        canvas.drawText("SUBTOTAL", 550, low, paint);
+        canvas.drawText("GST 18%", 550, low+50, paint);
+        canvas.drawText(paymentMethod, 280, low, paint);
+
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        canvas.drawText("TOTAL", 550, low+100, paint);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Rs." + 0.82 * sum + "/-", canvas.getWidth()-40, low, paint);
+        canvas.drawText( "Rs."+0.18 * sum+"/-", canvas.getWidth()-40, low+50, paint);
+
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        canvas.drawText("Payment Method: ",270, low, paint);
+        canvas.drawText( "Rs."+(0.18 * sum + 0.82*sum )+"/-", canvas.getWidth()-40, low+100, paint);
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+
+        uploadBitmap(bitmap);
+
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(canvas.getWidth(),low+250,1).create();
+        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+
+        page.getCanvas().drawBitmap(bitmap, 0, 0, paint);
+
+        pdfDocument.finishPage(page);
+
+    }
+
+    private void uploadBitmap(Bitmap bitmap) {
+        FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] data = byteArrayOutputStream.toByteArray();
+
+        UploadTask uploadTask = firebaseStorage.getReference("invoices").child(orderId).putBytes(data);
+
+        uploadTask.addOnCompleteListener(
+                task -> {
+                    if(task.isSuccessful()) {
+                        Log.d("File Upload","Done");
+                        exit();
+                    } else {
+                        Log.d("File Upload", "Invoice upload failed");
+                    }
+                }
+        ).addOnProgressListener(snapshot -> {
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.show();
         });
 
     }
@@ -172,8 +374,10 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     public void onPaymentSuccess(String s) {
 
         Toast.makeText(this, "Order Successful", Toast.LENGTH_SHORT).show();
-        loadProductsToMyOrders();
 
+        paymentMethod = "UPI";//todo add real payment method
+
+        loadProductsToMyOrders();
 
     }
 

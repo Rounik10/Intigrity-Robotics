@@ -81,8 +81,6 @@ public class MainHomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-
     }
 
     private void loadUserDetails() {

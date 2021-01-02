@@ -251,7 +251,6 @@ public class ProjectPdfActivity extends AppCompatActivity {
 
         pdfDocument.finishPage(page);
 
-        pdfDocument.close();
 
     }
 }

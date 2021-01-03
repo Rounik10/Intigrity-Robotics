@@ -135,6 +135,7 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/update_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/dot_dark_screen2"
@@ -145,7 +146,6 @@
             app:layout_columnWeight="1"
             app:layout_gravity="fill"
             app:layout_row="1"
-
             app:layout_rowWeight="1">
 
             <TextView
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/nunito_semibold"
-                android:text="E-Store"
+                android:text="Update Profile"
                 android:textColor="@color/darkWhite"
 
                 android:textSize="20sp" />

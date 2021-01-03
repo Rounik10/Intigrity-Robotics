@@ -6,23 +6,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.intigritirobotics.ui.MyAccount.UserProfileActivity;
 import com.example.intigritirobotics.ui.MyCart.MyCartActivity;
 import com.example.intigritirobotics.ui.Setting.SettingActivity;
 import com.example.intigritirobotics.ui.Support.SupportActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
-import com.squareup.okhttp.internal.framed.Header;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,9 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import java.util.Objects;
-
 import static com.example.intigritirobotics.SignUpActivity.pref;
 
 public class MainHomeActivity extends AppCompatActivity {
@@ -96,9 +88,11 @@ public class MainHomeActivity extends AppCompatActivity {
 
                     if(name!=null && address!=null && phone !=null){
                         TheUser = new UserModel(name, address, phone, currentUserUId);
+                        Log.d("loadUserDetails", address);
                     }
                 } catch (Exception e) {
                 //    Toast.makeText(, "", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
 
             }

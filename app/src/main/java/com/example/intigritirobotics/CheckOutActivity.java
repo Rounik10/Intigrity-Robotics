@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,31 +21,22 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewAnimationUtils;
-import android.widget.Button;
+import android.view.View;import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
-
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -183,7 +173,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         paint.setTextSize(30);
         canvas.drawText("Invoice Id", canvas.getWidth()-40, 40, paint);
-        canvas.drawText("1001", canvas.getWidth()-40, 80, paint);
+        canvas.drawText(orderId, canvas.getWidth()-40, 80, paint);
 
         paint.setTextAlign(Paint.Align.LEFT);
 
@@ -308,7 +298,6 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
 
         page.getCanvas().drawBitmap(bitmap, 0, 0, paint);
-
         pdfDocument.finishPage(page);
 
     }
@@ -344,7 +333,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.d("File Upload", "Invoice upload failed");
-
+                e.printStackTrace();
             }
         }).addOnProgressListener(snapshot -> {
             ProgressDialog progressDialog = new ProgressDialog(this);
@@ -416,4 +405,3 @@ class product {
         this.qty = qty;
     }
 }
-

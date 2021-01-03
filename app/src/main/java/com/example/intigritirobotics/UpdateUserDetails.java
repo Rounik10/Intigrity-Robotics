@@ -175,6 +175,5 @@ public class UpdateUserDetails extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
-
     }
 }

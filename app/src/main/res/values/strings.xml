@@ -151,4 +151,10 @@
     <string name="prod_title_placeholder">Arduino Uno R3 Micro controller , Getting started with arduino</string>
     <string name="your_rating_text">Your Rating</string>
     <string name="qty_placeholder">Qty:6</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="state">State</string>
+    <string name="pin">PIN</string>
+    <string name="city">City</string>
+    <string name="address_line_2">Address Line 2</string>
+    <string name="address_line_1">Address Line 1</string>
 </resources>

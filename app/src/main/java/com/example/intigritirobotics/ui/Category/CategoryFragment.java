@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,14 +21,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class CategoryFragment extends Fragment {
-    private List<CategoryModel> projectList = new ArrayList<>();
+    private final List<CategoryModel> projectList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
+    private GridLayoutManager gridLayoutManager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,36 +37,35 @@ public class CategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
 
         recyclerView =view.findViewById(R.id.category_fragment_recyclerview);
-        linearLayoutManager = new LinearLayoutManager(getContext());
+        gridLayoutManager = new GridLayoutManager(getContext(), 2);
 
-        loadcategory();
+        loadCategory();
         return view;
     }
 
-    private void loadcategory() {
+    private void loadCategory() {
+        loadingDialog.show();
         firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {
                 projectList.clear();
-                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                for (QueryDocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult())) {
                     projectList.add(new CategoryModel(
                             documentSnapshot.getId(),
-                            documentSnapshot.get("category_pic").toString(),
-                            documentSnapshot.get("category_title").toString()));
+                            Objects.requireNonNull(documentSnapshot.get("category_pic")).toString(),
+                            Objects.requireNonNull(documentSnapshot.get("category_title")).toString()));
                 }
 
-
-                linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setLayoutManager(gridLayoutManager);
                 CategoryFragmentAdapter adapter = new CategoryFragmentAdapter(projectList);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-
+                loadingDialog.dismiss();
             }
             else
             {
                 loadingDialog.dismiss();
-                String error = task.getException().getMessage();
+                String error = Objects.requireNonNull(task.getException()).getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
             }
 

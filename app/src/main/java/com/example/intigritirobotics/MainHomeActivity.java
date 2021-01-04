@@ -39,17 +39,6 @@ public class MainHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_home);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        firebaseFirestore  =FirebaseFirestore.getInstance();
-
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        currentUserUId = firebaseAuth.getUid();
-
-        loadUserDetails();
 
         loadingDialog = new Dialog(MainHomeActivity.this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -57,6 +46,19 @@ public class MainHomeActivity extends AppCompatActivity {
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
         loadingDialog.show();
+
+        setContentView(R.layout.activity_main_home);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        firebaseFirestore  =FirebaseFirestore.getInstance();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        currentUserUId = firebaseAuth.getUid();
+
+
+
+        loadUserDetails();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
@@ -73,6 +75,7 @@ public class MainHomeActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        loadingDialog.dismiss();
     }
 
     private void loadUserDetails() {
@@ -91,7 +94,6 @@ public class MainHomeActivity extends AppCompatActivity {
                         Log.d("loadUserDetails", address);
                     }
                 } catch (Exception e) {
-                //    Toast.makeText(, "", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
 

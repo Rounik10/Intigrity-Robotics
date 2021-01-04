@@ -56,6 +56,7 @@ public class MyCartActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.cart_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         firebaseFirestore  = FirebaseFirestore.getInstance();
         cartItemRecycler = findViewById(R.id.cart_recycler_view);
@@ -87,19 +88,24 @@ public class MyCartActivity extends AppCompatActivity {
             }
 
         });
+        text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_process_order, menu);
+        getMenuInflater().inflate(R.menu.main_home, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-
             finish();
             return true;
         }

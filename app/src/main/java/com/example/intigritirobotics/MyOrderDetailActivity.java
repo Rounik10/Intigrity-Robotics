@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private static final String TAG = "Debug: MyOrderDetail";
     private String orderId;
     private String[] productQty, productId, productPrices;
+    private TextView totalPriceText, deliveryCostText, total_amount_number;
     RecyclerView orderRecycler;
 
     @Override
@@ -32,14 +35,37 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         productQty = Objects.requireNonNull(myIntent.getStringExtra("product qty")).split(", ");
         productPrices = Objects.requireNonNull(myIntent.getStringExtra("product price")).split(", ");
 
-        setRecycler();
-
+        totalPriceText = findViewById(R.id._total_price);
+        deliveryCostText = findViewById(R.id.delivery_cost_text);
+        total_amount_number = findViewById(R.id.total_amount_number);
         Button toPdfAct = findViewById(R.id.pdf_act_button);
+
+        setRecycler();
+        setPrices();
+
         toPdfAct.setOnClickListener(l->{
             Intent intent = new Intent(this, ProjectPdfActivity.class);
             intent.putExtra("orderId", orderId);
             startActivity(intent);
         });
+
+    }
+
+    private void setPrices() {
+
+        int totalPrice = 0;
+
+        for(int i=0; i<productQty.length; i++) {
+            totalPrice += Integer.parseInt(productQty[i]) * Integer.parseInt(productPrices[i]);
+        }
+
+        String delivery = totalPrice < 500 ? "Rs.60/-": "Free";
+        String totalAmount = totalPrice < 500 ? "Rs." + (totalPrice + 60) +"/-" : "Rs." + totalPrice + "/-";
+        String totalPriceString = "Rs."+totalPrice+"/-";
+        
+        totalPriceText.setText(totalPriceString);
+        deliveryCostText.setText(delivery);
+        total_amount_number.setText(totalAmount);
 
     }
 

@@ -6,7 +6,6 @@
                 android:endColor="@color/second"
                 android:gradientRadius="800"
                 android:type="radial"/>
-            <corners android:radius="8dp"/>
         </shape>
     </item>
 </layer-list>

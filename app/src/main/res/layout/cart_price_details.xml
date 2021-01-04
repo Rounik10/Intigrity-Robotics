@@ -7,6 +7,7 @@
     android:background="@color/light_grey">
 
     <TextView
+        android:layout_marginTop="2dp"
         android:id="@+id/price_detail_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -99,18 +100,18 @@
         app:layout_constraintStart_toEndOf="@+id/total_amount"
         app:layout_constraintTop_toBottomOf="@+id/delivery_cost_text" />
 
-    <TextView
-        android:id="@+id/you_saved_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="@color/gen_white"
-        android:padding="4dp"
-        android:text="@string/you_saved_rs_xyz"
-        android:textColor="@color/gen_black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/total_amount" />
+<!--    <TextView-->
+<!--        android:id="@+id/you_saved_text"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="2dp"-->
+<!--        android:background="@color/gen_white"-->
+<!--        android:padding="4dp"-->
+<!--        android:text="@string/you_saved_rs_xyz"-->
+<!--        android:textColor="@color/gen_black"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/total_amount" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,5 @@
 package com.example.intigritirobotics;
 
-
-
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,14 +57,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             pic = itemView.findViewById(R.id.category_pic);
             CategoryTitle = itemView.findViewById(R.id.category_title);
 
-
         }
 
         private void  setData( final String index, String resource, String title)
         {
            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
             CategoryTitle.setText(title);
-
 
              itemView.setOnClickListener(new View.OnClickListener() {
                  @Override
@@ -79,7 +75,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
              });
 
         }
-
 
     }
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/WhiteTheme"
-    android:background="@drawable/category_gradient"
+    android:background="@drawable/splash_back"
     tools:context=".SplashActivity">
 
     <ImageView
@@ -24,7 +24,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:fontFamily="@font/nunito_semibold"
         android:shadowColor="@color/gen_black"
         android:shadowDx="0"
         android:shadowDy="0"

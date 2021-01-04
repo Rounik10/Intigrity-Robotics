@@ -46,17 +46,13 @@ public class MyCartActivity extends AppCompatActivity {
     public static MyCartAdapter adapter1;
     public static  View v, text;
     private Button checkoutBtn;
+    public static ImageView emptyCartImage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cart);
 
-        productList.clear();
-
-        buyNowLinLayout = findViewById(R.id.linearLayout);
-        totalPriceTextView = findViewById(R.id.total_amount_number);
-        deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
 
         Toolbar toolbar = findViewById(R.id.cart_toolbar);
         setSupportActionBar(toolbar);
@@ -66,10 +62,16 @@ public class MyCartActivity extends AppCompatActivity {
         cartBottomTotal = findViewById(R.id.cart_bottom_total_price);
         cartTotal = findViewById(R.id._total_price);
         projectLinearLayoutManager = new LinearLayoutManager(MyCartActivity.this);
+        productList.clear();
+
+        buyNowLinLayout = findViewById(R.id.linearLayout);
+        totalPriceTextView = findViewById(R.id.total_amount_number);
+        deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
 
         v = findViewById(R.id.include_product_price);
         text = findViewById(R.id.nothing_to_show);
 
+        emptyCartImage = findViewById(R.id.empty_cart_image);
         checkoutBtn = findViewById(R.id.cart_checkout_btn);
 
         loadProject();
@@ -114,11 +116,12 @@ public class MyCartActivity extends AppCompatActivity {
 
                 QuerySnapshot q = task.getResult();
                 assert q != null;
-                if(q.size() == 0) {
+                if(q.size() != 0) {
 
-                    v.setVisibility(View.GONE);
-                    text.setVisibility(View.VISIBLE);
-                    buyNowLinLayout.setVisibility(View.GONE);
+                    v.setVisibility(View.VISIBLE);
+                    text.setVisibility(View.GONE);
+                    buyNowLinLayout.setVisibility(View.VISIBLE);
+                    emptyCartImage.setVisibility(View.GONE);
 
                 }
                 for(DocumentSnapshot prodSnap : Objects.requireNonNull(q).getDocuments()){

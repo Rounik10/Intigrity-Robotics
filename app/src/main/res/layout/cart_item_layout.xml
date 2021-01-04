@@ -14,7 +14,6 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="10dp"
-        android:src="@drawable/arduino"
         app:civ_border_color="@color/gen_black"
         app:civ_border_overlay="true"
         app:civ_border_width="1dp"
@@ -29,7 +28,6 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
-        android:text="T9-NHXR-186H Uno R3 Atmega328p With Usb Cable Length 1 Feet, Blue and Black"
         android:textAlignment="textStart"
         android:textAppearance="@style/ToolbarTitle"
         android:textColor="#715D5D"
@@ -43,7 +41,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:fontFamily="@font/nunito_semibold"
-        android:text="Rs.449/-"
         android:textAlignment="textStart"
         android:textAppearance="@style/ToolbarTitle"
         android:textColor="@color/gen_black"
@@ -70,6 +67,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:orientation="horizontal"
+        android:background="@drawable/roundedbutton"
+        android:layout_marginVertical="4dp"
+        android:padding="2dp"
         app:layout_constraintBottom_toTopOf="@+id/divider2"
         app:layout_constraintEnd_toStartOf="@+id/cart_item_qty_layout"
         app:layout_constraintStart_toEndOf="@+id/product_preview_price"
@@ -82,15 +82,14 @@
             android:layout_gravity="center"
             android:layout_marginEnd="2dp"
             android:layout_weight="1"
-            android:text="4.5"
-            android:textColor="@color/gen_black"
+            android:textColor="@color/colorAccent"
             android:textSize="15sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center"
             android:layout_weight="1"
             app:srcCompat="@android:drawable/btn_star_big_on" />
@@ -127,6 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
+            android:fontFamily="@font/roboto_bold"
             android:text="Delete form cart"
             android:textColor="#D81400"
             android:textSize="20sp" />
@@ -156,7 +156,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="1"
             android:textColor="@color/gen_black" />
     </LinearLayout>
 

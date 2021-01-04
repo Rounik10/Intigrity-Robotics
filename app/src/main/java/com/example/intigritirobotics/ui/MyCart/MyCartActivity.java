@@ -53,6 +53,8 @@ public class MyCartActivity extends AppCompatActivity {
     private Button checkoutBtn;
     private static MutableLiveData<Integer> itemNo;
     public static ImageView emptyCartImage;
+    public  static  int totaleeeee;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -169,28 +171,30 @@ public class MyCartActivity extends AppCompatActivity {
     private static void hideViews() {
         v.setVisibility(View.VISIBLE);
         text.setVisibility(View.GONE);
-        buyNowLinLayout.setVisibility(View.GONE);
+        buyNowLinLayout.setVisibility(View.VISIBLE);
         emptyCartImage.setVisibility(View.GONE);
     }
 
     static void  calculatePrice() {
 
-        int total = 0;
 
+        totaleeeee =0;
         for(ViewAllModel product : productList) {
             int price = product.getFinalPrice();
             int quantity = product.getQuantity();
-            total += price*quantity;
+            totaleeeee += price*quantity;
+
         }
 
-        cartTotal.setText(total+"");
+        cartTotal.setText(totaleeeee+"");
 
-        String delPrice = (total>500)? "Free" : "Rs.60/-";
-        if(!delPrice.equals("Free")) total += 60;
+        String delPrice = (totaleeeee>500)? "Free" : "Rs.60/-";
+        if(!delPrice.equals("Free")) totaleeeee += 60;
 
         deliveryPriceTextView.setText(delPrice);
-        cartBottomTotal.setText(total+"");
-        totalPriceTextView.setText(total+"");
+        cartBottomTotal.setText(totaleeeee+"");
+        totalPriceTextView.setText(totaleeeee+"");
+        //newTotalPrice = total;
 
     }
 
@@ -201,8 +205,28 @@ public class MyCartActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
                         Toast.makeText(itemView.getContext(),"Item Deleted", Toast.LENGTH_SHORT).show();
-                        totalPriceTextView.setText("Rs."+price+"/-");
-                        loadProject();
+//                        totalPriceTextView.setText("Rs."+price+"/-");
+                        itemView.setVisibility(View.GONE);
+                        totaleeeee = totaleeeee-price;
+                        if (totaleeeee==0)
+                        {
+                            buyNowLinLayout.setVisibility(View.GONE);
+                            v.setVisibility(View.GONE);
+                            text.setVisibility(View.VISIBLE);
+                            emptyCartImage.setVisibility(View.VISIBLE);
+                        }
+
+                        else {
+                            cartTotal.setText(totaleeeee+"");
+
+                            String delPrice = (totaleeeee>500)? "Free" : "Rs.60/-";
+                            if(!delPrice.equals("Free")) totaleeeee += 60;
+                            deliveryPriceTextView.setText(delPrice);
+                            cartBottomTotal.setText(totaleeeee+"");
+                            totalPriceTextView.setText(totaleeeee+"");
+                        }
+
+
                     } else {
                         Toast.makeText(itemView.getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
                     }

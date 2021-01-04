@@ -1,9 +1,11 @@
 package com.example.intigritirobotics.ui.E_Store;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,9 +18,12 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.intigritirobotics.CategoryAdapter;
 import com.example.intigritirobotics.CategoryModel;
+import com.example.intigritirobotics.CheckOutActivity;
 import com.example.intigritirobotics.HorizontalAdapter1;
 import com.example.intigritirobotics.R;
+import com.example.intigritirobotics.ViewAllActivity;
 import com.example.intigritirobotics.ViewAllModel;
+import com.example.intigritirobotics.ui.MyCart.MyCartActivity;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -36,18 +41,28 @@ public class EStoreFragment extends Fragment {
     private List<ViewAllModel> horizontalList = new ArrayList<>();
     private LinearLayoutManager projectLinearLayoutManager, horizontalLinearLayoutManager;
     public String categoryId;
+    private Button Hor1ViewAllBtn;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_e_store, container, false);
 
         projectRecyclerView = view.findViewById(R.id.category_recyclerview);
+        Hor1ViewAllBtn = view.findViewById(R.id.Horizontal1_view_all_button);
         horizontalItemsRecyclerview = view.findViewById(R.id.horizontal_items_recyclerview);
         horizontalLinearLayoutManager = new LinearLayoutManager(getContext());
         projectLinearLayoutManager = new LinearLayoutManager(getContext());
         imageSlider = view.findViewById(R.id.image_slider);
         loadProject();
 
+        Hor1ViewAllBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
+
+                startActivity(myIntent);
+            }
+        });
         return view;
 
     }

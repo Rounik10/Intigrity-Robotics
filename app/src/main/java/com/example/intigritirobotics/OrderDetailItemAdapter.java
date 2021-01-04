@@ -112,7 +112,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                     if (task.isSuccessful() && is_app_starting > 2) {
                         DocumentSnapshot prodSnap = task.getResult();
                         assert prodSnap != null;
-                        String s = prodSnap.get((v + "").substring(0, 1) + "_star").toString();
+                        String s = Objects.requireNonNull(prodSnap.get((v + "").substring(0, 1) + "_star")).toString();
 
                         int x = s==null ? 0 : Integer.parseInt(s);
 
@@ -123,8 +123,8 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                                     if(task1.isSuccessful()) {
 
                                         if(Objects.requireNonNull(task1.getResult()).exists()) {
-                                            String prevRating = task1.getResult().get("Rating").toString();
-                                            int pre_num = Integer.parseInt(prodSnap.get(prevRating.substring(0,1)+"_star").toString());
+                                            String prevRating = Objects.requireNonNull(task1.getResult().get("Rating")).toString();
+                                            int pre_num = Integer.parseInt(Objects.requireNonNull(prodSnap.get(prevRating.substring(0, 1) + "_star")).toString());
 
                                             Log.d("Prev num is: ",""+pre_num);
 

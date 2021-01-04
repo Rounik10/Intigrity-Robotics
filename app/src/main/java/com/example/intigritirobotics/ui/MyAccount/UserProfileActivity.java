@@ -1,16 +1,23 @@
 package com.example.intigritirobotics.ui.MyAccount;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.example.intigritirobotics.R;
+import com.example.intigritirobotics.UpdateUserDetails;
 
 public class UserProfileActivity extends AppCompatActivity {
+
+    private CardView updateProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +28,8 @@ public class UserProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        updateProfile = findViewById(R.id.update_profile);
+        updateProfile.setOnClickListener(l-> updateUserDetails());
     }
 
     @Override
@@ -37,5 +46,10 @@ public class UserProfileActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateUserDetails() {
+        Intent intent = new Intent(getApplicationContext(), UpdateUserDetails.class);
+        startActivity(intent);
     }
 }

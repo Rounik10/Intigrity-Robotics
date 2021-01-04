@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -37,7 +38,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.intigritirobotics.MainHomeActivity.TheUser;
@@ -87,28 +90,7 @@ public class ProjectPdfActivity extends AppCompatActivity {
     }
     private void saveimage ()
     {
-        BitmapDrawable drawable = (BitmapDrawable) pdfView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
-        File filename;
-        try {
-            String path = Environment.getExternalStorageDirectory().toString();
 
-            new File(path + "/folder/subfolder").mkdirs();
-            filename = new File(path + "/folder/subfolder/image.jpg");
-
-            FileOutputStream out = new FileOutputStream(filename);
-
-
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-
-            MediaStore.Images.Media.insertImage(getContentResolver(), filename.getAbsolutePath(), filename.getName(), filename.getName());
-
-            Toast.makeText(getApplicationContext(), "File is Saved in  " + filename, Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 }

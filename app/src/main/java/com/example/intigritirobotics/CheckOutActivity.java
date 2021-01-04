@@ -63,6 +63,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         setContentView(R.layout.activity_check_out);
         Intent intent = getIntent();
+
         totalPriceTextView = findViewById(R.id.total_amount_number);
         deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
         cartTotal = findViewById(R.id._total_price);

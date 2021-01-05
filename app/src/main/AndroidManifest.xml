@@ -14,59 +14,59 @@
         android:roundIcon="@drawable/test_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntigritiRobotics">
-        <activity android:name=".ProjectPdfActivity"
+        <activity android:name=".e_store.ProjectPdfActivity"
             android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".MyOrderDetailActivity"
+        <activity android:name=".e_store.MyOrderDetailActivity"
             android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".CheckOutActivity"
+        <activity android:name=".e_store.CheckOutActivity"
             android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".UpdateUserDetails"
+        <activity android:name=".e_store.UpdateUserDetails"
             android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ProductDetailActivity"
-            android:parentActivityName=".MainHomeActivity"
+            android:name=".e_store.ProductDetailActivity"
+            android:parentActivityName=".e_store.MainHomeActivity"
             android:theme="@style/Theme.IntigritiRobotics.NoActionBar" />
         <activity
-            android:name=".ui.Support.SupportActivity"
+            android:name=".e_store.ui.Support.SupportActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ui.Setting.SettingActivity"
+            android:name=".e_store.ui.Setting.SettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ui.MyCart.MyCartActivity"
+            android:name=".e_store.ui.MyCart.MyCartActivity"
             android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ui.MyAccount.UserProfileActivity"
+            android:name=".e_store.ui.MyAccount.UserProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".ViewAllActivity"
+            android:name=".e_store.ViewAllActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".MainHomeActivity"
+            android:name=".e_store.MainHomeActivity"
             android:label="@string/title_activity_main_home"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:theme="@style/Theme.IntigritiRobotics.NoActionBar" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".e_store.SplashActivity"
             android:theme="@style/Theme.IntigritiRobotics.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -75,17 +75,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ResetActivity"
+            android:name=".e_store.ResetActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".e_store.SignInActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".e_store.SignUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
             tools:ignore="LockedOrientationActivity" />

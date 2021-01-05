@@ -8,7 +8,7 @@
     android:scrollbarStyle="outsideInset"
     android:visibility="visible"
     android:background="@drawable/splashback"
-    tools:context=".SignUpActivity"
+    tools:context=".e_store.SignUpActivity"
     >
 
     <ImageView

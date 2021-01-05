@@ -7,32 +7,32 @@
 
     <fragment
         android:id="@+id/nav_e_store"
-        android:name="com.example.intigritirobotics.ui.E_Store.EStoreFragment"
+        android:name="com.example.intigritirobotics.e_store.ui.E_Store.EStoreFragment"
         android:label="@string/menu_e_store"
         tools:layout="@layout/fragment_e_store" />
 
     <fragment
         android:id="@+id/nav_category"
-        android:name="com.example.intigritirobotics.ui.Category.CategoryFragment"
+        android:name="com.example.intigritirobotics.e_store.ui.Category.CategoryFragment"
         android:label="@string/menu_category"
         tools:layout="@layout/fragment_category" />
 
     <fragment
         android:id="@+id/nav_offer"
-        android:name="com.example.intigritirobotics.ui.offers.OfferFragment"
+        android:name="com.example.intigritirobotics.e_store.ui.offers.OfferFragment"
         android:label="@string/menu_offer"
         tools:layout="@layout/fragment_offers" />
 
 
     <fragment
         android:id="@+id/nav_notification"
-        android:name="com.example.intigritirobotics.ui.Notification.NotificationFragment"
+        android:name="com.example.intigritirobotics.e_store.ui.Notification.NotificationFragment"
         android:label="@string/menu_notification"
         tools:layout="@layout/fragment_notification" />
 
     <fragment
         android:id="@+id/nav_my_orders"
-        android:name="com.example.intigritirobotics.ui.MyOrders.MyOrdersFragment"
+        android:name="com.example.intigritirobotics.e_store.ui.MyOrders.MyOrdersFragment"
         android:label="@string/menu_my_order"
         tools:layout="@layout/fragment_my_orders" />
 

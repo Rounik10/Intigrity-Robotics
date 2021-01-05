@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyOrderDetailActivity">
+    tools:context=".e_store.MyOrderDetailActivity">
 
     <ScrollView
         android:id="@+id/rec_lin_layout"

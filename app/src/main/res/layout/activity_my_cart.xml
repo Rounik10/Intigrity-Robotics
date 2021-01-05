@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MyCart.MyCartActivity">
+    tools:context=".e_store.ui.MyCart.MyCartActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
@@ -52,20 +52,22 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp" />
 
-            <include
-                android:id="@+id/include_product_price"
-                layout="@layout/cart_price_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
+
+    <include
+        android:id="@+id/include_product_price"
+        layout="@layout/cart_price_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:background="#E4D48A"
+        android:layout_height="64dp"
+        android:background="#FFB300"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,8 +96,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/total_price"
+                android:layout_marginBottom="2dp"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <Button

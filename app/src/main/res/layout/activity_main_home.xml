@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:fitsSystemWindows="true"
-    tools:context=".MainHomeActivity"
+    tools:context=".e_store.MainHomeActivity"
     tools:openDrawer="start">
 
     <include

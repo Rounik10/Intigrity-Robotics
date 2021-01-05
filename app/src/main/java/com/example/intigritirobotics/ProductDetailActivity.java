@@ -13,24 +13,35 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import static com.example.intigritirobotics.MainHomeActivity.currentUserUId;
+import static com.example.intigritirobotics.MainHomeActivity.firebaseFirestore;
 import static com.example.intigritirobotics.MainHomeActivity.loadingDialog;
 
 public class ProductDetailActivity extends AppCompatActivity {
@@ -221,6 +232,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                     }
                 });
 
+
     }
 
     private void loadDataToProduct(DocumentSnapshot product) {
@@ -352,17 +364,20 @@ public class ProductDetailActivity extends AppCompatActivity {
     private void loadRelatedProduct() {
         firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task2 -> {
 
-            if (task2.isSuccessful()) {
+            if (task2.isSuccessful() && task2.getResult() !=null) {
                 horizontalList.clear();
 
                 for (QueryDocumentSnapshot documentSnapshot : task2.getResult()) {
 
-                    String id = documentSnapshot.getId();
-                    String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
-                    String title = documentSnapshot.get("product title").toString();
-                    float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
-                    int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
-                    horizontalList.add(new ViewAllModel(id, picUrl, title, rating, price));
+
+                    if (documentSnapshot !=null) {
+                        String id = documentSnapshot.getId();
+                        String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
+                        String title = documentSnapshot.get("product title").toString();
+                        float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
+                        int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
+                        horizontalList.add(new ViewAllModel(id, picUrl, title, rating, price));
+                    }
                 }
             } else {
                 loadingDialog.dismiss();

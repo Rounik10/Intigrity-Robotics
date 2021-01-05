@@ -78,7 +78,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="(34)Rating"
                     android:textColor="#000000"
                     app:layout_constraintBottom_toBottomOf="@+id/img_averageRating"
                     app:layout_constraintStart_toEndOf="@+id/img_averageRating"
@@ -114,7 +113,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="4.6"
                         android:textColor="#fff"
                         android:textSize="20sp" />
 

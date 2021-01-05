@@ -24,6 +24,9 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import static com.example.intigritirobotics.SignUpActivity.pref;
 
@@ -161,6 +164,30 @@ public class MainHomeActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void addProduct()
+    {
+        for (int x=0; x<=100; x++) {
+
+            Map<String,Object> pro = new HashMap<>();
+        pro.put("1_star","0");
+        pro.put("2_star","0");
+        pro.put("3_star","0");
+        pro.put("4_star","0");
+        pro.put("5_star","0");
+        pro.put("details","fekh");
+        pro.put("in stock","true");
+        pro.put("other","hdwjd");
+        pro.put("product price","525");
+        pro.put("product rating","0");
+        pro.put("product title","hbsa");
+        pro.put("product_pic","c");
+        pro.put("specs",0);
+
+            firebaseFirestore.collection("PRODUCTS").add(pro);
+        }
+
     }
 
 }

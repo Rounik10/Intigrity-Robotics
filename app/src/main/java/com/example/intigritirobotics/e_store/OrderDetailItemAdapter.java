@@ -69,6 +69,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
             pic = itemView.findViewById(R.id.order_detail_product_pic);
             title = itemView.findViewById(R.id.order_detail_product_title);
             ProductRating = itemView.findViewById(R.id.order_detail_product_ratingBar);
+            ProductRating.setClickable(false);
             price = itemView.findViewById(R.id.order_detail_product_price);
             qty = itemView.findViewById(R.id.order_detail_product_qty);
         }
@@ -98,7 +99,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                    is_app_starting++;
                }
             });
-
+/*
             ProductRating.setOnRatingBarChangeListener((ratingBar, v, b) -> {
 
                 is_app_starting++;
@@ -148,7 +149,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                 });
 
             });
-
+*/
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent( itemView.getContext(),ProductDetailActivity.class);
                 intent.putExtra("ID", ID);

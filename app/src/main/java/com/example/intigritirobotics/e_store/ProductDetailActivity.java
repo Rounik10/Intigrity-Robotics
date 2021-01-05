@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -16,6 +17,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
+import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.intigritirobotics.R;
@@ -44,6 +47,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     private final List<ViewAllModel> horizontalList = new ArrayList<>();
     private LinearLayoutManager horizontalLinearLayoutManager;
     private RecyclerView RelatedProductRecyclerview;
+    private ImageView offerImageView;
+    private String imageUrl;
+    private Button buyNowButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +73,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         horizontalLinearLayoutManager = new LinearLayoutManager(this);
         imgAverageRating = findViewById(R.id.img_averageRatingText);
         imgTotalRating = findViewById(R.id.img_total_rating);
+        buyNowButton = findViewById(R.id.buyNowButton);
+
         LinearLayout getHelpButton = findViewById(R.id.pd_project_help_btn);
         LinearLayout addToCartButton = findViewById(R.id.addToCartButton);
+        offerImageView = findViewById(R.id.pd_offer_banner);
 
         is_app_starting = 0;
 
@@ -86,9 +95,47 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
+        loadOffer();
+
         getHelpButton.setOnClickListener(view -> {
             Intent intent1 = new Intent(ProductDetailActivity.this, ProjectPdfActivity.class);
             startActivity(intent1);
+        });
+
+        buyNowButton.setOnClickListener(v-> buyItem());
+    }
+
+    private void buyItem() {
+
+        int finalPrice = Integer.parseInt(price);
+        String del = "Free";
+        if(finalPrice<500) {
+            finalPrice += 60;
+            del = "Rs.60/-";
+        }
+
+        Log.d("Price Issue", price + ", " + finalPrice);
+
+        Intent intent = new Intent(this, CheckOutActivity.class);
+
+        intent.putExtra("from", "ProductDetailActivity");
+        intent.putExtra("id", id);
+        intent.putExtra("image url", imageUrl);
+        intent.putExtra("title", title);
+        intent.putExtra("total rating", Float.parseFloat(imgAverageRating.getText().toString()));
+        intent.putExtra("final price", finalPrice);
+        intent.putExtra("Products cost", price);
+        intent.putExtra("Delivery", del);
+        intent.putExtra("Total cost", ""+finalPrice);
+
+        startActivity(intent);
+    }
+
+    private void loadOffer() {
+
+        firebaseFirestore.collection("/OFFERS").get().addOnSuccessListener(task ->{
+            String bannerUrl = task.getDocuments().get(0).get("Banner").toString();
+            Glide.with(this).load(bannerUrl).into(offerImageView);
         });
     }
 
@@ -242,6 +289,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         ImageSlider imageSlider = findViewById(R.id.imgSlider);
 
         String[] productPicUrls = product.get("product_pic").toString().split(", ");
+        imageUrl = productPicUrls[0];
 
         for (String imgUrl : productPicUrls) slideModelList.add(new SlideModel(imgUrl, null));
 

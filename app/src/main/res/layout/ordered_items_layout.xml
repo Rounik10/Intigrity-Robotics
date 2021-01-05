@@ -90,7 +90,6 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="2dp"
         android:stepSize="1"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

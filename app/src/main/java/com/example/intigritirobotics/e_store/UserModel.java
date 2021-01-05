@@ -7,6 +7,7 @@ public class UserModel {
     String address;
     String phoneNumber;
     String userId;
+    String pin;
     Image profileImage;
 
     public UserModel(String name, String address, String phoneNumber, String userId) {
@@ -15,6 +16,15 @@ public class UserModel {
         this.phoneNumber = phoneNumber;
         this.userId = userId;
     }
+
+    public UserModel(String name, String address, String phoneNumber, String userId, String pin) {
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.userId = userId;
+        this.pin = pin;
+    }
+
 
     public String getName() {
         return name;

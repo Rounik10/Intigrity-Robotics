@@ -61,8 +61,6 @@ public class MainHomeActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserUId = firebaseAuth.getUid();
 
-
-
         loadUserDetails();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -93,9 +91,10 @@ public class MainHomeActivity extends AppCompatActivity {
                     String name =  Objects.requireNonNull(userSnap.get("User Name")).toString();
                     String address = Objects.requireNonNull(userSnap.get("Address")).toString();
                     String phone = Objects.requireNonNull(userSnap.get("Phone")).toString();
+                    String pin = Objects.requireNonNull(userSnap.get("PIN")).toString();
 
                     if(name!=null && address!=null && phone !=null){
-                        TheUser = new UserModel(name, address, phone, currentUserUId);
+                        TheUser = new UserModel(name, address, phone, currentUserUId, pin);
                         Log.d("loadUserDetails", address);
                     }
                 } catch (Exception e) {
@@ -187,8 +186,7 @@ public class MainHomeActivity extends AppCompatActivity {
         pro.put("product_pic","c");
         pro.put("specs",0);
 
-            firebaseFirestore.collection("PRODUCTS").add(pro);
-        }
+            }
 
     }
 

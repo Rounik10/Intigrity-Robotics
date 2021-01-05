@@ -1,8 +1,5 @@
 package com.example.intigritirobotics.e_store;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,10 +18,11 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
-import android.view.View;import android.widget.Button;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import com.example.intigritirobotics.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,9 +34,9 @@ import com.google.firebase.storage.UploadTask;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -51,37 +49,68 @@ import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFir
 import static com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity.productList;
 
 public class CheckOutActivity extends AppCompatActivity implements PaymentResultListener {
-    private TextView totalPriceTextView, deliveryPriceTextView, cartBottomTotal, cartTotal;
+    private static final String TAG = "CheckOutActivity: ";
+    private TextView totalPriceTextView, deliveryPriceTextView, cartTotal;
     private Button checkoutPayBtn;
+    private TextView consumerName, shippingAddress, mobileNo, pinCode;
     private String orderId, date, address;
     private String paymentMethod;
-
+    private Intent intent;
+    private List<ViewAllModel> ProdList;
+    private String intentFrom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Checkout.preload(this);
 
         setContentView(R.layout.activity_check_out);
-        Intent intent = getIntent();
+        intent = getIntent();
+        
+        intentFrom = intent.getStringExtra("from");
+
+        address = TheUser.getAddress();
 
         totalPriceTextView = findViewById(R.id.total_amount_number);
         deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
         cartTotal = findViewById(R.id._total_price);
 
+        consumerName = findViewById(R.id.address_view_name);
+        shippingAddress = findViewById(R.id.address_view_street_area);
+        mobileNo = findViewById(R.id.address_view_mobile);
+        pinCode = findViewById(R.id.address_view_state_pin_code);
+
+        setData();
+        checkoutPayBtn.setOnClickListener(v -> startPayment());
+
+    }
+
+    private void setData() {
+
+        if(!intentFrom.equals("ProductDetailActivity")) {
+            ProdList = productList;
+        } else {
+            ProdList = new ArrayList<>();
+            String id = intent.getStringExtra("id");
+            String image = intent.getStringExtra("image url");
+            String title = intent.getStringExtra("title");
+            float totalRating = intent.getFloatExtra("total rating", 0);
+            int finalPrice = intent.getIntExtra("final price", 0);
+            ViewAllModel product = new ViewAllModel(id, image, title, totalRating, finalPrice);
+            ProdList.add(product);
+        }
+
         cartTotal.setText(intent.getStringExtra("Products cost"));
         deliveryPriceTextView.setText(intent.getStringExtra("Delivery"));
+
+        Log.d(TAG, intent.getStringExtra("Total cost"));
+
         totalPriceTextView.setText(intent.getStringExtra("Total cost"));
         checkoutPayBtn = findViewById(R.id.checkout_pay_button);
+        pinCode.setText(TheUser.pin);
 
-        address = TheUser.getAddress();
-
-        checkoutPayBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startPayment();
-            }
-        });
+        consumerName.setText(TheUser.name);
+        shippingAddress.setText(address);
+        mobileNo.setText(TheUser.phoneNumber);
 
     }
 
@@ -93,11 +122,10 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         StringBuilder qtyStr = new StringBuilder();
         StringBuilder priceStr = new StringBuilder();
 
-        for(ViewAllModel product: productList) {
+        for(ViewAllModel product: ProdList) {
             idStr.append(product.getId()).append(", ");
             qtyStr.append(product.getQuantity()).append(", ");
             priceStr.append(product.getFinalPrice()).append(", ");
-
         }
 
         date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -117,6 +145,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 map.put("order date", date);
                 map.put("order status", "Order Placed");
                 map.put("invoice token", "x");
+                map.put("shipping address", address);
+                map.put("phone no", TheUser.phoneNumber);
 
                 Map<String, Object> m2 = new HashMap<>();
                 m2.put("order Id", orderId);
@@ -126,7 +156,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 collRef.document(orderId).set(map).addOnCompleteListener(task1 -> {
 
                     if(task.isSuccessful()) {
-                        uploadPdf(productList);
+                        uploadPdf(ProdList);
                         firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart")
                                 .get()
                                 .addOnCompleteListener(task2 -> {
@@ -148,7 +178,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     }
 
     void exit() {
-        productList.clear();
+        ProdList.clear();
 
         Intent intent = new Intent(this, MainHomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -156,7 +186,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         startActivity(intent);
     }
 
-    private void uploadPdf(List<ViewAllModel> productList) {
+    private void uploadPdf(List<ViewAllModel> ProdList) {
 
         PdfDocument pdfDocument = new PdfDocument();
         Paint paint = new Paint();
@@ -251,7 +281,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         int s_no = 0;
         int sum = 0;
 
-        for(ViewAllModel product: productList) {
+        for(ViewAllModel product: ProdList) {
 
             sum += product.getFinalPrice() * product.getQuantity();
 

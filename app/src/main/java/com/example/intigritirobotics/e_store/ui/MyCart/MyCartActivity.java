@@ -54,7 +54,6 @@ public class MyCartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_cart);
 
-
         Toolbar toolbar = findViewById(R.id.cart_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -85,6 +84,7 @@ public class MyCartActivity extends AppCompatActivity {
                 myIntent.putExtra("Products cost",cartTotal.getText().toString());
                 myIntent.putExtra("Delivery",deliveryPriceTextView.getText().toString());
                 myIntent.putExtra("Total cost",totalPriceTextView.getText().toString());
+                myIntent.putExtra("from", "MyCartActivity");
                 startActivity(myIntent);
             }
 

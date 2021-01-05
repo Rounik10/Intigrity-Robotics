@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,6 +24,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private TextView totalPriceText, deliveryCostText, total_amount_number;
     RecyclerView orderRecycler;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +36,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         productId =  Objects.requireNonNull(myIntent.getStringExtra("productId")).split(", ");
         productQty = Objects.requireNonNull(myIntent.getStringExtra("product qty")).split(", ");
         productPrices = Objects.requireNonNull(myIntent.getStringExtra("product price")).split(", ");
+
 
         totalPriceText = findViewById(R.id._total_price);
         deliveryCostText = findViewById(R.id.delivery_cost_text);

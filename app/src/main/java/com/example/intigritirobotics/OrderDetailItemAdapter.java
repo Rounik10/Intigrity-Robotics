@@ -93,6 +93,7 @@ public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItem
                    String priceText = "Rs."+Price+"/-";
                    price.setText(priceText);
                    ProductRating.setRating(Float.parseFloat(Rating));
+                   ProductRating.setEnabled(false);
                    is_app_starting++;
                }
             });

@@ -192,7 +192,7 @@ public class MyCartActivity extends AppCompatActivity {
         if(!delPrice.equals("Free")) totaleeeee += 60;
 
         deliveryPriceTextView.setText(delPrice);
-        cartBottomTotal.setText(totaleeeee+"");
+        cartBottomTotal.setText("Rs."+totaleeeee+"/-");
         totalPriceTextView.setText(totaleeeee+"");
         //newTotalPrice = total;
 

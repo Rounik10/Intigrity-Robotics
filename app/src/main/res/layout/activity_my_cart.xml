@@ -65,9 +65,9 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:background="#C0F0FB"
+        android:background="#E4D48A"
         android:orientation="horizontal"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -104,9 +104,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="#ED2020"
+            android:background="@drawable/roundedbutton"
             android:text="@string/check_out"
             android:textColor="#fff"
+            android:elevation="3dp"
             android:textStyle="bold" />
     </LinearLayout>
 

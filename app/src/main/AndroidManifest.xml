@@ -14,10 +14,22 @@
         android:roundIcon="@drawable/test_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.IntigritiRobotics">
-        <activity android:name=".ProjectPdfActivity" />
-        <activity android:name=".MyOrderDetailActivity" />
-        <activity android:name=".CheckOutActivity" />
-        <activity android:name=".UpdateUserDetails" />
+        <activity android:name=".ProjectPdfActivity"
+            android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".MyOrderDetailActivity"
+            android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".CheckOutActivity"
+            android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".UpdateUserDetails"
+            android:theme="@style/Theme.IntigritiRobotics.NoActionBar"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ProductDetailActivity"
             android:parentActivityName=".MainHomeActivity"

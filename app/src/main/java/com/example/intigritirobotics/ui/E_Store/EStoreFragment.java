@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -40,13 +41,15 @@ public class EStoreFragment extends Fragment {
     private List<SlideModel> slideModels = new ArrayList<>();
     private List<ViewAllModel> horizontalList = new ArrayList<>();
     private LinearLayoutManager projectLinearLayoutManager, horizontalLinearLayoutManager;
-    public String categoryId;
     private Button Hor1ViewAllBtn;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_e_store, container, false);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.e_store_swipe);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.gen_black);
         projectRecyclerView = view.findViewById(R.id.category_recyclerview);
         Hor1ViewAllBtn = view.findViewById(R.id.Horizontal1_view_all_button);
         horizontalItemsRecyclerview = view.findViewById(R.id.horizontal_items_recyclerview);
@@ -61,6 +64,13 @@ public class EStoreFragment extends Fragment {
                 Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
 
                 startActivity(myIntent);
+            }
+        });
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                loadProject();
             }
         });
         return view;
@@ -118,7 +128,6 @@ public class EStoreFragment extends Fragment {
         /////////////////////////////////////////////////////////////////// HORIZONTAL ///////////////////////////////////////////////////////
 
         firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task2 -> {
-            int i =1;
             if (task2.isSuccessful()) {
                 horizontalList.clear();
 
@@ -130,8 +139,6 @@ public class EStoreFragment extends Fragment {
                     float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
                     int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
                     horizontalList.add(new ViewAllModel(id, picUrl, title, rating, price));
-                    Toast.makeText(getContext(), ""+i, Toast.LENGTH_LONG).show();
-                    i++;
                 }
             }
             else {
@@ -149,7 +156,7 @@ public class EStoreFragment extends Fragment {
         HorizontalAdapter1 adapter1 = new HorizontalAdapter1(horizontalList);
         horizontalItemsRecyclerview.setAdapter(adapter1);
         adapter1.notifyDataSetChanged();
-        loadingDialog.dismiss();
+        mSwipeRefreshLayout.setRefreshing(false);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }

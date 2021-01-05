@@ -2,9 +2,42 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/light_grey">
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/-"
+        android:textSize="18sp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/delivery_cost_text" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/-"
+        android:layout_marginEnd="5dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/delivery_cost_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price_detail_text" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rs."
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/total_amount_number"
+        app:layout_constraintEnd_toStartOf="@+id/total_amount_number"
+        app:layout_constraintTop_toTopOf="@+id/total_amount_number" />
 
     <TextView
         android:layout_marginTop="2dp"
@@ -14,6 +47,7 @@
         android:background="@color/gen_white"
         android:text="@string/price_details"
         android:textSize="24sp"
+        android:textColor="#590202"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,7 +58,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:background="@color/gen_white"
         android:padding="5dp"
         android:text="@string/price_delivery"
         android:textColor="@color/gen_black"
@@ -37,48 +70,43 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:background="@color/gen_white"
-        android:gravity="end"
-        android:padding="5dp"
-        android:text="@string/pricePlaceHolder"
+        android:padding="2dp"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/nub_products_text"
-        app:layout_constraintTop_toBottomOf="@id/price_detail_text" />
+        app:layout_constraintEnd_toStartOf="@+id/textView18"
+        app:layout_constraintBottom_toBottomOf="@id/textView18"
+
+        app:layout_constraintTop_toTopOf="@id/textView18"  />
 
     <TextView
         android:id="@+id/delivery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:background="@color/gen_white"
         android:padding="5dp"
         android:text="@string/delivery"
         android:textColor="@color/gen_black"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/nub_products_text"
         app:layout_constraintTop_toBottomOf="@id/nub_products_text" />
 
     <TextView
         android:id="@+id/delivery_cost_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:background="@color/gen_white"
         android:gravity="end"
         android:padding="5dp"
-        android:text="@string/free"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/delivery"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/delivery"
-        app:layout_constraintTop_toBottomOf="@+id/_total_price" />
+        app:layout_constraintTop_toBottomOf="@+id/nub_products_text" />
 
     <TextView
         android:id="@+id/total_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:background="@color/gen_white"
         android:padding="5dp"
         android:text="@string/total_amount"
         android:textColor="@color/gen_black"
@@ -90,17 +118,23 @@
         android:id="@+id/total_amount_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="@color/gen_white"
-        android:gravity="end"
-        android:padding="5dp"
-        android:text="@string/pricePlaceHolder"
+        android:padding="2dp"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/total_amount"
-        app:layout_constraintTop_toBottomOf="@+id/delivery_cost_text" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView20"
+        app:layout_constraintEnd_toStartOf="@+id/textView20"
+        app:layout_constraintTop_toTopOf="@+id/textView20" />
 
-<!--    <TextView-->
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rs."
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/_total_price"
+        app:layout_constraintEnd_toStartOf="@+id/_total_price"
+        app:layout_constraintTop_toTopOf="@+id/_total_price" />
+
+    <!--    <TextView-->
 <!--        android:id="@+id/you_saved_text"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->

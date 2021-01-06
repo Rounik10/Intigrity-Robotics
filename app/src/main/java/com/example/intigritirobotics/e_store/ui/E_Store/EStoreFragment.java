@@ -57,21 +57,11 @@ public class EStoreFragment extends Fragment {
         imageSlider = view.findViewById(R.id.image_slider);
         loadProject();
 
-        Hor1ViewAllBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
-
-                startActivity(myIntent);
-            }
+        Hor1ViewAllBtn.setOnClickListener(view1 -> {
+            Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
+            startActivity(myIntent);
         });
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                loadProject();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this::loadProject);
         return view;
 
     }
@@ -156,7 +146,6 @@ public class EStoreFragment extends Fragment {
         horizontalItemsRecyclerview.setAdapter(adapter1);
         adapter1.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 

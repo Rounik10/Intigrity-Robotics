@@ -285,7 +285,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             tvOutOfStock.setVisibility(View.VISIBLE);
         }
 
-        ///////////////////////////////////////////////////////// Slider/////////////////////////////////////////////////////////////////
         ImageSlider imageSlider = findViewById(R.id.imgSlider);
 
         String[] productPicUrls = product.get("product_pic").toString().split(", ");
@@ -297,18 +296,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         TextView briefText = findViewById(R.id.itemBriefDetail);
         briefText.setText(title);
-        ///////////////////////////////////////////////////////// Slider/////////////////////////////////////////////////////////////////
 
-
-        ////////////////////////////////////////////////////////// Set Ratings//////////////////////////////////////////////////////////////
         TextView avgRatingText = findViewById(R.id.averageRatingText);
         String avgRating = getAvg(product);
         avgRatingText.setText(avgRating);
         imgAverageRating.setText(avgRating);
-        ////////////////////////////////////////////////////////// Set Ratings//////////////////////////////////////////////////////////////
 
-
-        ///////////////////////////////////////////////////////////// Tabs//////////////////////////////////////////////////////////////////
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("Some Details");
         arrayList.add("Specs");

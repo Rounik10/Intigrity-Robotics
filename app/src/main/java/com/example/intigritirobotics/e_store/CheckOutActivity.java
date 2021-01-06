@@ -416,7 +416,9 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         Toast.makeText(this, "Order Successful", Toast.LENGTH_SHORT).show();
 
-        paymentMethod = "UPI";//todo add real payment method
+        paymentMethod = "UPI";
+        //todo add real payment method
+        Log.d("payment id",s);
 
         loadProductsToMyOrders();
 

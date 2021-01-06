@@ -219,11 +219,28 @@ public class MyCartActivity extends AppCompatActivity {
                             totalPriceTextView.setText(totaleeeee+"");
                         }
 
-
+                        checkIsEmpty();
                     } else {
                         Toast.makeText(itemView.getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+    }
+
+    private static void checkIsEmpty() {
+
+        firebaseFirestore.collection("USERS/"+currentUserUId+"/My Cart/")
+                .get()
+                .addOnCompleteListener(task -> {
+           if(task.isSuccessful()) {
+               if(task.getResult().isEmpty()) {
+                   buyNowLinLayout.setVisibility(View.GONE);
+                   v.setVisibility(View.GONE);
+                   emptyCartImage.setVisibility(View.VISIBLE);
+                   text.setVisibility(View.VISIBLE);
+               }
+           }
+        });
 
     }
 

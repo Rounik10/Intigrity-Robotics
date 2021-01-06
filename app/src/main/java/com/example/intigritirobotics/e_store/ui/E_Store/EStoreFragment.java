@@ -61,7 +61,8 @@ public class EStoreFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
-
+                myIntent.putExtra("Index","1");
+                myIntent.putExtra("Title","#Trendding");
                 startActivity(myIntent);
             }
         });

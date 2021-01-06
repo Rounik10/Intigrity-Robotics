@@ -52,16 +52,16 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp" />
 
+            <include
+                android:id="@+id/include_product_price"
+                layout="@layout/cart_price_details"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:visibility="gone" />
+
         </LinearLayout>
     </ScrollView>
-
-    <include
-        android:id="@+id/include_product_price"
-        layout="@layout/cart_price_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"

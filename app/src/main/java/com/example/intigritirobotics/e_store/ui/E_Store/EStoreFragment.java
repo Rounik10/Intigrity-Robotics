@@ -23,6 +23,7 @@ import com.example.intigritirobotics.e_store.HorizontalAdapter1;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ViewAllActivity;
 import com.example.intigritirobotics.e_store.ViewAllModel;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -126,8 +127,11 @@ public class EStoreFragment extends Fragment {
             if (task2.isSuccessful()) {
                 horizontalList.clear();
 
-                for (QueryDocumentSnapshot documentSnapshot : task2.getResult()) {
+                List<DocumentSnapshot> list = task2.getResult().getDocuments();
+                int n = Math.min(list.size(), 8);
 
+                for (int i=0; i<n; i++) {
+                    DocumentSnapshot documentSnapshot = list.get(i);
                     String id = documentSnapshot.getId();
                     String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
                     String title = documentSnapshot.get("product title").toString();

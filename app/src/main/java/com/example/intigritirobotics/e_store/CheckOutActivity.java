@@ -19,6 +19,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -58,6 +59,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     private Intent intent;
     private List<ViewAllModel> ProdList;
     private String intentFrom;
+    private RadioButton onlinePayment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +71,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         intentFrom = intent.getStringExtra("from");
 
         address = TheUser.getAddress();
+
+        onlinePayment = findViewById(R.id.online_method);
 
         totalPriceTextView = findViewById(R.id.total_amount_number);
         deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
@@ -388,26 +392,25 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     }
 
     public void startPayment() {
-        Checkout checkout = new Checkout();
-        final Activity activity = this;
+        if (onlinePayment.isChecked()) {
+            Checkout checkout = new Checkout();
+            final Activity activity = this;
 
-        try
-        {
-            JSONObject options = new JSONObject();
-            options.put("name", "Merchant Name");
-            options.put("description", "Test Order");
-            options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
-            options.put("theme.color", "#3399cc");
-            options.put("currency", "INR");
-            options.put("amount", "100");//pass amount in currency subunits
-            options.put("prefill.email", "rpgamerindia@gmail.com");
-            options.put("prefill.contact","6299022603");
+            try {
+                JSONObject options = new JSONObject();
+                options.put("name", "Merchant Name");
+                options.put("description", "Test Order");
+                options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
+                options.put("theme.color", "#3399cc");
+                options.put("currency", "INR");
+                options.put("amount", "100");//pass amount in currency subunits
+                options.put("prefill.email", "rpgamerindia@gmail.com");
+                options.put("prefill.contact", "6299022603");
 
-            checkout.open(activity, options);
-        }
-        catch(Exception e)
-        {
-            Log.e("Payment Failed", "Error in starting Razorpay Checkout", e);
+                checkout.open(activity, options);
+            } catch (Exception e) {
+                Log.e("Payment Failed", "Error in starting Razorpay Checkout", e);
+            }
         }
     }
 

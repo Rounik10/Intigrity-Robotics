@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,6 +65,12 @@ public class ViewAllActivity extends AppCompatActivity {
 
     private void loadProject(){
 
+        switch(categoryId){
+            case "1":
+                //code to be executed;
+                break;  //optional
+
+            default:
         String docPath = "/CATEGORY/"+categoryId;
 
         firebaseFirestore.document(docPath).get().addOnCompleteListener(task -> {
@@ -94,6 +101,8 @@ public class ViewAllActivity extends AppCompatActivity {
 
             }
         });
+        }
+
 
     }
 }

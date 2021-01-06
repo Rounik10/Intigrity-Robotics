@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout7" />
 
     <TextView
-        android:id="@+id/textView26"
+        android:id="@+id/payment_method"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Google Pay"
@@ -46,13 +46,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
     <TextView
-        android:id="@+id/textView28"
+        android:id="@+id/payment_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Ref: 514556515dcda55sc"
-        app:layout_constraintEnd_toEndOf="@+id/textView26"
-        app:layout_constraintStart_toStartOf="@+id/textView26"
-        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+        app:layout_constraintEnd_toEndOf="@+id/payment_method"
+        app:layout_constraintStart_toStartOf="@+id/payment_method"
+        app:layout_constraintTop_toBottomOf="@+id/payment_method" />
 
     <LinearLayout
         android:id="@+id/linearLayout7"

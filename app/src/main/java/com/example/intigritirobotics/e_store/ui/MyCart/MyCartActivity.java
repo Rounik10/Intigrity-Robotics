@@ -44,7 +44,6 @@ public class MyCartActivity extends AppCompatActivity {
     public static MyCartAdapter adapter1;
     public static  View v, text;
     private Button checkoutBtn;
-    private static MutableLiveData<Integer> itemNo;
     public static ImageView emptyCartImage;
     public  static  int totaleeeee;
 

@@ -14,6 +14,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.intigritirobotics.e_store.MainHomeActivity.TheUser;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class MyOrderDetailActivity extends AppCompatActivity {
@@ -22,6 +24,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private String orderId;
     private String[] productQty, productId, productPrices;
     private TextView totalPriceText, deliveryCostText, total_amount_number;
+    private TextView name, address, phone, pin, paymentMethod, paymentId;
     RecyclerView orderRecycler;
 
     @Override
@@ -41,14 +44,37 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         total_amount_number = findViewById(R.id.total_amount_number);
         Button toPdfAct = findViewById(R.id.pdf_act_button);
 
+        name = findViewById(R.id.address_view_name);
+        phone = findViewById(R.id.address_view_mobile);
+        address = findViewById(R.id.address_view_street_area);
+        pin = findViewById(R.id.address_view_state_pin_code);
+        paymentMethod = findViewById(R.id.payment_method);
+        paymentId = findViewById(R.id.payment_id);
+
         setRecycler();
         setPrices();
+        setDetails();
 
         toPdfAct.setOnClickListener(l->{
             Intent intent = new Intent(this, ProjectPdfActivity.class);
             intent.putExtra("orderId", orderId);
             startActivity(intent);
         });
+
+    }
+
+    private void setDetails() {
+
+        firebaseFirestore.document("ORDERS/"+orderId).get().addOnSuccessListener(order ->{
+
+            address.setText(Objects.requireNonNull(order.get("shipping address")).toString());
+            name.setText(Objects.requireNonNull(TheUser.name));
+            phone.setText(Objects.requireNonNull(order.get("phone no")).toString());
+            pin.setText(Objects.requireNonNull(order.get("PIN")).toString());
+            paymentMethod.setText(Objects.requireNonNull(order.get("payment method")).toString());
+            paymentId.setText(Objects.requireNonNull(order.get("payment id")).toString());
+
+        }).addOnFailureListener(Throwable::printStackTrace);
 
     }
 

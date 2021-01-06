@@ -3,6 +3,7 @@ package com.example.intigritirobotics.e_store;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +31,9 @@ public class ProjectPdfActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_pdf);
 
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setTitle("Loading");
+        pd.show();
         Intent intent = getIntent();
 
         orderId = intent.getStringExtra("orderId");
@@ -43,6 +47,7 @@ public class ProjectPdfActivity extends AppCompatActivity {
                     .apply(new RequestOptions().placeholder(R.drawable.category_icon))
                     .into(pdfView);
 
+            pd.dismiss();
         }).addOnFailureListener(e -> {
 
         });

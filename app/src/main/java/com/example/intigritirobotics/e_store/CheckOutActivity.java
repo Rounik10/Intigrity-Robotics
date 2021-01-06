@@ -22,10 +22,8 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.intigritirobotics.R;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -43,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.TheUser;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
@@ -60,18 +59,17 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     private List<ViewAllModel> ProdList;
     private String intentFrom;
     private RadioButton onlinePayment;
+    private String paymentId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Checkout.preload(this);
-
         setContentView(R.layout.activity_check_out);
         intent = getIntent();
         
         intentFrom = intent.getStringExtra("from");
-
         address = TheUser.getAddress();
-
         onlinePayment = findViewById(R.id.online_method);
 
         totalPriceTextView = findViewById(R.id.total_amount_number);
@@ -99,14 +97,12 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             String title = intent.getStringExtra("title");
             float totalRating = intent.getFloatExtra("total rating", 0);
             int finalPrice = intent.getIntExtra("final price", 0);
-            ViewAllModel product = new ViewAllModel(id, image, title, totalRating, finalPrice);
+            ViewAllModel product = new ViewAllModel(id, image, title, totalRating, finalPrice,1);
             ProdList.add(product);
         }
 
         cartTotal.setText(intent.getStringExtra("Products cost"));
         deliveryPriceTextView.setText(intent.getStringExtra("Delivery"));
-
-        Log.d(TAG, intent.getStringExtra("Total cost"));
 
         totalPriceTextView.setText(intent.getStringExtra("Total cost"));
         checkoutPayBtn = findViewById(R.id.checkout_pay_button);
@@ -138,7 +134,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         collRef.get().addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
-                int totalOrders = task.getResult().size() + 1;
+                int totalOrders = Objects.requireNonNull(task.getResult()).size() + 1;
 
                 orderId = "IR-00000" + totalOrders;
 
@@ -151,6 +147,9 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 map.put("invoice token", "x");
                 map.put("shipping address", address);
                 map.put("phone no", TheUser.phoneNumber);
+                map.put("PIN", TheUser.pin);
+                map.put("payment method", paymentMethod);
+                map.put("payment id", paymentId);
 
                 Map<String, Object> m2 = new HashMap<>();
                 m2.put("order Id", orderId);
@@ -164,7 +163,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                         firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart")
                                 .get()
                                 .addOnCompleteListener(task2 -> {
-                                    List<DocumentSnapshot> l = task2.getResult().getDocuments();
+                                    List<DocumentSnapshot> l = Objects.requireNonNull(task2.getResult()).getDocuments();
                                     for(int i=0; i<l.size(); i++) {
                                         firebaseFirestore
                                                 .document("USERS/"+currentUserUId+"/My Cart/"+l.get(i).getId()).delete();
@@ -347,30 +346,23 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         UploadTask uploadTask = firebaseStorage.getReference("invoices").child(orderId).putBytes(data);
 
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                StorageReference dateRef = storageRef.child("invoices").child(orderId);
-                Toast.makeText(CheckOutActivity.this,dateRef.toString(),Toast.LENGTH_LONG).show();
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            StorageReference dateRef = storageRef.child("invoices").child(orderId);
+            Toast.makeText(CheckOutActivity.this,dateRef.toString(),Toast.LENGTH_LONG).show();
 
-                dateRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+            dateRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+            {
+                @Override
+                public void onSuccess(Uri downloadUrl)
                 {
-                    @Override
-                    public void onSuccess(Uri downloadUrl)
-                    {
-                        //do something with downloadurl
-                        firebaseFirestore.collection("ORDERS").document(orderId).update("invoice token",downloadUrl.toString());
-                    }
-                });
-                exit();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("File Upload", "Invoice upload failed");
-                e.printStackTrace();
-            }
+                    firebaseFirestore.collection("ORDERS").document(orderId).update("invoice token",downloadUrl.toString());
+                }
+            });
+            exit();
+        }).addOnFailureListener(e -> {
+            Log.d("File Upload", "Invoice upload failed");
+            e.printStackTrace();
         }).addOnProgressListener(snapshot -> {
             ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.show();
@@ -382,11 +374,9 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
             NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()
+            return netInfo != null && netInfo.isConnected()
                     && netInfo.isConnectedOrConnecting()
-                    && netInfo.isAvailable()) {
-                return true;
-            }
+                    && netInfo.isAvailable();
         }
         return false;
     }
@@ -423,6 +413,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         //todo add real payment method
         Log.d("payment id",s);
 
+        paymentId = s;
         loadProductsToMyOrders();
 
     }
@@ -431,14 +422,5 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     public void onPaymentError(int i, String s) {
         Log.d("dikkat", s);
         Toast.makeText(this, "Payment Error"+s, Toast.LENGTH_SHORT).show();
-    }
-}
-
-class product {
-    String name;
-    int qty;
-    product(String name, int qty) {
-        this.name = name;
-        this.qty = qty;
     }
 }

@@ -4,12 +4,17 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ui.MyAccount.UserProfileActivity;
 import com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity;
@@ -30,6 +35,9 @@ import androidx.appcompat.widget.Toolbar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.example.intigritirobotics.e_store.SignUpActivity.pref;
 
 public class MainHomeActivity extends AppCompatActivity {
@@ -40,10 +48,14 @@ public class MainHomeActivity extends AppCompatActivity {
     public static String currentUserUId;
     public FirebaseAuth firebaseAuth;
     public static UserModel TheUser;
+    private CircleImageView navPic;
+    private Layout navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_home);
+
 
         loadingDialog = new Dialog(MainHomeActivity.this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -52,12 +64,12 @@ public class MainHomeActivity extends AppCompatActivity {
         loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
         loadingDialog.show();
 
-        setContentView(R.layout.activity_main_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         firebaseFirestore  =FirebaseFirestore.getInstance();
 
+        navPic = findViewById(R.id.nav_pic);
         firebaseAuth = FirebaseAuth.getInstance();
         currentUserUId = firebaseAuth.getUid();
 
@@ -79,6 +91,17 @@ public class MainHomeActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         loadingDialog.dismiss();
+//        firebaseFirestore.collection("USERS").document(currentUserUId).get().addOnCompleteListener(task -> {
+//            DocumentSnapshot  documentSnapshot = task.getResult();
+//            assert documentSnapshot != null;
+//            Glide.with(getApplicationContext())
+//                    .load(documentSnapshot.get("USER PIC"))
+//                    .apply(new RequestOptions().placeholder(R.drawable.category_icon))
+//                    .into(navPic);
+//
+//        }).addOnFailureListener(e -> {
+//
+//        });
     }
 
     private void loadUserDetails() {
@@ -95,7 +118,6 @@ public class MainHomeActivity extends AppCompatActivity {
 
                     if(name!=null && address!=null && phone !=null){
                         TheUser = new UserModel(name, address, phone, currentUserUId, pin);
-                        Log.d("loadUserDetails", address);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -3,22 +3,30 @@ package com.example.intigritirobotics.e_store;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ui.MyAccount.UserProfileActivity;
 import com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity;
 import com.example.intigritirobotics.e_store.ui.Setting.SettingActivity;
 import com.example.intigritirobotics.e_store.ui.Support.SupportActivity;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -27,6 +35,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,12 +43,15 @@ import static com.example.intigritirobotics.e_store.SignUpActivity.pref;
 
 public class MainHomeActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainHomeActivity";
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore firebaseFirestore;
     public static Dialog loadingDialog;
     public static String currentUserUId;
     public FirebaseAuth firebaseAuth;
     public static UserModel TheUser;
+    private ImageView headerImg;
+    private TextView headerText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +76,10 @@ public class MainHomeActivity extends AppCompatActivity {
         loadUserDetails();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+
+        headerText = headerView.findViewById(R.id.nav_name);
+        headerImg = headerView.findViewById(R.id.nav_pic);
 
         DrawerLayout drawer = findViewById(R.id.drawer);
         // Passing each menu ID as a set of Ids because each
@@ -92,17 +108,33 @@ public class MainHomeActivity extends AppCompatActivity {
                     String address = Objects.requireNonNull(userSnap.get("Address")).toString();
                     String phone = Objects.requireNonNull(userSnap.get("Phone")).toString();
                     String pin = Objects.requireNonNull(userSnap.get("PIN")).toString();
+                    String imgToken = userSnap.contains("Profile Image") ? userSnap.get("Profile Image").toString(): null;
 
                     if(name!=null && address!=null && phone !=null){
                         TheUser = new UserModel(name, address, phone, currentUserUId, pin);
-                        Log.d("loadUserDetails", address);
                     }
+                    headerText.setText(name);
+                    if(imgToken != null) setImage(imgToken);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             }
         });
+    }
+
+    private void setImage(String imgUrl) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        storage.getReference("/profileImg/"+imgUrl)
+                .getDownloadUrl()
+                .addOnSuccessListener(task -> {
+
+                    Glide.with(this).load(task).into(headerImg);
+
+                }).addOnFailureListener(Throwable::printStackTrace);
+
     }
 
     @Override

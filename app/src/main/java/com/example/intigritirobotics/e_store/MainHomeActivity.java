@@ -3,9 +3,7 @@ package com.example.intigritirobotics.e_store;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
@@ -13,20 +11,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ui.MyAccount.UserProfileActivity;
 import com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity;
 import com.example.intigritirobotics.e_store.ui.Setting.SettingActivity;
 import com.example.intigritirobotics.e_store.ui.Support.SupportActivity;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -34,10 +29,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import static com.example.intigritirobotics.e_store.SignUpActivity.pref;
 
@@ -132,11 +123,8 @@ public class MainHomeActivity extends AppCompatActivity {
 
         storage.getReference("/profileImg/"+imgUrl)
                 .getDownloadUrl()
-                .addOnSuccessListener(task -> {
-
-                    Glide.with(this).load(task).into(headerImg);
-
-                }).addOnFailureListener(Throwable::printStackTrace);
+                .addOnSuccessListener(task -> Glide.with(this).load(task).into(headerImg))
+                .addOnFailureListener(Throwable::printStackTrace);
 
     }
 
@@ -151,7 +139,7 @@ public class MainHomeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case R.id.action_cart:
-                 startActivity(new Intent(this, MyCartActivity.class));
+                startActivity(new Intent(this, MyCartActivity.class));
                 return true;
             case R.id.action_search:
                 Toast.makeText(this,"Search", Toast.LENGTH_SHORT).show();
@@ -202,27 +190,28 @@ public class MainHomeActivity extends AppCompatActivity {
         finish();
     }
 
+    /*
     private void addProduct()
     {
         for (int x=0; x<=100; x++) {
 
             Map<String,Object> pro = new HashMap<>();
-        pro.put("1_star","0");
-        pro.put("2_star","0");
-        pro.put("3_star","0");
-        pro.put("4_star","0");
-        pro.put("5_star","0");
-        pro.put("details","fekh");
-        pro.put("in stock","true");
-        pro.put("other","hdwjd");
-        pro.put("product price","525");
-        pro.put("product rating","0");
-        pro.put("product title","hbsa");
-        pro.put("product_pic","c");
-        pro.put("specs",0);
+            pro.put("1_star","0");
+            pro.put("2_star","0");
+            pro.put("3_star","0");
+            pro.put("4_star","0");
+            pro.put("5_star","0");
+            pro.put("details","fekh");
+            pro.put("in stock","true");
+            pro.put("other","hdwjd");
+            pro.put("product price","525");
+            pro.put("product rating","0");
+            pro.put("product title","hbsa");
+            pro.put("product_pic","c");
+            pro.put("specs",0);
 
-            }
+        }
 
     }
-
+    */
 }

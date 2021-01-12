@@ -370,17 +370,6 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     }
 
-    public static boolean isConnectionAvailable(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager != null) {
-            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-            return netInfo != null && netInfo.isConnected()
-                    && netInfo.isConnectedOrConnecting()
-                    && netInfo.isAvailable();
-        }
-        return false;
-    }
-
     public void startPayment() {
         if (onlinePayment.isChecked()) {
             Checkout checkout = new Checkout();

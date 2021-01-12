@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.loadingDialog;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -200,7 +199,6 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                                                     setRatings(p2);
 
-                                                    loadingDialog.cancel();
                                                 }
                                         );
 
@@ -405,11 +403,10 @@ public class ProductDetailActivity extends AppCompatActivity {
                     horizontalList.add(new ViewAllModel(id, picUrl, title, rating, price));
                 }
             } else {
-                loadingDialog.dismiss();
                 String error = task2.getException().getMessage();
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
             }
-        }).addOnFailureListener(e -> loadingDialog.dismiss());
+        });
 
         horizontalLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         RelatedProductRecyclerview.setLayoutManager(horizontalLinearLayoutManager);

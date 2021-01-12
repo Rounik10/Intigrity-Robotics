@@ -46,7 +46,7 @@ public class MainHomeActivity extends AppCompatActivity {
     private static final String TAG = "MainHomeActivity";
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore firebaseFirestore;
-    public static Dialog loadingDialog;
+    public static Dialog HomeloadingDialog;
     public static String currentUserUId;
     public FirebaseAuth firebaseAuth;
     public static UserModel TheUser;
@@ -57,12 +57,14 @@ public class MainHomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        loadingDialog = new Dialog(MainHomeActivity.this);
-        loadingDialog.setContentView(R.layout.loading_progress_dialog);
-        loadingDialog.setCancelable(false);
-        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
-        loadingDialog.show();
+        HomeloadingDialog = new Dialog(MainHomeActivity.this);
+        HomeloadingDialog.setContentView(R.layout.loading_progress_dialog);
+        HomeloadingDialog.setCancelable(false);
+        HomeloadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        HomeloadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
+
+        HomeloadingDialog.show();
+
 
         setContentView(R.layout.activity_main_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -90,11 +92,12 @@ public class MainHomeActivity extends AppCompatActivity {
                 .setDrawerLayout(drawer)
                 .build();
 
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        loadingDialog.dismiss();
     }
 
     private void loadUserDetails() {

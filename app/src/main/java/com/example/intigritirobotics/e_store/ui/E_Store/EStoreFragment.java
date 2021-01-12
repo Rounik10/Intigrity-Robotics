@@ -1,5 +1,6 @@
 package com.example.intigritirobotics.e_store.ui.E_Store;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,8 +30,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.loadingDialog;
 
 public class EStoreFragment extends Fragment {
 
@@ -42,10 +43,12 @@ public class EStoreFragment extends Fragment {
     private LinearLayoutManager projectLinearLayoutManager, horizontalLinearLayoutManager;
     private Button Hor1ViewAllBtn;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    ProgressDialog progressDialog ;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_e_store, container, false);
+        HomeloadingDialog.show();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.e_store_swipe);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.gen_black);
@@ -99,12 +102,12 @@ public class EStoreFragment extends Fragment {
 
                     }
                     else {
-                        loadingDialog.dismiss();
+                        progressDialog.dismiss();
                         String error = task1.getException().getMessage();
                         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(e -> {
-                    loadingDialog.dismiss();
+                    progressDialog.dismiss();
 
                 });
 
@@ -115,7 +118,7 @@ public class EStoreFragment extends Fragment {
                 adapter.notifyDataSetChanged();
 
             } else {
-                loadingDialog.dismiss();
+                progressDialog.dismiss();
                 String error = task.getException().getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
             }
@@ -142,12 +145,12 @@ public class EStoreFragment extends Fragment {
                 }
             }
             else {
-                loadingDialog.dismiss();
+                progressDialog.dismiss();
                 String error = task2.getException().getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e -> {
-            loadingDialog.dismiss();
+            progressDialog.dismiss();
 
         });
 
@@ -157,6 +160,7 @@ public class EStoreFragment extends Fragment {
         horizontalItemsRecyclerview.setAdapter(adapter1);
         adapter1.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
+      HomeloadingDialog.dismiss();
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }

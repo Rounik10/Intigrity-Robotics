@@ -94,7 +94,6 @@ public class ViewAllActivity extends AppCompatActivity {
                             ViewAllAdapter adapter1 = new ViewAllAdapter(productList);
                             productRecycler.setAdapter(adapter1);
                             adapter1.notifyDataSetChanged();
-                            MainHomeActivity.loadingDialog.dismiss();
                         }
                     }).addOnFailureListener(e -> Log.e("Fail",e.getMessage()));
                 }

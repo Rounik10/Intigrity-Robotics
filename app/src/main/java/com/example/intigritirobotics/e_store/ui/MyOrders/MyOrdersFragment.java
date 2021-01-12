@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
@@ -30,6 +31,8 @@ public class MyOrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_orders, container, false);
+        HomeloadingDialog.show();
+
         recyclerView =view.findViewById(R.id.my_orders_recyclerview);
         linearLayoutManager = new LinearLayoutManager(getContext());
 
@@ -63,6 +66,8 @@ public class MyOrdersFragment extends Fragment {
                                     MyOrderAdapter adapter = new MyOrderAdapter(myOrderModels);
                                     recyclerView.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
+                                    HomeloadingDialog.dismiss();
+
                                 }
                             });
 
@@ -71,6 +76,8 @@ public class MyOrdersFragment extends Fragment {
             } else {
                 String error = task.getException().getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                HomeloadingDialog.dismiss();
+
             }
 
         });

@@ -147,7 +147,6 @@ public class MyCartActivity extends AppCompatActivity {
 
                             cartItemRecycler.setAdapter(adapter1);
                             adapter1.notifyDataSetChanged();
-                            MainHomeActivity.loadingDialog.dismiss();
                             calculatePrice();
                         }
                     }

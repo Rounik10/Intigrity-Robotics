@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.loadingDialog;
 
 public class CategoryFragment extends Fragment {
     private final List<CategoryModel> projectList = new ArrayList<>();
@@ -31,6 +31,7 @@ public class CategoryFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         
         View view = inflater.inflate(R.layout.fragment_category, container, false);
+        HomeloadingDialog.show();
 
         recyclerView =view.findViewById(R.id.category_fragment_recyclerview);
         gridLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -40,7 +41,6 @@ public class CategoryFragment extends Fragment {
     }
 
     private void loadCategory() {
-        loadingDialog.show();
         firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {
@@ -56,13 +56,15 @@ public class CategoryFragment extends Fragment {
                 CategoryFragmentAdapter adapter = new CategoryFragmentAdapter(projectList);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                loadingDialog.dismiss();
+                HomeloadingDialog.dismiss();
+
             }
             else
             {
-                loadingDialog.dismiss();
                 String error = Objects.requireNonNull(task.getException()).getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                HomeloadingDialog.dismiss();
+
             }
 
         });

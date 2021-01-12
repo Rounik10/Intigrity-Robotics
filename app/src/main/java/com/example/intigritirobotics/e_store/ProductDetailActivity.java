@@ -1,10 +1,12 @@
 package com.example.intigritirobotics.e_store;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,11 +51,20 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageView offerImageView;
     private String imageUrl;
     private Button buyNowButton;
+    private Dialog loadingDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
+        loadingDialog = new Dialog(ProductDetailActivity.this);
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
+
+        loadingDialog.show();
 
         Toolbar toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
@@ -385,6 +396,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         int stars = Integer.parseInt(val);
         progressBar.setMax(total);
         progressBar.setProgress(stars);
+        loadingDialog.dismiss();
     }
 
     private void loadRelatedProduct() {

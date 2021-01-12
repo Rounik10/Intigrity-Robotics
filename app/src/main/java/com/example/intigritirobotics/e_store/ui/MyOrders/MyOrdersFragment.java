@@ -42,7 +42,7 @@ public class MyOrdersFragment extends Fragment {
     }
     private void loadOrders() {
         firebaseFirestore.collection("/USERS/"+ currentUserUId +"/My Orders").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
+            if (task.isSuccessful() && task.getResult() != null) {
                 myOrderModels.clear();
 
                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
@@ -66,7 +66,6 @@ public class MyOrdersFragment extends Fragment {
                                     MyOrderAdapter adapter = new MyOrderAdapter(myOrderModels);
                                     recyclerView.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
-                                    HomeloadingDialog.dismiss();
 
                                 }
                             });
@@ -79,6 +78,8 @@ public class MyOrdersFragment extends Fragment {
                 HomeloadingDialog.dismiss();
 
             }
+            HomeloadingDialog.dismiss();
+
 
         });
 

@@ -85,6 +85,7 @@ public class ResetActivity extends AppCompatActivity {
     }
     public void Checkemail()
     {
+
         pb3.setVisibility(View.VISIBLE);
         rt.setEnabled(false);
         String e = String.valueOf(em3.getText());

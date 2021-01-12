@@ -3,9 +3,12 @@ package com.example.intigritirobotics.e_store;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,11 +29,20 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private TextView totalPriceText, deliveryCostText, total_amount_number;
     private TextView name, address, phone, pin, paymentMethod, paymentId;
     RecyclerView orderRecycler;
+        private Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_order_detail);
+        loadingDialog = new Dialog(MyOrderDetailActivity.this);
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
+
+        loadingDialog.show();
+
         Intent myIntent = getIntent();
 
         orderId = myIntent.getStringExtra("order id");
@@ -73,6 +85,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
             pin.setText(Objects.requireNonNull(order.get("PIN")).toString());
             paymentMethod.setText(Objects.requireNonNull(order.get("payment method")).toString());
             paymentId.setText(Objects.requireNonNull(order.get("payment id")).toString());
+            loadingDialog.dismiss();
 
         }).addOnFailureListener(Throwable::printStackTrace);
 

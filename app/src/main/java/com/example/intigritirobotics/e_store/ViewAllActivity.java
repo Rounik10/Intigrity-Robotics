@@ -1,10 +1,12 @@
 package com.example.intigritirobotics.e_store;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
@@ -29,11 +31,20 @@ public class ViewAllActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private List<ViewAllModel> recList;
     private String categoryId;
+    private Dialog loadingDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all);
+        loadingDialog = new Dialog(ViewAllActivity.this);
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
+
+        loadingDialog.show();
+
         Toolbar toolbar = findViewById(R.id.vie_all_toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
@@ -68,6 +79,8 @@ public class ViewAllActivity extends AppCompatActivity {
         switch(categoryId){
             case "1":
                 //code to be executed;
+                loadingDialog.dismiss();
+
                 break;  //optional
 
             default:
@@ -94,6 +107,7 @@ public class ViewAllActivity extends AppCompatActivity {
                             ViewAllAdapter adapter1 = new ViewAllAdapter(productList);
                             productRecycler.setAdapter(adapter1);
                             adapter1.notifyDataSetChanged();
+                            loadingDialog.dismiss();
                         }
                     }).addOnFailureListener(e -> Log.e("Fail",e.getMessage()));
                 }

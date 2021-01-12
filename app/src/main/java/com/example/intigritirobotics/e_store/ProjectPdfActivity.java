@@ -2,12 +2,14 @@ package com.example.intigritirobotics.e_store;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -25,11 +27,19 @@ public class ProjectPdfActivity extends AppCompatActivity {
 
     private String orderId;
     private ImageView pdfView;
+    private  Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_pdf);
+        loadingDialog = new Dialog(ProjectPdfActivity.this);
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
+
+        loadingDialog.show();
 
         ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Loading");
@@ -54,10 +64,12 @@ public class ProjectPdfActivity extends AppCompatActivity {
         Button button = findViewById(R.id.save_pdf_button);
 
         button.setOnClickListener(view -> saveImage());
+        loadingDialog.dismiss();
 
     }
     private void saveImage ()
     {
+        loadingDialog.show();
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
         StorageReference filRef = firebaseStorage.getReference().child("/invoices/" + orderId);
 
@@ -82,6 +94,8 @@ public class ProjectPdfActivity extends AppCompatActivity {
         request.setDestinationInExternalFilesDir(context, destinationDir, fileName+ ".png");
 
         downloadManager.enqueue(request);
+        loadingDialog.dismiss();
+        Toast.makeText(ProjectPdfActivity.this, "File Saved! ", Toast.LENGTH_SHORT).show();
     }
 
 }

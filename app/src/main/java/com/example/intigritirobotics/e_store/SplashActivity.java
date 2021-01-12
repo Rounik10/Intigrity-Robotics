@@ -2,9 +2,7 @@ package com.example.intigritirobotics.e_store;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -13,11 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.example.intigritirobotics.R;
-import com.github.barteksc.pdfviewer.util.Constants;
 
 public class SplashActivity extends AppCompatActivity {
 

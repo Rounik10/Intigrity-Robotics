@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +24,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.example.intigritirobotics.e_store.MainHomeActivity.TheUser;
 
 public class UpdateUserDetails extends AppCompatActivity {
 
@@ -58,6 +61,7 @@ public class UpdateUserDetails extends AppCompatActivity {
     }
 
     public void updateDataOpenDashboard(View view) {
+        Log.d("UpdateUserDetails", "Update Started");
         SharedPreferences pref = getSharedPreferences("user_details", MODE_PRIVATE);
         String name = pref.getString("username", "Not A User");
         if (!addFstLine.getText().toString().equals("")) {
@@ -91,6 +95,7 @@ public class UpdateUserDetails extends AppCompatActivity {
 
                             docRef.update(map).addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
+                                    TheUser = new UserModel(name, address,phoneNumber, userId);
                                     uploadPic();
                                 } else {
                                     Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show();
@@ -143,7 +148,7 @@ public class UpdateUserDetails extends AppCompatActivity {
 
     private void uploadPic() {
         Uri file = imageUri;
-        if(file == null) return;
+        if(file == null) finish();
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -157,8 +162,8 @@ public class UpdateUserDetails extends AppCompatActivity {
                 .addOnSuccessListener(taskSnapshot -> {
                     // Get a URL to the uploaded content
                     pd.dismiss();
-                    startActivity(new Intent(this, MainHomeActivity.class));
                     Snackbar.make(findViewById(android.R.id.content), "Profile Uploaded", Snackbar.LENGTH_SHORT).show();
+                    finish();
                 })
                 .addOnFailureListener(exception -> {
                     Toast.makeText(getApplicationContext(), "Update Failed", Toast.LENGTH_SHORT).show();

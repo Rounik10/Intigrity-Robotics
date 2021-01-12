@@ -2,6 +2,7 @@ package com.example.intigritirobotics.e_store.ui.MyCart;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
@@ -22,7 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.intigritirobotics.e_store.CheckOutActivity;
 import com.example.intigritirobotics.e_store.MainHomeActivity;
 import com.example.intigritirobotics.R;
+import com.example.intigritirobotics.e_store.UpdateUserDetails;
 import com.example.intigritirobotics.e_store.ViewAllModel;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -30,6 +34,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.intigritirobotics.e_store.MainHomeActivity.TheUser;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
 
 public class MyCartActivity extends AppCompatActivity {
@@ -79,12 +85,21 @@ public class MyCartActivity extends AppCompatActivity {
         checkoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MyCartActivity.this, CheckOutActivity.class);
-                myIntent.putExtra("Products cost",cartTotal.getText().toString());
-                myIntent.putExtra("Delivery",deliveryPriceTextView.getText().toString());
-                myIntent.putExtra("Total cost",totalPriceTextView.getText().toString());
-                myIntent.putExtra("from", "MyCartActivity");
-                startActivity(myIntent);
+
+                if(TheUser == null || TheUser.isIncomplete()) {
+
+                    Toast.makeText(getApplicationContext(), "Please Update Your Address First", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), UpdateUserDetails.class));
+
+                } else {
+                    Intent myIntent = new Intent(MyCartActivity.this, CheckOutActivity.class);
+                    myIntent.putExtra("Products cost",cartTotal.getText().toString());
+                    myIntent.putExtra("Delivery",deliveryPriceTextView.getText().toString());
+                    myIntent.putExtra("Total cost",totalPriceTextView.getText().toString());
+                    myIntent.putExtra("from", "MyCartActivity");
+                    startActivity(myIntent);
+                }
+
             }
 
         });

@@ -25,6 +25,9 @@ public class UserModel {
         this.pin = pin;
     }
 
+    public boolean isIncomplete() {
+        return address == null || phoneNumber == null || pin == null || name == null;
+    }
 
     public String getName() {
         return name;

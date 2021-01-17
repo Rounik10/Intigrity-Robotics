@@ -28,6 +28,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private String[] productQty, productId, productPrices;
     private TextView totalPriceText, deliveryCostText, total_amount_number;
     private TextView name, address, phone, pin, paymentMethod, paymentId;
+    private int discount;
     RecyclerView orderRecycler;
         private Dialog loadingDialog;
 
@@ -86,6 +87,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
             paymentMethod.setText(Objects.requireNonNull(order.get("payment method")).toString());
             paymentId.setText(Objects.requireNonNull(order.get("payment id")).toString());
             loadingDialog.dismiss();
+            discount = Integer.parseInt(order.get("offer discount").toString());
 
         }).addOnFailureListener(Throwable::printStackTrace);
 
@@ -98,6 +100,8 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         for(int i=0; i<productQty.length; i++) {
             totalPrice += Integer.parseInt(productQty[i]) * Integer.parseInt(productPrices[i]);
         }
+
+        totalPrice -= discount;
 
         String delivery = totalPrice < 500 ? "Rs.60/-": "Free";
         String totalAmount = totalPrice < 500 ? ""+(totalPrice + 60)  : ""+totalPrice;

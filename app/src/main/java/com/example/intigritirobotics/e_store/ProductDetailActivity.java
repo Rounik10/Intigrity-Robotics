@@ -1,6 +1,7 @@
 package com.example.intigritirobotics.e_store;
 
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -24,6 +26,8 @@ import com.bumptech.glide.Glide;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.intigritirobotics.R;
+import com.example.intigritirobotics.e_store.ui.MyOrders.MyOrdersFragment;
+import com.example.intigritirobotics.e_store.ui.offers.OfferFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -50,7 +54,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     private RecyclerView RelatedProductRecyclerview;
     private ImageView offerImageView;
     private String imageUrl;
-    private Button buyNowButton;
     private Dialog loadingDialog;
 
 
@@ -83,7 +86,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         horizontalLinearLayoutManager = new LinearLayoutManager(this);
         imgAverageRating = findViewById(R.id.img_averageRatingText);
         imgTotalRating = findViewById(R.id.img_total_rating);
-        buyNowButton = findViewById(R.id.buyNowButton);
+        Button buyNowButton = findViewById(R.id.buyNowButton);
+        Button moreOffersBtn = findViewById(R.id.pd_more_offer);
 
         LinearLayout getHelpButton = findViewById(R.id.pd_project_help_btn);
         LinearLayout addToCartButton = findViewById(R.id.addToCartButton);
@@ -113,6 +117,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
         buyNowButton.setOnClickListener(v-> buyItem());
+
     }
 
     private void buyItem() {

@@ -1,8 +1,8 @@
 package com.example.intigritirobotics.e_store;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,21 +10,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.intigritirobotics.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -51,7 +50,7 @@ import static com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity.pro
 public class CheckOutActivity extends AppCompatActivity implements PaymentResultListener {
     private static final String TAG = "CheckOutActivity: ";
     private TextView totalPriceTextView, deliveryPriceTextView, cartTotal;
-    private Button checkoutPayBtn;
+    private Button checkoutPayBtn, couponApplyBtn;
     private TextView consumerName, shippingAddress, mobileNo, pinCode;
     private String orderId, date, address;
     private String paymentMethod;
@@ -60,6 +59,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     private String intentFrom;
     private RadioButton onlinePayment;
     private String paymentId;
+    private EditText codeInp;
+    private int discount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,13 +77,94 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
         cartTotal = findViewById(R.id._total_price);
 
+        codeInp = findViewById(R.id.code_input);
+
         consumerName = findViewById(R.id.address_view_name);
         shippingAddress = findViewById(R.id.address_view_street_area);
         mobileNo = findViewById(R.id.address_view_mobile);
         pinCode = findViewById(R.id.address_view_state_pin_code);
+        Button updateAddressBtn = findViewById(R.id.address_view_update_address);
+        couponApplyBtn = findViewById(R.id.code_apply_btn);
 
         setData();
         checkoutPayBtn.setOnClickListener(v -> startPayment());
+        updateAddressBtn.setOnClickListener(v -> startActivity(new Intent(this, UpdateUserDetails.class)));
+        couponApplyBtn.setOnClickListener(v-> new AlertDialog.Builder(this)
+                .setTitle("Confirm")
+                .setMessage("Do you really want to use your coupon, you can't use it again !")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> applyCoupon())
+                .setNegativeButton(android.R.string.no, null).show());
+
+        codeInp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                couponApplyBtn.setEnabled(editable.length() > 5);
+            }
+        });
+    }
+
+    private void applyCoupon() {
+
+        firebaseFirestore.collection("OFFERS").get().addOnSuccessListener(task->{
+            boolean codeExists = false;
+            boolean expired = false;
+            String[] val;
+            for(DocumentSnapshot offer : task.getDocuments()) {
+                String code = offer.get("Id").toString();
+                if(code.equals(codeInp.getText().toString())) {
+                    codeExists = true;
+                    if(offer.get("Expired").toString().equals("true")) {
+                        expired = true;
+                        break;
+                    }
+
+                    int newPrice = Integer.parseInt(totalPriceTextView.getText().toString());
+
+                    val = offer.get("value").toString().split(" ");
+                    if(val[0].equals("1")) {
+                        String delCharge = deliveryPriceTextView.getText().toString();
+                        if(delCharge.equals("Free")) {
+                            Toast.makeText(this, "Delivery is Already free for this Order!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            newPrice-=60;
+                            discount = 60;
+                            deliveryPriceTextView.setText(R.string.free);
+                        }
+                    } else if(val[0].equals("2")) {
+                        if(newPrice < Integer.parseInt(val[2])) {
+                            Toast.makeText(this, "Total is too low", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        discount = Integer.parseInt(val[2]);
+                        newPrice-= discount;
+                    } else {
+                        discount = Math.min(newPrice / 2, 200);
+                        newPrice-=discount;
+                    }
+
+                    String price = ""+newPrice;
+                    totalPriceTextView.setText(price);
+
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("Expired", true);
+
+                    firebaseFirestore.document("OFFERS/"+offer.getId()).update(map);
+                }
+            }
+            if(expired) Toast.makeText(this, "Code is Expired", Toast.LENGTH_SHORT).show();
+            else if(!codeExists) Toast.makeText(this, "Code is Incorrect!", Toast.LENGTH_SHORT).show();
+        });
 
     }
 
@@ -143,6 +225,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 map.put("productPrice", priceStr.toString());
                 map.put("order by", currentUserUId);
                 map.put("order date", date);
+                map.put("offer discount", discount);
                 map.put("order status", "Order Placed");
                 map.put("invoice token", "x");
                 map.put("shipping address", address);
@@ -167,7 +250,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                                     for(int i=0; i<l.size(); i++) {
                                         firebaseFirestore
                                                 .document("USERS/"+currentUserUId+"/My Cart/"+l.get(i).getId()).delete();
-                                        Log.d("dikkat", l.get(i).getId());
+                                        Log.d(TAG, l.get(i).getId());
                                     }
                                 });
 
@@ -351,14 +434,10 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             StorageReference dateRef = storageRef.child("invoices").child(orderId);
             Toast.makeText(CheckOutActivity.this,dateRef.toString(),Toast.LENGTH_LONG).show();
 
-            dateRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
-            {
-                @Override
-                public void onSuccess(Uri downloadUrl)
-                {
-                    firebaseFirestore.collection("ORDERS").document(orderId).update("invoice token",downloadUrl.toString());
-                }
-            });
+            dateRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> firebaseFirestore
+                    .collection("ORDERS")
+                    .document(orderId)
+                    .update("invoice token",downloadUrl.toString()));
             exit();
         }).addOnFailureListener(e -> {
             Log.d("File Upload", "Invoice upload failed");
@@ -399,7 +478,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         Toast.makeText(this, "Order Successful", Toast.LENGTH_SHORT).show();
 
         paymentMethod = "UPI";
-        //todo add real payment method
+
         Log.d("payment id",s);
 
         paymentId = s;
@@ -409,7 +488,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     @Override
     public void onPaymentError(int i, String s) {
-        Log.d("dikkat", s);
+        Log.d(TAG, s);
         Toast.makeText(this, "Payment Error"+s, Toast.LENGTH_SHORT).show();
     }
 }

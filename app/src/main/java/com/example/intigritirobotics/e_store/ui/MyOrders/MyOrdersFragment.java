@@ -23,7 +23,7 @@ import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUser
 import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class MyOrdersFragment extends Fragment {
-    private List<MyOrderModel> myOrderModels = new ArrayList<>();
+    private final List<MyOrderModel> myOrderModels = new ArrayList<>();
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
 

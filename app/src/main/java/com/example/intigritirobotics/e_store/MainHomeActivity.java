@@ -80,10 +80,8 @@ public class MainHomeActivity extends AppCompatActivity {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_e_store, R.id.nav_category, R.id.nav_offer, R.id.nav_my_orders,
                 R.id.nav_notification, R.id.nav_my_cart, R.id.nav_setting, R.id.nav_support)
-                .setDrawerLayout(drawer)
+                .setOpenableLayout(drawer)
                 .build();
-
-
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);

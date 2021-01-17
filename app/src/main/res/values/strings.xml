@@ -158,4 +158,5 @@
     <string name="address_line_2">Address Line 2</string>
     <string name="address_line_1">Address Line 1</string>
     <string name="user">User</string>
+    <string name="apply">Apply</string>
 </resources>

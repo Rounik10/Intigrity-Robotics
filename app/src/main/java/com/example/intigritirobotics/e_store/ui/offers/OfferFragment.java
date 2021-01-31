@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -12,17 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intigritirobotics.R;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
+import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class OfferFragment extends Fragment {
 
-    private List<OfferViewModel> offerslist = new ArrayList<>();
+    private final List<OfferViewModel> offersList = new ArrayList<>();
     private RecyclerView offerRecyclerView;
     private LinearLayoutManager offerLayoutManager;
 
@@ -40,30 +41,39 @@ public class OfferFragment extends Fragment {
     }
 
     private void loadOffer() {
-        firebaseFirestore.collection("OFFERS").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                offerslist.clear();
-                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    offerslist.add(new OfferViewModel(
-                            documentSnapshot.get("Banner").toString(),
-                            documentSnapshot.get("Id").toString(),
-                            (Boolean) documentSnapshot.get("Expired")));
+        firebaseFirestore.collection("USERS/"+currentUserUId+"/My Offers").get().addOnSuccessListener(task1 -> {
 
-                }
-                offerLayoutManager.setOrientation(RecyclerView.VERTICAL);
-                offerRecyclerView.setLayoutManager(offerLayoutManager);
-                OfferAdapter adapter = new OfferAdapter(offerslist);
-                offerRecyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-                HomeloadingDialog.dismiss();
+            offersList.clear();
+            List<DocumentSnapshot> offerList = task1.getDocuments();
 
+            for(DocumentSnapshot offer: offerList) {
+                boolean expired = Objects.equals(offer.get("Expired"), true);
+                String id = Objects.requireNonNull(offer.getId());
 
-            } else {
-                String error = task.getException().getMessage();
-                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                HomeloadingDialog.dismiss();
+                firebaseFirestore.document("OFFERS/"+id).get()
+                        .addOnCompleteListener(task->{
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+
+                        assert documentSnapshot != null;
+                        offersList.add(new OfferViewModel(
+                                Objects.requireNonNull(documentSnapshot.get("Banner")).toString(),
+                                id,
+                                expired));
+
+                        offerLayoutManager.setOrientation(RecyclerView.VERTICAL);
+                        offerRecyclerView.setLayoutManager(offerLayoutManager);
+                        OfferAdapter adapter = new OfferAdapter(offersList);
+                        offerRecyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
+                        HomeloadingDialog.dismiss();
+
+                    }
+                });
 
             }
+
         });
     }
+
 }

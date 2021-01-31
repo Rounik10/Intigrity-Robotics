@@ -125,8 +125,6 @@ public class EStoreFragment extends Fragment {
 
         });
 
-        /////////////////////////////////////////////////////////////////// HORIZONTAL ///////////////////////////////////////////////////////
-
         firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task2 -> {
             if (task2.isSuccessful()) {
                 horizontalList.clear();
@@ -161,7 +159,6 @@ public class EStoreFragment extends Fragment {
         adapter1.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
       HomeloadingDialog.dismiss();
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 

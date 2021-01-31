@@ -158,6 +158,7 @@ public class UpdateUserDetails extends AppCompatActivity {
         pd.show();
         StorageReference riversRef = storageReference.child("profileImg/" + currentUser);
 
+        assert file != null;
         riversRef.putFile(file)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Get a URL to the uploaded content

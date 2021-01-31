@@ -53,7 +53,8 @@
                 <item
                     android:id="@+id/nav_bt_home"
                     android:icon="@drawable/common_full_open_on_phone"
-                    android:title="@string/menu_bt_home" />
+                    android:title="@string/menu_bt_home"
+                    android:onClick="backToHome"/>
                 <item
                     android:id="@+id/nav_logout"
                     android:icon="@drawable/logout"

@@ -22,7 +22,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.intigritirobotics.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,7 +33,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
+
 import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,6 +65,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     private String paymentId;
     private EditText codeInp;
     private int discount;
+    private String usedCoupon;
+    private String couponApplied;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +74,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         Checkout.preload(this);
         setContentView(R.layout.activity_check_out);
         intent = getIntent();
-        
+
+        couponApplied = "NONE";
         intentFrom = intent.getStringExtra("from");
         address = TheUser.getAddress();
         onlinePayment = findViewById(R.id.online_method);
@@ -89,7 +96,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         setData();
         checkoutPayBtn.setOnClickListener(v -> startPayment());
         updateAddressBtn.setOnClickListener(v -> startActivity(new Intent(this, UpdateUserDetails.class)));
-        couponApplyBtn.setOnClickListener(v-> new AlertDialog.Builder(this)
+        couponApplyBtn.setOnClickListener(v -> new AlertDialog.Builder(this)
                 .setTitle("Confirm")
                 .setMessage("Do you really want to use your coupon, you can't use it again !")
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -116,61 +123,71 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     private void applyCoupon() {
 
-        firebaseFirestore.collection("OFFERS").get().addOnSuccessListener(task->{
-            boolean codeExists = false;
-            boolean expired = false;
-            String[] val;
-            for(DocumentSnapshot offer : task.getDocuments()) {
-                String code = offer.get("Id").toString();
-                if(code.equals(codeInp.getText().toString())) {
-                    codeExists = true;
-                    if(offer.get("Expired").toString().equals("true")) {
-                        expired = true;
-                        break;
+        firebaseFirestore
+                .document("USERS/" + currentUserUId + "/My Offers/" + codeInp.getText().toString())
+                .get()
+                .addOnSuccessListener(myOffer -> {
+                    if (!myOffer.exists()) {
+                        Toast.makeText(this, "Code is Incorrect!", Toast.LENGTH_SHORT).show();
+                        return;
                     }
 
-                    int newPrice = Integer.parseInt(totalPriceTextView.getText().toString());
-
-                    val = offer.get("value").toString().split(" ");
-                    if(val[0].equals("1")) {
-                        String delCharge = deliveryPriceTextView.getText().toString();
-                        if(delCharge.equals("Free")) {
-                            Toast.makeText(this, "Delivery is Already free for this Order!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            newPrice-=60;
-                            discount = 60;
-                            deliveryPriceTextView.setText(R.string.free);
-                        }
-                    } else if(val[0].equals("2")) {
-                        if(newPrice < Integer.parseInt(val[2])) {
-                            Toast.makeText(this, "Total is too low", Toast.LENGTH_SHORT).show();
-                            break;
-                        }
-                        discount = Integer.parseInt(val[2]);
-                        newPrice-= discount;
-                    } else {
-                        discount = Math.min(newPrice / 2, 200);
-                        newPrice-=discount;
+                    if (Objects.requireNonNull(myOffer.get("Expired")).toString().equals("true")) {
+                        Toast.makeText(this, "Code is Expired", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+                    String code = Objects.requireNonNull(myOffer.getId());
 
-                    String price = ""+newPrice;
-                    totalPriceTextView.setText(price);
+                    firebaseFirestore.document("OFFERS/" + code)
+                            .get()
+                            .addOnSuccessListener(offer -> {
+                                String[] val;
 
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("Expired", true);
+                                int newPrice = Integer.parseInt(totalPriceTextView.getText().toString());
+                                Log.d(TAG, offer.getId());
+                                val = Objects.requireNonNull(offer.get("Value")).toString().split(" ");
+                                if (val[0].equals("1")) {
+                                    String delCharge = deliveryPriceTextView.getText().toString();
+                                    if (delCharge.equals("Free")) {
+                                        Toast.makeText(this, "Delivery is Already free for this Order!", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        newPrice -= 60;
+                                        discount = 60;
+                                        deliveryPriceTextView.setText(R.string.free);
+                                    }
+                                } else if (val[0].equals("2")) {
+                                    if (newPrice < Integer.parseInt(val[2])) {
+                                        Toast.makeText(this, "Total is too low", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    discount = Integer.parseInt(val[2]);
+                                    newPrice -= discount;
+                                } else {
+                                    discount = Math.min(newPrice / 2, 200);
+                                    newPrice -= discount;
+                                }
 
-                    firebaseFirestore.document("OFFERS/"+offer.getId()).update(map);
-                }
-            }
-            if(expired) Toast.makeText(this, "Code is Expired", Toast.LENGTH_SHORT).show();
-            else if(!codeExists) Toast.makeText(this, "Code is Incorrect!", Toast.LENGTH_SHORT).show();
-        });
+                                String price = "" + newPrice;
+                                totalPriceTextView.setText(price);
+                                couponApplied = offer.getId();
+                                usedCoupon = code;
+                                setCouponExpired(offer.getId(), true);
+                            });
+                });
+
+    }
+
+    private void setCouponExpired(String couponId, Boolean Value) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("Expired", Value);
+        firebaseFirestore.document("USERS/" + currentUserUId + "/My Offers/" + couponId).update(map);
 
     }
 
     private void setData() {
 
-        if(!intentFrom.equals("ProductDetailActivity")) {
+        if (!intentFrom.equals("ProductDetailActivity")) {
             ProdList = productList;
         } else {
             ProdList = new ArrayList<>();
@@ -179,7 +196,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             String title = intent.getStringExtra("title");
             float totalRating = intent.getFloatExtra("total rating", 0);
             int finalPrice = intent.getIntExtra("final price", 0);
-            ViewAllModel product = new ViewAllModel(id, image, title, totalRating, finalPrice,1);
+            ViewAllModel product = new ViewAllModel(id, image, title, totalRating, finalPrice, 1);
             ProdList.add(product);
         }
 
@@ -198,13 +215,13 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     private void loadProductsToMyOrders() {
 
-        Map<String , Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
 
         StringBuilder idStr = new StringBuilder();
         StringBuilder qtyStr = new StringBuilder();
         StringBuilder priceStr = new StringBuilder();
 
-        for(ViewAllModel product: ProdList) {
+        for (ViewAllModel product : ProdList) {
             idStr.append(product.getId()).append(", ");
             qtyStr.append(product.getQuantity()).append(", ");
             priceStr.append(product.getFinalPrice()).append(", ");
@@ -215,7 +232,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         CollectionReference collRef = firebaseFirestore.collection("ORDERS");
 
         collRef.get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
+            if (task.isSuccessful()) {
                 int totalOrders = Objects.requireNonNull(task.getResult()).size() + 1;
 
                 orderId = "IR-00000" + totalOrders;
@@ -226,6 +243,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 map.put("order by", currentUserUId);
                 map.put("order date", date);
                 map.put("offer discount", discount);
+                map.put("coupon used",usedCoupon);
                 map.put("order status", "Order Placed");
                 map.put("invoice token", "x");
                 map.put("shipping address", address);
@@ -237,19 +255,19 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 Map<String, Object> m2 = new HashMap<>();
                 m2.put("order Id", orderId);
 
-                firebaseFirestore.collection("/USERS/"+ currentUserUId +"/My Orders").add(m2);
+                firebaseFirestore.collection("/USERS/" + currentUserUId + "/My Orders").add(m2);
 
                 collRef.document(orderId).set(map).addOnCompleteListener(task1 -> {
 
-                    if(task.isSuccessful()) {
+                    if (task.isSuccessful()) {
                         uploadPdf(ProdList);
-                        firebaseFirestore.collection("/USERS/"+ currentUserUId + "/My Cart")
+                        firebaseFirestore.collection("/USERS/" + currentUserUId + "/My Cart")
                                 .get()
                                 .addOnCompleteListener(task2 -> {
                                     List<DocumentSnapshot> l = Objects.requireNonNull(task2.getResult()).getDocuments();
-                                    for(int i=0; i<l.size(); i++) {
+                                    for (int i = 0; i < l.size(); i++) {
                                         firebaseFirestore
-                                                .document("USERS/"+currentUserUId+"/My Cart/"+l.get(i).getId()).delete();
+                                                .document("USERS/" + currentUserUId + "/My Cart/" + l.get(i).getId()).delete();
                                         Log.d(TAG, l.get(i).getId());
                                     }
                                 });
@@ -281,7 +299,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         Canvas canvas = new Canvas(bitmap);
 
         paint.setColor(Color.WHITE);
-        canvas.drawRect(0,0, canvas.getWidth(), canvas.getHeight(), paint);
+        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
         paint.setColor(Color.BLACK);
 
         paint.setTextSize(80);
@@ -290,31 +308,31 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         paint.setTextAlign(Paint.Align.RIGHT);
 
         paint.setTextSize(30);
-        canvas.drawText("Invoice Id", canvas.getWidth()-40, 40, paint);
-        canvas.drawText(orderId, canvas.getWidth()-40, 80, paint);
+        canvas.drawText("Invoice Id", canvas.getWidth() - 40, 40, paint);
+        canvas.drawText(orderId, canvas.getWidth() - 40, 80, paint);
 
         paint.setTextAlign(Paint.Align.LEFT);
 
         paint.setColor(Color.rgb(150, 150, 150));
-        canvas.drawRect(30, 130, canvas.getWidth()-40, 135, paint);
+        canvas.drawRect(30, 130, canvas.getWidth() - 40, 135, paint);
 
         paint.setColor(Color.BLACK);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-        canvas.drawText("Order date: "+ date, 50, 200, paint);
+        canvas.drawText("Order date: " + date, 50, 200, paint);
         canvas.drawText("Shipping Address: ", 50, 250, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Sold By: ", 665, 250,paint);
+        canvas.drawText("Sold By: ", 665, 250, paint);
 
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
-        TextPaint mTextPaint=new TextPaint();
+        TextPaint mTextPaint = new TextPaint();
 
         mTextPaint.setTextSize(28);
 
-        StaticLayout mTextLayout = new StaticLayout(address, mTextPaint, canvas.getWidth()/2-50, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        StaticLayout mTextLayout = new StaticLayout(address, mTextPaint, canvas.getWidth() / 2 - 50, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
 
         canvas.save();
 
@@ -325,30 +343,30 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         canvas.restore();
 
         canvas.save();
-        mTextLayout = new StaticLayout("soldBy", mTextPaint, canvas.getWidth()/2-50, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        canvas.translate(550,270);
+        mTextLayout = new StaticLayout("soldBy", mTextPaint, canvas.getWidth() / 2 - 50, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        canvas.translate(550, 270);
         mTextLayout.draw(canvas);
 
         int t2 = mTextLayout.getHeight();
         canvas.restore();
 
-        int row = 270 + Math.max(t1,t2);
+        int row = 270 + Math.max(t1, t2);
 
         paint.setColor(Color.rgb(150, 150, 150));
-        canvas.drawRect(30, row+30, 280, row+80, paint);
+        canvas.drawRect(30, row + 30, 280, row + 80, paint);
 
         paint.setColor(Color.WHITE);
         canvas.drawText("BILL TO", 50, row + 65, paint);
 
         paint.setColor(Color.BLACK);
-        canvas.drawText("Consumer Name: ", 30 , row + 120, paint);
-        canvas.drawText(TheUser.name, 280 , row + 120, paint);
+        canvas.drawText("Consumer Name: ", 30, row + 120, paint);
+        canvas.drawText(TheUser.name, 280, row + 120, paint);
 
-        canvas.drawText("Contact No: ", 550 , row + 120, paint);
-        canvas.drawText(TheUser.phoneNumber, 720 , row + 120, paint);
+        canvas.drawText("Contact No: ", 550, row + 120, paint);
+        canvas.drawText(TheUser.phoneNumber, 720, row + 120, paint);
 
         paint.setColor(Color.rgb(150, 150, 150));
-        canvas.drawRect(30, row + 150, canvas.getWidth()-30, row + 200, paint);
+        canvas.drawRect(30, row + 150, canvas.getWidth() - 30, row + 200, paint);
 
         paint.setColor(Color.WHITE);
 
@@ -359,7 +377,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         canvas.drawText("Qty", 550, row + 185, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Amount", canvas.getWidth()-40, row+185, paint);
+        canvas.drawText("Amount", canvas.getWidth() - 40, row + 185, paint);
         paint.setTextAlign(Paint.Align.LEFT);
 
         paint.setColor(Color.BLACK);
@@ -367,52 +385,52 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         int s_no = 0;
         int sum = 0;
 
-        for(ViewAllModel product: ProdList) {
+        for (ViewAllModel product : ProdList) {
 
             sum += product.getFinalPrice() * product.getQuantity();
 
             paint.setTextAlign(Paint.Align.LEFT);
 
             String title = product.getTitle();
-            if(title.length()>20) title = title.substring(0,20)+"...";
+            if (title.length() > 20) title = title.substring(0, 20) + "...";
 
-            canvas.drawText(""+ ++s_no, 60, low, paint);
+            canvas.drawText("" + ++s_no, 60, low, paint);
             canvas.drawText(title, 160, low, paint);
-            canvas.drawText(""+product.getQuantity(), 550 ,low, paint);
+            canvas.drawText("" + product.getQuantity(), 550, low, paint);
 
             paint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(product.getQuantity() + " x " + (int)(0.82 * product.getFinalPrice()), canvas.getWidth() - 40, low, paint);
+            canvas.drawText(product.getQuantity() + " x " + (int) (0.82 * product.getFinalPrice()), canvas.getWidth() - 40, low, paint);
             paint.setTextAlign(Paint.Align.LEFT);
 
             low += 50;
         }
 
-        paint.setColor(Color.rgb(150,150, 150));
-        canvas.drawRect(30, low+50, canvas.getWidth()-40, low+55, paint);
+        paint.setColor(Color.rgb(150, 150, 150));
+        canvas.drawRect(30, low + 50, canvas.getWidth() - 40, low + 55, paint);
 
         paint.setColor(Color.BLACK);
         low += 100;
 
         canvas.drawText("SUBTOTAL", 550, low, paint);
-        canvas.drawText("GST 18%", 550, low+50, paint);
+        canvas.drawText("GST 18%", 550, low + 50, paint);
         canvas.drawText(paymentMethod, 280, low, paint);
 
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("TOTAL", 550, low+100, paint);
+        canvas.drawText("TOTAL", 550, low + 100, paint);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Rs." + 0.82 * sum + "/-", canvas.getWidth()-40, low, paint);
-        canvas.drawText( "Rs."+0.18 * sum+"/-", canvas.getWidth()-40, low+50, paint);
+        canvas.drawText("Rs." + 0.82 * sum + "/-", canvas.getWidth() - 40, low, paint);
+        canvas.drawText("Rs." + 0.18 * sum + "/-", canvas.getWidth() - 40, low + 50, paint);
 
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("Payment Method: ",270, low, paint);
-        canvas.drawText( "Rs."+(0.18 * sum + 0.82*sum )+"/-", canvas.getWidth()-40, low+100, paint);
+        canvas.drawText("Payment Method: ", 270, low, paint);
+        canvas.drawText("Rs." + (0.18 * sum + 0.82 * sum) + "/-", canvas.getWidth() - 40, low + 100, paint);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
         uploadBitmap(bitmap);
 
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(canvas.getWidth(),low+250,1).create();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(canvas.getWidth(), low + 250, 1).create();
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
 
         page.getCanvas().drawBitmap(bitmap, 0, 0, paint);
@@ -421,7 +439,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     }
 
     private void uploadBitmap(Bitmap bitmap) {
-        FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
@@ -432,18 +450,20 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         uploadTask.addOnSuccessListener(taskSnapshot -> {
             StorageReference storageRef = FirebaseStorage.getInstance().getReference();
             StorageReference dateRef = storageRef.child("invoices").child(orderId);
-            Toast.makeText(CheckOutActivity.this,dateRef.toString(),Toast.LENGTH_LONG).show();
+            Toast.makeText(CheckOutActivity.this, dateRef.toString(), Toast.LENGTH_LONG).show();
 
             dateRef.getDownloadUrl().addOnSuccessListener(downloadUrl -> firebaseFirestore
                     .collection("ORDERS")
                     .document(orderId)
-                    .update("invoice token",downloadUrl.toString()));
+                    .update("invoice token", downloadUrl.toString()));
+            Toast.makeText(this, "Order Successful", Toast.LENGTH_SHORT).show();
             exit();
         }).addOnFailureListener(e -> {
             Log.d("File Upload", "Invoice upload failed");
             e.printStackTrace();
         }).addOnProgressListener(snapshot -> {
             ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Please Wait");
             progressDialog.show();
         });
 
@@ -467,6 +487,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
                 checkout.open(activity, options);
             } catch (Exception e) {
+                if (!couponApplied.equals("NONE")) setCouponExpired(couponApplied, true);
+                setCouponExpired(usedCoupon, false);
                 Log.e("Payment Failed", "Error in starting Razorpay Checkout", e);
             }
         }
@@ -474,21 +496,15 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     @Override
     public void onPaymentSuccess(String s) {
-
-        Toast.makeText(this, "Order Successful", Toast.LENGTH_SHORT).show();
-
         paymentMethod = "UPI";
-
-        Log.d("payment id",s);
-
+        Log.d("payment id", s);
         paymentId = s;
         loadProductsToMyOrders();
-
     }
 
     @Override
     public void onPaymentError(int i, String s) {
         Log.d(TAG, s);
-        Toast.makeText(this, "Payment Error"+s, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Payment Error" + s, Toast.LENGTH_SHORT).show();
     }
 }

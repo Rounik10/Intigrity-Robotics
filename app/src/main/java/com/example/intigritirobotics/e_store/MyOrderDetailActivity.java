@@ -87,7 +87,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
             paymentMethod.setText(Objects.requireNonNull(order.get("payment method")).toString());
             paymentId.setText(Objects.requireNonNull(order.get("payment id")).toString());
             loadingDialog.dismiss();
-            discount = Integer.parseInt(order.get("offer discount").toString());
+            discount = Integer.parseInt(Objects.requireNonNull(order.get("offer discount")).toString());
 
         }).addOnFailureListener(Throwable::printStackTrace);
 

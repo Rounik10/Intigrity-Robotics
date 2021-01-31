@@ -7,7 +7,7 @@
     android:saveEnabled="true"
     android:scrollbarStyle="outsideInset"
     android:visibility="visible"
-    android:background="@drawable/splashback"
+    android:background="@color/second"
     tools:context=".e_store.SignUpActivity"
     >
 
@@ -126,14 +126,14 @@
         android:layout_below="@+id/name1"
         android:layout_alignEnd="@+id/name1"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="70dp"
+        android:layout_marginStart="69dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginEnd="1dp"
         android:ems="10"
         android:hint="E-Mail"
-        android:textColorHint="@android:color/darker_gray"
         android:inputType="textEmailAddress"
         android:textColor="@color/design_default_color_background"
+        android:textColorHint="@android:color/darker_gray"
         android:visibility="visible"
         tools:visibility="visible" />
 

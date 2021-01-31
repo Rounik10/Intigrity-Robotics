@@ -29,6 +29,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import static com.example.intigritirobotics.e_store.SignUpActivity.pref;
 
@@ -56,11 +60,10 @@ public class MainHomeActivity extends AppCompatActivity {
 
         HomeloadingDialog.show();
 
-
         setContentView(R.layout.activity_main_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         firebaseFirestore  =FirebaseFirestore.getInstance();
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -86,7 +89,6 @@ public class MainHomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
     }
 
     private void loadUserDetails() {
@@ -96,11 +98,12 @@ public class MainHomeActivity extends AppCompatActivity {
                 DocumentSnapshot userSnap = task.getResult();
 
                 try{
+                    assert userSnap != null;
                     String name =  Objects.requireNonNull(userSnap.get("User Name")).toString();
                     String address = Objects.requireNonNull(userSnap.get("Address")).toString();
                     String phone = Objects.requireNonNull(userSnap.get("Phone")).toString();
                     String pin = Objects.requireNonNull(userSnap.get("PIN")).toString();
-                    String imgToken = userSnap.contains("Profile Image") ? userSnap.get("Profile Image").toString(): null;
+                    String imgToken = userSnap.contains("Profile Image") ? Objects.requireNonNull(userSnap.get("Profile Image")).toString(): null;
 
                     if(name!=null && address!=null && phone !=null){
                         TheUser = new UserModel(name, address, phone, currentUserUId, pin);
@@ -188,6 +191,11 @@ public class MainHomeActivity extends AppCompatActivity {
         finish();
     }
 
+    public void backToHome(MenuItem item) {
+        startActivity(new Intent(this, MainHomeActivity.class));
+        finish();
+    }
+
     /*
     private void addProduct()
     {
@@ -211,5 +219,27 @@ public class MainHomeActivity extends AppCompatActivity {
         }
 
     }
-    */
+
+
+    private void addCoupons() {
+
+        firebaseFirestore.collection("OFFERS").get().addOnSuccessListener(task -> {
+
+            List<DocumentSnapshot> docList = task.getDocuments();
+            Map<String, Object> coupons = new HashMap<>();
+
+            for(int i=0; i<Math.min(docList.size(),4); i++) {
+                coupons.put("Id",docList.get(i).getId());
+                coupons.put("Expired", false);
+
+                firebaseFirestore
+                        .collection("USERS/"+ currentUserUId+"/My Offers")
+                        .document(docList.get(i).getId()).set(coupons)
+                        .addOnFailureListener(Throwable::printStackTrace);
+            }
+
+        }).addOnFailureListener(Throwable::printStackTrace);
+
+    }
+     */
 }

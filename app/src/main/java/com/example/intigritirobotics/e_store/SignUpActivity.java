@@ -25,10 +25,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -205,6 +208,7 @@ public class SignUpActivity extends AppCompatActivity {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
+                                                    addCoupons();
                                                     SharedPreferences.Editor editor = pref.edit();
                                                     editor.putString("username", e);
                                                     editor.putString("password", p);
@@ -238,6 +242,27 @@ public class SignUpActivity extends AppCompatActivity {
         } else {
             em1.setError("Invalid Email");
         }
+    }
+
+    private void addCoupons() {
+
+        firebaseFirestore.collection("OFFERS").get().addOnSuccessListener(task -> {
+
+            List<DocumentSnapshot> docList = task.getDocuments();
+            Map<String, Object> coupons = new HashMap<>();
+
+            for(int i=0; i<Math.min(docList.size(),4); i++) {
+                coupons.put("Id",docList.get(i).getId());
+                coupons.put("Expired", false);
+
+                firebaseFirestore
+                        .collection("USERS/"+ fba.getUid()+"/My Offers")
+                        .document(docList.get(i).getId()).set(coupons)
+                        .addOnFailureListener(Throwable::printStackTrace);
+            }
+
+        }).addOnFailureListener(Throwable::printStackTrace);
+
     }
 
     public void HomeShow() {

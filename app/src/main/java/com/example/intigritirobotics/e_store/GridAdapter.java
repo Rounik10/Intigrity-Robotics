@@ -11,26 +11,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.intigritirobotics.R;
-
 import java.util.List;
 
-public class HorizontalAdapter1 extends RecyclerView.Adapter<HorizontalAdapter1.ViewHolder> {
+public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 
     private final List<ViewAllModel> ViewAllModelList;
 
-    public HorizontalAdapter1(List<ViewAllModel> ViewAllModelList) {
+    public GridAdapter(List<ViewAllModel> ViewAllModelList) {
         this.ViewAllModelList = ViewAllModelList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public GridAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.horizontal_product_layout_item,viewGroup,false);
-        return new ViewHolder(view);
+        return new GridAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull GridAdapter.ViewHolder viewHolder, int position) {
         String index = ViewAllModelList.get(position).getId();
         String resource = ViewAllModelList.get(position).getImage();
         String title = ViewAllModelList.get(position).getTitle();
@@ -82,5 +81,4 @@ public class HorizontalAdapter1 extends RecyclerView.Adapter<HorizontalAdapter1.
         }
 
     }
-
 }

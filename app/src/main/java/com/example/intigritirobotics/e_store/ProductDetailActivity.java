@@ -409,7 +409,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
             if (task2.isSuccessful()) {
                 horizontalList.clear();
-
+                assert task2.getResult() != null;
                 for (QueryDocumentSnapshot documentSnapshot : task2.getResult()) {
 
                     String id = documentSnapshot.getId();
@@ -420,8 +420,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                     horizontalList.add(new ViewAllModel(id, picUrl, title, rating, price));
                 }
             } else {
-                String error = task2.getException().getMessage();
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+                Objects.requireNonNull(task2.getException()).printStackTrace();
+                Toast.makeText(this, "Something went wrong, try again!", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -23,25 +24,31 @@ import com.example.intigritirobotics.e_store.CategoryModel;
 import com.example.intigritirobotics.e_store.HorizontalAdapter1;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ViewAllActivity;
+import com.example.intigritirobotics.e_store.ViewAllAdapter;
 import com.example.intigritirobotics.e_store.ViewAllModel;
+import com.example.intigritirobotics.e_store.ui.Category.CategoryFragmentAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class EStoreFragment extends Fragment {
 
-    private List<CategoryModel> projectList = new ArrayList<>();
-    private RecyclerView projectRecyclerView, horizontalItemsRecyclerview;
+    private final List<CategoryModel> projectList = new ArrayList<>();
+    private RecyclerView projectRecyclerView, horizontalItemsRecyclerview, gridRecView;
     private ImageSlider imageSlider;
-    private List<SlideModel> slideModels = new ArrayList<>();
-    private List<ViewAllModel> horizontalList = new ArrayList<>();
+    private final List<SlideModel> slideModels = new ArrayList<>();
+    private final List<ViewAllModel> horizontalList = new ArrayList<>();
     private LinearLayoutManager projectLinearLayoutManager, horizontalLinearLayoutManager;
-    private Button Hor1ViewAllBtn;
+    private GridLayoutManager gridLayoutManager;
+    private List<ViewAllModel> gridList = new ArrayList<>();
+
     SwipeRefreshLayout mSwipeRefreshLayout;
     ProgressDialog progressDialog ;
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,14 +60,18 @@ public class EStoreFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.e_store_swipe);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.gen_black);
         projectRecyclerView = view.findViewById(R.id.category_recyclerview);
-        Hor1ViewAllBtn = view.findViewById(R.id.Horizontal1_view_all_button);
+
+        gridRecView = view.findViewById(R.id.product_grid_1);
+        gridLayoutManager = new GridLayoutManager(getContext(), 2);
+
+        Button hor1ViewAllBtn = view.findViewById(R.id.Horizontal1_view_all_button);
         horizontalItemsRecyclerview = view.findViewById(R.id.horizontal_items_recyclerview);
         horizontalLinearLayoutManager = new LinearLayoutManager(getContext());
         projectLinearLayoutManager = new LinearLayoutManager(getContext());
         imageSlider = view.findViewById(R.id.image_slider);
         loadProject();
 
-        Hor1ViewAllBtn.setOnClickListener(new View.OnClickListener() {
+        hor1ViewAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
@@ -107,8 +118,8 @@ public class EStoreFragment extends Fragment {
                         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(e -> {
+                    e.printStackTrace();
                     progressDialog.dismiss();
-
                 });
 
                 projectLinearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -148,6 +159,7 @@ public class EStoreFragment extends Fragment {
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e -> {
+            e.printStackTrace();
             progressDialog.dismiss();
 
         });
@@ -158,7 +170,44 @@ public class EStoreFragment extends Fragment {
         horizontalItemsRecyclerview.setAdapter(adapter1);
         adapter1.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
-      HomeloadingDialog.dismiss();
+        HomeloadingDialog.dismiss();
+
+        setUpGrid();
+
+    }
+
+    void setUpGrid() {
+
+        firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+            {
+                gridList.clear();
+                QuerySnapshot prodListSnap = task.getResult();
+
+                for (int i=0; i<4; i++) {
+                    DocumentSnapshot documentSnapshot = prodListSnap.getDocuments().get(i);
+
+                    String id = documentSnapshot.getId();
+                    String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
+                    String title = documentSnapshot.get("product title").toString();
+                    float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
+                    int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
+                    gridList.add(new ViewAllModel(id, picUrl, title, rating, price));
+
+                }
+
+                gridRecView.setLayoutManager(gridLayoutManager);
+                HorizontalAdapter1 gridAdapter = new HorizontalAdapter1(gridList);
+                gridRecView.setAdapter(gridAdapter);
+                gridAdapter.notifyDataSetChanged();
+
+            }
+            else
+            {
+                task.getException().printStackTrace();
+            }
+
+        });
 
     }
 

@@ -30,7 +30,7 @@ public class CategoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         HomeloadingDialog.show();
 
-        recyclerView =view.findViewById(R.id.category_fragment_recyclerview);
+        recyclerView = view.findViewById(R.id.category_fragment_recyclerview);
         gridLayoutManager = new GridLayoutManager(getContext(), 2);
 
         loadCategory();
@@ -46,25 +46,25 @@ public class CategoryFragment extends Fragment {
                     projectList.add(new CategoryModel(
                             documentSnapshot.getId(),
                             Objects.requireNonNull(documentSnapshot.get("category_pic")).toString(),
-                            Objects.requireNonNull(documentSnapshot.get("category_title")).toString()));
+                            Objects.requireNonNull(documentSnapshot.get("category_title")).toString()
+                    ));
                 }
 
                 recyclerView.setLayoutManager(gridLayoutManager);
                 CategoryFragmentAdapter adapter = new CategoryFragmentAdapter(projectList);
                 recyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                HomeloadingDialog.dismiss();
 
             }
             else
             {
                 String error = Objects.requireNonNull(task.getException()).getMessage();
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                HomeloadingDialog.dismiss();
-
             }
+            HomeloadingDialog.dismiss();
 
         });
 
     }
+
 }

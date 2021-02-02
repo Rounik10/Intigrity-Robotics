@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.intigritirobotics.e_store.CategoryAdapter;
 import com.example.intigritirobotics.e_store.CategoryModel;
+import com.example.intigritirobotics.e_store.GridAdapter;
 import com.example.intigritirobotics.e_store.HorizontalAdapter1;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ViewAllActivity;
@@ -36,18 +38,20 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
+import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class EStoreFragment extends Fragment {
 
     private final List<CategoryModel> projectList = new ArrayList<>();
-    private RecyclerView projectRecyclerView, horizontalItemsRecyclerview, gridRecView;
+    private RecyclerView projectRecyclerView, horizontalItemsRecyclerview, gridRecView, cartRevView;
     private ImageSlider imageSlider;
     private final List<SlideModel> slideModels = new ArrayList<>();
     private final List<ViewAllModel> horizontalList = new ArrayList<>();
     private LinearLayoutManager projectLinearLayoutManager, horizontalLinearLayoutManager;
-    private GridLayoutManager gridLayoutManager;
-    private List<ViewAllModel> gridList = new ArrayList<>();
+    private GridLayoutManager gridLayoutManager, cartGridManager;
+    private final List<ViewAllModel> gridList = new ArrayList<>(), cartList = new ArrayList<>();
+    private CardView cartCard, bundleCard;
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     ProgressDialog progressDialog ;
@@ -63,6 +67,12 @@ public class EStoreFragment extends Fragment {
 
         gridRecView = view.findViewById(R.id.product_grid_1);
         gridLayoutManager = new GridLayoutManager(getContext(), 2);
+
+        cartGridManager = new GridLayoutManager(getContext(),2);
+        cartRevView = view.findViewById(R.id.cart_grid);
+
+        cartCard = view.findViewById(R.id.cart_card);
+        bundleCard = view.findViewById(R.id.bundle_card);
 
         Button hor1ViewAllBtn = view.findViewById(R.id.Horizontal1_view_all_button);
         horizontalItemsRecyclerview = view.findViewById(R.id.horizontal_items_recyclerview);
@@ -173,11 +183,45 @@ public class EStoreFragment extends Fragment {
         HomeloadingDialog.dismiss();
 
         setUpGrid();
+        setUpInYourCart();
+
+    }
+
+    private void setUpInYourCart() {
+        firebaseFirestore.collection("USERS/"+currentUserUId+"/My Cart")
+                .get()
+                .addOnSuccessListener(task->{
+                    if(task.size()>1) {
+
+                        cartList.clear();
+
+                        for (int i=0; i<2; i++) {
+                            String prod_id = task.getDocuments().get(i).getId();
+
+                            firebaseFirestore.document("PRODUCTS/"+prod_id).get().addOnSuccessListener(documentSnapshot -> {
+                                String id = documentSnapshot.getId();
+                                String picUrl = documentSnapshot.get("product_pic").toString().split(", ")[0];
+                                String title = documentSnapshot.get("product title").toString();
+                                float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
+                                int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
+                                cartList.add(new ViewAllModel(id, picUrl, title, rating, price));
+
+                                cartRevView.setLayoutManager(cartGridManager);
+                                GridAdapter gridAdapter = new GridAdapter(cartList);
+                                cartRevView.setAdapter(gridAdapter);
+                                gridAdapter.notifyDataSetChanged();
+                            });
+
+                        }
+
+                        cartCard.setVisibility(View.VISIBLE);
+                    }
+                }
+        ).addOnFailureListener(Throwable::printStackTrace);
 
     }
 
     void setUpGrid() {
-
         firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {
@@ -197,10 +241,10 @@ public class EStoreFragment extends Fragment {
                 }
 
                 gridRecView.setLayoutManager(gridLayoutManager);
-                HorizontalAdapter1 gridAdapter = new HorizontalAdapter1(gridList);
+                GridAdapter gridAdapter = new GridAdapter(gridList);
                 gridRecView.setAdapter(gridAdapter);
                 gridAdapter.notifyDataSetChanged();
-
+                bundleCard.setVisibility(View.VISIBLE);
             }
             else
             {

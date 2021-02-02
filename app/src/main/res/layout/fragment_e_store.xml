@@ -48,24 +48,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView13"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="4dp"
                     android:layout_marginBottom="4dp"
                     android:layout_weight="1"
-                    android:text="#Trending"
+                    android:text="@string/trending"
                     android:fontFamily="@font/roboto_black"
                     android:textColor="#390101"
                     android:textSize="25sp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/Horizontal1_view_all_button"
@@ -75,7 +73,7 @@
                     android:backgroundTint="#009688"
                     android:fontFamily="@font/nunito_semibold"
                     android:layout_marginEnd="8dp"
-                    android:text="View all" />
+                    android:text="@string/view_all" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -86,12 +84,96 @@
                 android:background="@color/grey_light"
                 android:orientation="horizontal" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_gravity="center"
-                android:id="@+id/product_grid_1"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/bundle_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:backgroundTint="@color/grey_light"
+                android:visibility="gone"
+                app:cardCornerRadius="4dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/popular_bundles"
+                        android:fontFamily="@font/roboto_black"
+                        android:textColor="#390101"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_gravity="center"
+                        android:id="@+id/product_grid_1"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/view_all_bundles_text"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="2dp"
+                        android:textSize="24sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/second"
+                        android:text="@string/view_all"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cart_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
                 android:layout_marginTop="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:backgroundTint="@color/grey_light"
+                app:cardCornerRadius="4dp"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Items in your cart"
+                        android:fontFamily="@font/roboto_black"
+                        android:textColor="#390101"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_gravity="center"
+                        android:id="@+id/cart_grid"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/cart_grid_text"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="2dp"
+                        android:textSize="24sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/second"
+                        android:text="Go to Cart"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </ScrollView>

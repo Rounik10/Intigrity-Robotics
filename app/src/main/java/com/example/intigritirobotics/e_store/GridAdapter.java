@@ -5,32 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.intigritirobotics.R;
-
 import java.util.List;
 
-public class HorizontalAdapter1 extends RecyclerView.Adapter<HorizontalAdapter1.ViewHolder> {
+public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ViewHolder> {
 
     private final List<ViewAllModel> ViewAllModelList;
 
-    public HorizontalAdapter1(List<ViewAllModel> ViewAllModelList) {
+    public GridAdapter(List<ViewAllModel> ViewAllModelList) {
         this.ViewAllModelList = ViewAllModelList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.horizontal_product_layout_item,viewGroup,false);
-        return new ViewHolder(view);
+    public GridAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.grid_item_model,viewGroup,false);
+        return new GridAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull GridAdapter.ViewHolder viewHolder, int position) {
         String index = ViewAllModelList.get(position).getId();
         String resource = ViewAllModelList.get(position).getImage();
         String title = ViewAllModelList.get(position).getTitle();
@@ -47,27 +45,16 @@ public class HorizontalAdapter1 extends RecyclerView.Adapter<HorizontalAdapter1.
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView pic;
-        private final TextView CategoryTitle;
-        private final TextView ProductPrice;
-        private final TextView ProductRating;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            pic = itemView.findViewById(R.id.horizontal_product_preview_pic);
-            CategoryTitle = itemView.findViewById(R.id.horizontal_product_preview_title);
-            ProductRating = itemView.findViewById(R.id.horizontal_product_preview_rating);
-            ProductPrice = itemView.findViewById(R.id.horizontal_product_preview_price);
+            pic = itemView.findViewById(R.id.prod_img);
         }
         private void setData( final String index, String resource, String title, int price, float rating)
         {
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions()
                     .placeholder(R.drawable.category_icon))
                     .into(pic);
-            CategoryTitle.setText(title);
-            String priceText = "Rs." + price +"/-";
-            String ratingText = ""+ rating;
-            ProductPrice.setText(priceText);
-            ProductRating.setText(ratingText);
 
             itemView.setOnClickListener(v -> {
                 Intent intent = new Intent( itemView.getContext(),ProductDetailActivity.class);
@@ -82,5 +69,4 @@ public class HorizontalAdapter1 extends RecyclerView.Adapter<HorizontalAdapter1.
         }
 
     }
-
 }

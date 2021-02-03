@@ -89,6 +89,7 @@ public class MainHomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
     }
 
     private void loadUserDetails() {
@@ -197,29 +198,17 @@ public class MainHomeActivity extends AppCompatActivity {
     }
 
     /*
-    private void addProduct()
-    {
-        for (int x=0; x<=100; x++) {
+    private void updateProds() {
+        firebaseFirestore.collection("PRODUCTS").get().addOnSuccessListener(task->{
 
-            Map<String,Object> pro = new HashMap<>();
-            pro.put("1_star","0");
-            pro.put("2_star","0");
-            pro.put("3_star","0");
-            pro.put("4_star","0");
-            pro.put("5_star","0");
-            pro.put("details","fekh");
-            pro.put("in stock","true");
-            pro.put("other","hdwjd");
-            pro.put("product price","525");
-            pro.put("product rating","0");
-            pro.put("product title","hbsa");
-            pro.put("product_pic","c");
-            pro.put("specs",0);
+           for(DocumentSnapshot d : task.getDocuments()) {
+               Map<String, Object> map = new HashMap<>();
+               map.put("product_pic","https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSvj_XtCdGmER6V7rg0CFvop3j1uTZ4yQ2vI3DyvVa7_nT862WFegNxBejZQMXS65ISN6ACb5U&usqp=CAc, https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSvj_XtCdGmER6V7rg0CFvop3j1uTZ4yQ2vI3DyvVa7_nT862WFegNxBejZQMXS65ISN6ACb5U&usqp=CAc, https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSvj_XtCdGmER6V7rg0CFvop3j1uTZ4yQ2vI3DyvVa7_nT862WFegNxBejZQMXS65ISN6ACb5U&usqp=CAc");
+               firebaseFirestore.document("PRODUCTS/"+d.getId()).update(map);
+           }
 
-        }
-
+        });
     }
-
 
     private void addCoupons() {
 

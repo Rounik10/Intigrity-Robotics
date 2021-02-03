@@ -2,7 +2,10 @@ package com.example.intigritirobotics.e_store;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,9 +26,13 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.example.intigritirobotics.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -261,6 +268,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
                     if (task.isSuccessful()) {
                         uploadPdf(ProdList);
+                        successpayment(orderId);
                         firebaseFirestore.collection("/USERS/" + currentUserUId + "/My Cart")
                                 .get()
                                 .addOnCompleteListener(task2 -> {
@@ -499,6 +507,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         paymentMethod = "UPI";
         Log.d("payment id", s);
         paymentId = s;
+
         loadProductsToMyOrders();
     }
 
@@ -506,5 +515,39 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     public void onPaymentError(int i, String s) {
         Log.d(TAG, s);
         Toast.makeText(this, "Payment Error" + s, Toast.LENGTH_SHORT).show();
+    }
+
+    private void successpayment(String orderId)
+    {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(CheckOutActivity.this)
+                .setSmallIcon(R.drawable.test_logo)
+                .setContentTitle("Order Confirmed")
+                .setContentText("Your order is confirmed, tap to view...")
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(CheckOutActivity.this, MyOrderDetailActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        firebaseFirestore.document("ORDERS/"+orderId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful())
+                {
+                    DocumentSnapshot order =  task.getResult();
+                    intent.putExtra("order id", orderId);
+                    intent.putExtra("productId", order.get("productQsIds").toString());
+                    intent.putExtra("product qty", order.get("productQty").toString());
+                    intent.putExtra("product price", order.get("productPrice").toString());
+                    Toast.makeText(getApplicationContext(), order.get("productQsIds").toString(), Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+        }).addOnFailureListener(Throwable::printStackTrace);
+
+      PendingIntent pendingIntent = PendingIntent.getActivity(CheckOutActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0,builder.build());
     }
 }

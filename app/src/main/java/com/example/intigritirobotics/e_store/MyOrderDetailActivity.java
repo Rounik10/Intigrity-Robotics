@@ -1,5 +1,6 @@
 package com.example.intigritirobotics.e_store;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,8 +12,11 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.intigritirobotics.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +48,9 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         loadingDialog.show();
 
-        Intent myIntent = getIntent();
 
-        orderId = myIntent.getStringExtra("order id");
+        gtExtra();
 
-        productId =  Objects.requireNonNull(myIntent.getStringExtra("productId")).split(", ");
-        productQty = Objects.requireNonNull(myIntent.getStringExtra("product qty")).split(", ");
-        productPrices = Objects.requireNonNull(myIntent.getStringExtra("product price")).split(", ");
 
         totalPriceText = findViewById(R.id._total_price);
         deliveryCostText = findViewById(R.id.delivery_cost_text);
@@ -64,9 +64,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         paymentMethod = findViewById(R.id.payment_method);
         paymentId = findViewById(R.id.payment_id);
 
-        setRecycler();
-        setPrices();
-        setDetails();
+
 
         toPdfAct.setOnClickListener(l->{
             Intent intent = new Intent(this, ProjectPdfActivity.class);
@@ -160,5 +158,58 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         }
 
     }
+    private void  gtExtra()
+    {
+        Intent myIntent = getIntent();
+        orderId = myIntent.getStringExtra("order id");
 
+
+        if (myIntent.getStringExtra("from notification").equals("true"))
+        {
+            firebaseFirestore.document("ORDERS/"+orderId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful())
+                    {
+                        DocumentSnapshot order =  task.getResult();
+                        productId = Objects.requireNonNull(order.get("productQsIds").toString()).split(", ");
+                        productQty = Objects.requireNonNull(order.get("productQty").toString()).split(", ");
+                        productPrices = Objects.requireNonNull(order.get("productPrice").toString()).split(", ");
+                        setRecycler();
+                        setPrices();
+                        setDetails();
+                    }
+                }
+            }).addOnFailureListener(Throwable::printStackTrace);
+
+        }
+        else {
+
+            productId = Objects.requireNonNull(myIntent.getStringExtra("productId")).split(", ");
+            productQty = Objects.requireNonNull(myIntent.getStringExtra("product qty")).split(", ");
+            productPrices = Objects.requireNonNull(myIntent.getStringExtra("product price")).split(", ");
+            setRecycler();
+            setPrices();
+            setDetails();
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = getIntent();
+        if (myIntent.getStringExtra("from notification").equals("true"))
+        {
+           Intent intent = new Intent(MyOrderDetailActivity.this, MainHomeActivity.class);
+           startActivity(intent);
+           finish();
+        }
+        else
+        {
+            finish();
+
+        }
+
+            super.onBackPressed();
+    }
 }

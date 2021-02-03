@@ -2,6 +2,7 @@ package com.example.intigritirobotics.e_store;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.pdf.PdfDocument;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Layout;
@@ -31,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
 import com.example.intigritirobotics.R;
+import com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -74,6 +77,9 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     private int discount;
     private String usedCoupon;
     private String couponApplied;
+
+    public static final String CHANNEL_1_ID = "channel1";
+    public static final String CHANNEL_2_ID = "channel2";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +256,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 map.put("order by", currentUserUId);
                 map.put("order date", date);
                 map.put("offer discount", discount);
-                map.put("coupon used",usedCoupon);
+                map.put("coupon used", usedCoupon);
                 map.put("order status", "Order Placed");
                 map.put("invoice token", "x");
                 map.put("shipping address", address);
@@ -517,8 +523,31 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         Toast.makeText(this, "Payment Error" + s, Toast.LENGTH_SHORT).show();
     }
 
-    private void successpayment(String orderId)
-    {
+    private void successpayment(String orderId) {
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel1 = new NotificationChannel(
+                    CHANNEL_1_ID,
+                    "Channel 1",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel1.setDescription("This is Channel 1");
+            Intent intent = new Intent(CheckOutActivity.this, MyOrderDetailActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("order id", orderId);
+            intent.putExtra("from notification", "true");
+
+//            NotificationChannel channel2 = new NotificationChannel(
+//                    CHANNEL_2_ID,
+//                    "Channel 2",
+//                    NotificationManager.IMPORTANCE_LOW
+//            );
+//            channel2.setDescription("This is Channel 2");
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel1);
+//            manager.createNotificationChannel(channel2);
+        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(CheckOutActivity.this)
                 .setSmallIcon(R.drawable.test_logo)
                 .setContentTitle("Order Confirmed")
@@ -528,26 +557,32 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         Intent intent = new Intent(CheckOutActivity.this, MyOrderDetailActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        firebaseFirestore.document("ORDERS/"+orderId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful())
-                {
-                    DocumentSnapshot order =  task.getResult();
-                    intent.putExtra("order id", orderId);
-                    intent.putExtra("productId", order.get("productQsIds").toString());
-                    intent.putExtra("product qty", order.get("productQty").toString());
-                    intent.putExtra("product price", order.get("productPrice").toString());
-                    Toast.makeText(getApplicationContext(), order.get("productQsIds").toString(), Toast.LENGTH_SHORT).show();
+        intent.putExtra("order id", orderId);
+        intent.putExtra("from notification", "true");
 
 
-                }
-            }
-        }).addOnFailureListener(Throwable::printStackTrace);
-
-      PendingIntent pendingIntent = PendingIntent.getActivity(CheckOutActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(CheckOutActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0,builder.build());
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, builder.build());
+    }
+
+    private void failpayment(String orderId) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(CheckOutActivity.this)
+                .setSmallIcon(R.drawable.test_logo)
+                .setContentTitle("Order Confirmed")
+                .setContentText("Your order is confirmed, tap to view...")
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        Intent intent = new Intent(CheckOutActivity.this, MyCartActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("order id", orderId);
+
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(CheckOutActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, builder.build());
     }
 }

@@ -92,13 +92,10 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         intentFrom = intent.getStringExtra("from");
         address = TheUser.getAddress();
         onlinePayment = findViewById(R.id.online_method);
-
         totalPriceTextView = findViewById(R.id.total_amount_number);
         deliveryPriceTextView = findViewById(R.id.delivery_cost_text);
         cartTotal = findViewById(R.id._total_price);
-
         codeInp = findViewById(R.id.code_input);
-
         consumerName = findViewById(R.id.address_view_name);
         shippingAddress = findViewById(R.id.address_view_street_area);
         mobileNo = findViewById(R.id.address_view_mobile);

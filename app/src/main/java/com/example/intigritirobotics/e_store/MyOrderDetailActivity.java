@@ -18,12 +18,13 @@ import com.example.intigritirobotics.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.TheUser;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class MyOrderDetailActivity extends AppCompatActivity {
 
@@ -33,9 +34,9 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     private TextView totalPriceText, deliveryCostText, total_amount_number;
     private TextView name, address, phone, pin, paymentMethod, paymentId;
     private int discount;
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     RecyclerView orderRecycler;
-        private Dialog loadingDialog;
-
+    private Dialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         String delivery = totalPrice < 500 ? "Rs.60/-": "Free";
         String totalAmount = totalPrice < 500 ? ""+(totalPrice + 60)  : ""+totalPrice;
         String totalPriceString = ""+totalPrice;
-        
+
         totalPriceText.setText(totalPriceString);
         deliveryCostText.setText(delivery);
 
@@ -128,34 +129,34 @@ public class MyOrderDetailActivity extends AppCompatActivity {
                     .get()
                     .addOnCompleteListener(task -> {
 
-                if(task.isSuccessful()) {
+                        if(task.isSuccessful()) {
 
-                    DocumentSnapshot product =  task.getResult();
-                    int total = 0;
-                    float sum = 0, temp;
-                    for (int j = 1; j <= 5; j++) {
-                        assert product != null;
-                        temp = Integer.parseInt(Objects.requireNonNull(product.get(j + "_star")).toString());
-                        sum += j * temp;
-                        total += temp;
-                    }
-                    String average = "" + sum / total;
-                    if (average.length() > 3) average = average.substring(0, 3);
+                            DocumentSnapshot product =  task.getResult();
+                            int total = 0;
+                            float sum = 0, temp;
+                            for (int j = 1; j <= 5; j++) {
+                                assert product != null;
+                                temp = Integer.parseInt(Objects.requireNonNull(product.get(j + "_star")).toString());
+                                sum += j * temp;
+                                total += temp;
+                            }
+                            String average = "" + sum / total;
+                            if (average.length() > 3) average = average.substring(0, 3);
 
-                    orderDetailItemsModelList.add(new OrderDetailItemsModel(prodId, prodPrice, prodQty, average));
+                            orderDetailItemsModelList.add(new OrderDetailItemsModel(prodId, prodPrice, prodQty, average));
 
-                    Log.d(TAG, average);
+                            Log.d(TAG, average);
 
-                    orderRecycler = findViewById(R.id.order_detail_recyclerView);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-                    orderRecycler.setLayoutManager(linearLayoutManager);
+                            orderRecycler = findViewById(R.id.order_detail_recyclerView);
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+                            orderRecycler.setLayoutManager(linearLayoutManager);
 
-                    OrderDetailItemAdapter orderDetailItemAdapter = new OrderDetailItemAdapter(orderDetailItemsModelList);
-                    orderRecycler.setAdapter(orderDetailItemAdapter);
+                            OrderDetailItemAdapter orderDetailItemAdapter = new OrderDetailItemAdapter(orderDetailItemsModelList);
+                            orderRecycler.setAdapter(orderDetailItemAdapter);
 
-                }
+                        }
 
-            });
+                    });
 
         }
 
@@ -202,9 +203,9 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         Intent myIntent = getIntent();
         if (myIntent.getStringExtra("from notification").equals("true"))
         {
-           Intent intent = new Intent(MyOrderDetailActivity.this, MainHomeActivity.class);
-           startActivity(intent);
-           finish();
+            Intent intent = new Intent(MyOrderDetailActivity.this, MainHomeActivity.class);
+            startActivity(intent);
+            finish();
         }
         else
         {
@@ -212,6 +213,6 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         }
 
-            super.onBackPressed();
+        super.onBackPressed();
     }
 }

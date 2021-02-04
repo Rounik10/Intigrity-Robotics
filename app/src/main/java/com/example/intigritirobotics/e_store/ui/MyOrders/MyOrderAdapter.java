@@ -94,6 +94,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
                 intent.putExtra("status", clickedOrder.getProductStatus());
                 intent.putExtra("product qty", clickedOrder.getProductQty());
                 intent.putExtra("product price", clickedOrder.getProductPrices());
+                intent.putExtra("from notification", "false");
+
 
                 itemView.getContext().startActivity(intent);
             });

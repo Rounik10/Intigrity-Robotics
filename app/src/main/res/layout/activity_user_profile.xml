@@ -14,14 +14,14 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:elevation="5dp"
         android:background="@drawable/project_toolbar_background"
+        android:elevation="5dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -41,11 +41,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/nunito_semibold"
         android:text="Amenda Alis"
         android:textColor="@color/darkWhite"
-        android:textStyle="bold"
         android:textSize="20sp"
-        android:fontFamily="@font/nunito_semibold"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/profile_user_image"
         app:layout_constraintStart_toStartOf="@+id/profile_user_image"
         app:layout_constraintTop_toBottomOf="@+id/profile_user_image" />
@@ -210,8 +210,6 @@
                 android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
     </androidx.gridlayout.widget.GridLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

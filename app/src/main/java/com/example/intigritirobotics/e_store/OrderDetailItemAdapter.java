@@ -21,12 +21,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
-
 public class OrderDetailItemAdapter extends RecyclerView.Adapter<OrderDetailItemAdapter.ODIViewHolder> {
 
     private final List<OrderDetailItemsModel>OrderDetailItemAdapterList;
     public int is_app_starting = 0;
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     public OrderDetailItemAdapter(List<OrderDetailItemsModel> orderDetailItemAdapterList) {
         OrderDetailItemAdapterList = orderDetailItemAdapterList;

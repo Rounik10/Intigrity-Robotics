@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.intigritirobotics.R;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,13 +20,13 @@ import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class OfferFragment extends Fragment {
 
     private final List<OfferViewModel> offersList = new ArrayList<>();
     private RecyclerView offerRecyclerView;
     private LinearLayoutManager offerLayoutManager;
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

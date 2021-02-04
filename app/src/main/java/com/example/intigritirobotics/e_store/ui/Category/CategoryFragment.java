@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.intigritirobotics.e_store.CategoryModel;
 import com.example.intigritirobotics.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
-
 public class CategoryFragment extends Fragment {
     private final List<CategoryModel> projectList = new ArrayList<>();
     private RecyclerView recyclerView;
     private GridLayoutManager gridLayoutManager;
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

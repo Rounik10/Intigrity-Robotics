@@ -27,25 +27,19 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
-
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
-
 import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,7 +52,6 @@ import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.TheUser;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 import static com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity.productList;
 
 public class CheckOutActivity extends AppCompatActivity implements PaymentResultListener {
@@ -73,6 +66,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
     private String intentFrom;
     private RadioButton onlinePayment;
     private String paymentId;
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private EditText codeInp;
     private int discount;
     private String usedCoupon;
@@ -129,6 +123,8 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                 couponApplyBtn.setEnabled(editable.length() > 5);
             }
         });
+
+        successpayment("IR-0000024");
     }
 
     private void applyCoupon() {
@@ -294,7 +290,6 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     void exit() {
         ProdList.clear();
-
         Intent intent = new Intent(this, MainHomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("EXIT", true);
@@ -424,7 +419,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
         canvas.drawText("SUBTOTAL", 550, low, paint);
         canvas.drawText("GST 18%", 550, low + 50, paint);
-        canvas.drawText(paymentMethod, 280, low, paint);
+        canvas.drawText(paymentId, 280, low, paint);
 
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         canvas.drawText("TOTAL", 550, low + 100, paint);
@@ -435,7 +430,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         canvas.drawText("Rs." + 0.18 * sum + "/-", canvas.getWidth() - 40, low + 50, paint);
 
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        canvas.drawText("Payment Method: ", 270, low, paint);
+        canvas.drawText("Payment Id: ", 270, low, paint);
         canvas.drawText("Rs." + (0.18 * sum + 0.82 * sum) + "/-", canvas.getWidth() - 40, low + 100, paint);
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
 
@@ -524,6 +519,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d(TAG, "Isme to aaya 1");
             NotificationChannel channel1 = new NotificationChannel(
                     CHANNEL_1_ID,
                     "Channel 1",
@@ -545,7 +541,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
             manager.createNotificationChannel(channel1);
 //            manager.createNotificationChannel(channel2);
         }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(CheckOutActivity.this)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(CheckOutActivity.this, CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.test_logo)
                 .setContentTitle("Order Confirmed")
                 .setContentText("Your order is confirmed, tap to view...")
@@ -556,7 +552,6 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("order id", orderId);
         intent.putExtra("from notification", "true");
-
 
         PendingIntent pendingIntent = PendingIntent.getActivity(CheckOutActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
@@ -575,7 +570,6 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
         Intent intent = new Intent(CheckOutActivity.this, MyCartActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("order id", orderId);
-
 
         PendingIntent pendingIntent = PendingIntent.getActivity(CheckOutActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);

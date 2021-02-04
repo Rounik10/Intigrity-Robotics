@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -25,17 +26,20 @@ import com.example.intigritirobotics.e_store.GridAdapter;
 import com.example.intigritirobotics.e_store.HorizontalAdapter1;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ViewAllActivity;
+import com.example.intigritirobotics.e_store.ViewAllAdapter;
 import com.example.intigritirobotics.e_store.ViewAllModel;
-import com.example.intigritirobotics.e_store.ui.MyCart.MyCartActivity;
+import com.example.intigritirobotics.e_store.ui.Category.CategoryFragmentAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
+import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class EStoreFragment extends Fragment {
 
@@ -43,7 +47,6 @@ public class EStoreFragment extends Fragment {
     private RecyclerView projectRecyclerView, horizontalItemsRecyclerview, gridRecView, cartRevView;
     private ImageSlider imageSlider;
     private final List<SlideModel> slideModels = new ArrayList<>();
-    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private final List<ViewAllModel> horizontalList = new ArrayList<>();
     private LinearLayoutManager projectLinearLayoutManager, horizontalLinearLayoutManager;
     private GridLayoutManager gridLayoutManager, cartGridManager;
@@ -58,15 +61,17 @@ public class EStoreFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_e_store, container, false);
         HomeloadingDialog.show();
 
-        mSwipeRefreshLayout = view.findViewById(R.id.e_store_swipe);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.e_store_swipe);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.gen_black);
         projectRecyclerView = view.findViewById(R.id.category_recyclerview);
 
         gridRecView = view.findViewById(R.id.product_grid_1);
         gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        gridRecView.setNestedScrollingEnabled(false);
 
         cartGridManager = new GridLayoutManager(getContext(),2);
         cartRevView = view.findViewById(R.id.cart_grid);
+        cartRevView.setNestedScrollingEnabled(false);
 
         cartCard = view.findViewById(R.id.cart_card);
         bundleCard = view.findViewById(R.id.bundle_card);
@@ -78,21 +83,22 @@ public class EStoreFragment extends Fragment {
         imageSlider = view.findViewById(R.id.image_slider);
         loadProject();
 
-        hor1ViewAllBtn.setOnClickListener(view1 -> {
-            Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
-            myIntent.putExtra("Index","1");
-            myIntent.putExtra("Title","#Trendding");
-            startActivity(myIntent);
+        hor1ViewAllBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
+                myIntent.putExtra("Index","1");
+                myIntent.putExtra("Title","#Trendding");
+                startActivity(myIntent);
+            }
         });
-        mSwipeRefreshLayout.setOnRefreshListener(this::loadProject);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
 
-        //TextView viewAll;
-        //viewAll = view.findViewById(R.id.view_all_bundles_text);
-        // viewAll.setOnClickListener(v->startActivity(new Intent(getContext(), ViewAllActivity.class)));
-        
-        TextView gotoCart;
-        gotoCart = view.findViewById(R.id.cart_grid_text);
-        gotoCart.setOnClickListener(v->startActivity(new Intent(getContext(), MyCartActivity.class)));
+                loadProject();
+            }
+        });
         return view;
 
     }

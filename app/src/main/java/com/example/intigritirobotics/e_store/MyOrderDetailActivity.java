@@ -12,14 +12,11 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.intigritirobotics.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +38,8 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_my_order_detail);
         loadingDialog = new Dialog(MyOrderDetailActivity.this);
         loadingDialog.setContentView(R.layout.loading_progress_dialog);
@@ -50,14 +49,12 @@ public class MyOrderDetailActivity extends AppCompatActivity {
 
         loadingDialog.show();
 
-
-        gtExtra();
-
-
         totalPriceText = findViewById(R.id._total_price);
         deliveryCostText = findViewById(R.id.delivery_cost_text);
         total_amount_number = findViewById(R.id.total_amount_number);
         Button toPdfAct = findViewById(R.id.pdf_act_button);
+
+        gtExtra();
 
         name = findViewById(R.id.address_view_name);
         phone = findViewById(R.id.address_view_mobile);
@@ -107,9 +104,12 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         String totalAmount = totalPrice < 500 ? ""+(totalPrice + 60)  : ""+totalPrice;
         String totalPriceString = ""+totalPrice;
 
+        Log.d(TAG,">>>1"+(totalPriceText == null) );
+        Log.d(TAG,">>>2"+(deliveryCostText == null) );
+        Log.d(TAG,">>>3"+(total_amount_number == null) );
+
         totalPriceText.setText(totalPriceString);
         deliveryCostText.setText(delivery);
-
         total_amount_number.setText(totalAmount);
 
     }
@@ -205,13 +205,8 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         {
             Intent intent = new Intent(MyOrderDetailActivity.this, MainHomeActivity.class);
             startActivity(intent);
-            finish();
         }
-        else
-        {
-            finish();
-
-        }
+        finish();
 
         super.onBackPressed();
     }

@@ -145,10 +145,7 @@ public class UpdateUserDetails extends AppCompatActivity {
 
     private void uploadPic() {
         Uri file = imageUri;
-        if(file == null) {
-            finish();
-            return;
-        }
+        if(file == null) finish();
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -158,7 +155,7 @@ public class UpdateUserDetails extends AppCompatActivity {
         pd.show();
         StorageReference riversRef = storageReference.child("profileImg/" + currentUser);
 
-        //assert file != null;
+        assert file != null;
         riversRef.putFile(file)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Get a URL to the uploaded content

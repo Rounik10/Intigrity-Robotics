@@ -4,13 +4,11 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
@@ -36,16 +34,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import static com.example.intigritirobotics.e_store.SignUpActivity.pref;
 
 public class MainHomeActivity extends AppCompatActivity {
 
     private static final String TAG = "MainHomeActivity";
     private AppBarConfiguration mAppBarConfiguration;
-    public FirebaseFirestore firebaseFirestore;
+    public static FirebaseFirestore firebaseFirestore;
     public static Dialog HomeloadingDialog;
     public static String currentUserUId;
     public FirebaseAuth firebaseAuth;
@@ -94,8 +89,6 @@ public class MainHomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        headerImg.setOnClickListener(v->startActivity(new Intent(this,UserProfileActivity.class)));
 
     }
 

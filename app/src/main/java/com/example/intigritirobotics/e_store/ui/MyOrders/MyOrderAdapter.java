@@ -6,20 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.intigritirobotics.e_store.MainHomeActivity;
 import com.example.intigritirobotics.e_store.MyOrderDetailActivity;
 import com.example.intigritirobotics.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.List;
 
 public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHolder> {
 
-    private final List<MyOrderModel> myOrderModelList;
-    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private List<MyOrderModel> myOrderModelList;
 
     public MyOrderAdapter(List<MyOrderModel> myOrderModelList) {
         this.myOrderModelList = myOrderModelList;
@@ -49,8 +54,8 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageView pic;
-        private final TextView ProductTitle,OrderId, OrderDate,OrderStatus;
+        private ImageView pic;
+        private TextView ProductTitle,OrderId, OrderDate,OrderStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,40 +69,47 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.ViewHold
 
         private void  setData( String orderId, String orderDate, String productId, String productStatus)
         {
-            firebaseFirestore.document("PRODUCTS/"+productId.split(", ")[0]).get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful())
-                        {
-                            DocumentSnapshot queryDocumentSnapshots = task.getResult();
-                            Glide.with(itemView.getContext())
-                                    .load(queryDocumentSnapshots
-                                            .get("product_pic")
-                                            .toString()
-                                            .split(", ")[0])
-                                    .apply(new RequestOptions().placeholder(R.drawable.category_icon))
-                                    .into(pic);
-                            ProductTitle.setText(queryDocumentSnapshots.get("product title").toString());
+
+            MainHomeActivity.firebaseFirestore.document("PRODUCTS/"+productId.split(", ")[0]).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful())
+                            {
+                                DocumentSnapshot queryDocumentSnapshots = task.getResult();
+                                Glide.with(itemView.getContext()).load(queryDocumentSnapshots.get("product_pic").toString().split(", ")[0]).apply(new RequestOptions().placeholder(R.drawable.category_icon)).into(pic);
+                                ProductTitle.setText(queryDocumentSnapshots.get("product title").toString());
+                            }
                         }
-                    }).addOnFailureListener(Throwable::printStackTrace);
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
             OrderDate.setText(orderDate);
             OrderId.setText(orderId);
             OrderStatus.setText(productStatus);
 
 
-            itemView.setOnClickListener(v -> {
-                Intent intent = new Intent( itemView.getContext(), MyOrderDetailActivity.class);
-                MyOrderModel clickedOrder = myOrderModelList.get(getAdapterPosition());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent( itemView.getContext(), MyOrderDetailActivity.class);
 
-                intent.putExtra("date", clickedOrder.getOrderDate());
-                intent.putExtra("order id", clickedOrder.getOrderID());
-                intent.putExtra("productId", clickedOrder.getProductID());
-                intent.putExtra("status", clickedOrder.getProductStatus());
-                intent.putExtra("product qty", clickedOrder.getProductQty());
-                intent.putExtra("product price", clickedOrder.getProductPrices());
+                    MyOrderModel clickedOrder = myOrderModelList.get(getAdapterPosition());
+
+                    intent.putExtra("date", clickedOrder.getOrderDate());
+                    intent.putExtra("order id", clickedOrder.getOrderID());
+                    intent.putExtra("productId", clickedOrder.getProductID());
+                    intent.putExtra("status", clickedOrder.getProductStatus());
+                    intent.putExtra("product qty", clickedOrder.getProductQty());
+                    intent.putExtra("product price", clickedOrder.getProductPrices());
                 intent.putExtra("from notification", "false");
 
 
-                itemView.getContext().startActivity(intent);
+                    itemView.getContext().startActivity(intent);
+                }
             });
 
         }

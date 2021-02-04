@@ -107,6 +107,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
         
         totalPriceText.setText(totalPriceString);
         deliveryCostText.setText(delivery);
+
         total_amount_number.setText(totalAmount);
 
     }

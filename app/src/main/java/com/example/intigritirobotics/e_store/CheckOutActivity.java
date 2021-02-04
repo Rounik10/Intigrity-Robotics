@@ -517,7 +517,6 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
 
     private void successpayment(String orderId) {
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Log.d(TAG, "Isme to aaya 1");
             NotificationChannel channel1 = new NotificationChannel(
@@ -526,7 +525,7 @@ public class CheckOutActivity extends AppCompatActivity implements PaymentResult
                     NotificationManager.IMPORTANCE_HIGH
             );
             channel1.setDescription("This is Channel 1");
-            Intent intent = new Intent(CheckOutActivity.this, MyOrderDetailActivity.class);
+            Intent intent = new Intent(CheckOutActivity.this,  MyOrderDetailActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("order id", orderId);
             intent.putExtra("from notification", "true");

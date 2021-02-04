@@ -36,6 +36,7 @@ public class MyOrderDetailActivity extends AppCompatActivity {
     RecyclerView orderRecycler;
         private Dialog loadingDialog;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

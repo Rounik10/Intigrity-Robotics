@@ -1,5 +1,6 @@
 package com.example.intigritirobotics.e_store.ui.E_Store;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -25,21 +24,17 @@ import com.example.intigritirobotics.e_store.CategoryModel;
 import com.example.intigritirobotics.e_store.GridAdapter;
 import com.example.intigritirobotics.e_store.HorizontalAdapter1;
 import com.example.intigritirobotics.R;
+import com.example.intigritirobotics.e_store.MainHomeActivity;
 import com.example.intigritirobotics.e_store.ViewAllActivity;
-import com.example.intigritirobotics.e_store.ViewAllAdapter;
 import com.example.intigritirobotics.e_store.ViewAllModel;
-import com.example.intigritirobotics.e_store.ui.Category.CategoryFragmentAdapter;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import static com.example.intigritirobotics.e_store.MainHomeActivity.HomeloadingDialog;
 import static com.example.intigritirobotics.e_store.MainHomeActivity.currentUserUId;
-import static com.example.intigritirobotics.e_store.MainHomeActivity.firebaseFirestore;
 
 public class EStoreFragment extends Fragment {
 
@@ -52,6 +47,8 @@ public class EStoreFragment extends Fragment {
     private GridLayoutManager gridLayoutManager, cartGridManager;
     private final List<ViewAllModel> gridList = new ArrayList<>(), cartList = new ArrayList<>();
     private CardView cartCard, bundleCard;
+    private Dialog HomeloadingDialog;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     ProgressDialog progressDialog ;
@@ -59,6 +56,12 @@ public class EStoreFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_e_store, container, false);
+
+        HomeloadingDialog = new Dialog(getContext());
+        HomeloadingDialog.setContentView(R.layout.loading_progress_dialog);
+        HomeloadingDialog.setCancelable(false);
+        HomeloadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        HomeloadingDialog.getWindow().setBackgroundDrawableResource(R.drawable.border_background);
         HomeloadingDialog.show();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.e_store_swipe);
@@ -83,27 +86,18 @@ public class EStoreFragment extends Fragment {
         imageSlider = view.findViewById(R.id.image_slider);
         loadProject();
 
-        hor1ViewAllBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
-                myIntent.putExtra("Index","1");
-                myIntent.putExtra("Title","#Trendding");
-                startActivity(myIntent);
-            }
+        hor1ViewAllBtn.setOnClickListener(view1 -> {
+            Intent myIntent = new Intent(getContext(), ViewAllActivity.class);
+            myIntent.putExtra("Index","1");
+            myIntent.putExtra("Title","#Trendding");
+            startActivity(myIntent);
         });
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                loadProject();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this::loadProject);
         return view;
 
     }
 
-    private void loadProject() {
+    public void loadProject() {
         firebaseFirestore.collection("CATEGORY").get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 projectList.clear();
@@ -183,7 +177,6 @@ public class EStoreFragment extends Fragment {
         adapter1.notifyDataSetChanged();
         mSwipeRefreshLayout.setRefreshing(false);
         HomeloadingDialog.dismiss();
-
         setUpGrid();
         setUpInYourCart();
 
@@ -225,8 +218,7 @@ public class EStoreFragment extends Fragment {
 
     void setUpGrid() {
         firebaseFirestore.collection("PRODUCTS").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful())
-            {
+            if (task.isSuccessful()) {
                 gridList.clear();
                 QuerySnapshot prodListSnap = task.getResult();
 
@@ -239,7 +231,6 @@ public class EStoreFragment extends Fragment {
                     float rating = Float.parseFloat(String.valueOf(documentSnapshot.get("product rating")));
                     int price = Integer.parseInt(String.valueOf(documentSnapshot.get("product price")));
                     gridList.add(new ViewAllModel(id, picUrl, title, rating, price));
-
                 }
 
                 gridRecView.setLayoutManager(gridLayoutManager);
@@ -247,9 +238,9 @@ public class EStoreFragment extends Fragment {
                 gridRecView.setAdapter(gridAdapter);
                 gridAdapter.notifyDataSetChanged();
                 bundleCard.setVisibility(View.VISIBLE);
+                MainHomeActivity.HomeloadingDialog.dismiss();
             }
-            else
-            {
+            else {
                 task.getException().printStackTrace();
             }
 

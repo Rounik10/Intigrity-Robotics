@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import com.example.intigritirobotics.R;
+import com.example.intigritirobotics.e_store.ui.E_Store.EStoreFragment;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -42,8 +43,7 @@ public class SplashActivity extends AppCompatActivity {
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 pref = getSharedPreferences("user_details",MODE_PRIVATE);
                 intent = new Intent(SplashActivity.this,MainHomeActivity.class);
-                if(pref.contains("username") && pref.contains("password")){
-
+                if(pref.contains("username") && pref.contains("password")) {
                     startActivity(intent);
                 }
                 else {
@@ -53,7 +53,6 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }, SPLASH_TIME_OUT);
         }
-
 
     }
     public void HomeShow() {
@@ -73,4 +72,5 @@ public class SplashActivity extends AppCompatActivity {
         }
         return false;
     }
+
 }

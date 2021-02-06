@@ -1,6 +1,8 @@
 package com.example.intigritirobotics.e_store;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -57,7 +59,6 @@ public class MainHomeActivity extends AppCompatActivity {
         HomeloadingDialog.setCancelable(false);
         HomeloadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         HomeloadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.border_background));
-
         HomeloadingDialog.show();
 
         setContentView(R.layout.activity_main_home);
@@ -183,13 +184,19 @@ public class MainHomeActivity extends AppCompatActivity {
     }
 
     public void logout(MenuItem item) {
-        pref = getSharedPreferences("user_details", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.clear();
-        editor.apply();
-        Intent intent = new Intent(this, SignUpActivity.class);
-        startActivity(intent);
-        finish();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you really want to log out?");
+        builder.setPositiveButton("Yes", (dialogInterface, i) -> {
+            pref = getSharedPreferences("user_details", MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.clear();
+            editor.apply();
+            Intent intent = new Intent(MainHomeActivity.this, SignUpActivity.class);
+            startActivity(intent);
+            finish();
+        }).setNegativeButton("No", (dialogInterface, i) -> dialogInterface.dismiss()).show();
+
     }
 
     public void backToHome(MenuItem item) {

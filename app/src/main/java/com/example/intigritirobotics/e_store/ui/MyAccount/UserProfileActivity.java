@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +28,12 @@ public class UserProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         updateProfile = findViewById(R.id.update_profile);
-        updateProfile.setOnClickListener(l-> updateUserDetails());
+        updateProfile.setOnClickListener(l -> updateUserDetails());
+
+        TextView userNameText = findViewById(R.id.profile_user_name);
+
+        String userName = getIntent().getStringExtra("user_name");
+        if (userName != null) userNameText.setText(userName);
     }
 
     @Override

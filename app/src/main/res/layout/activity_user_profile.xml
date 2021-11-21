@@ -4,18 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#318188"
+    android:background="@color/second"
     tools:context=".e_store.ui.MyAccount.UserProfileActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/profile_toolbar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:elevation="5dp"
-        android:background="@drawable/project_toolbar_background"
+        android:background="#3F80EF"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,14 +23,14 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_user_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="0dp"
         android:layout_marginTop="70dp"
-        android:src="@drawable/user"
-        app:civ_border_color="@color/gen_black"
-        app:civ_border_width="1dp"
+        android:elevation="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/dummy_user"
+        app:layout_constraintDimensionRatio="1"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -41,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Amenda Alis"
+        android:text="@string/user_name"
         android:textColor="@color/darkWhite"
         android:textStyle="bold"
         android:textSize="20sp"
@@ -50,9 +47,9 @@
         app:layout_constraintStart_toStartOf="@+id/profile_user_image"
         app:layout_constraintTop_toBottomOf="@+id/profile_user_image" />
 
-    <androidx.gridlayout.widget.GridLayout
-        android:layout_width="0dp"
-        android:layout_height="250dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:columnCount="3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,14 +58,20 @@
         app:rowCount="3">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/arduino_card"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:backgroundTint="#03293A"
             android:elevation="8dp"
             app:cardCornerRadius="8dp"
             app:cardUseCompatPadding="true"
             app:layout_column="0"
             app:layout_columnWeight="1"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@+id/my_courses"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_gravity="fill"
             app:layout_row="0"
             app:layout_rowWeight="1">
@@ -79,20 +82,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/nunito_semibold"
-                android:text="Arduino"
+                android:text="@string/arduino"
                 android:textColor="@color/darkWhite"
                 android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/my_courses"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:backgroundTint="#330547"
             android:elevation="8dp"
             app:cardCornerRadius="8dp"
             app:cardUseCompatPadding="true"
             app:layout_column="1"
             app:layout_columnWeight="1"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@+id/cardView3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/arduino_card"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_gravity="fill"
             app:layout_row="0"
             app:layout_rowWeight="1">
@@ -103,21 +112,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/nunito_semibold"
-                android:text="My Courses"
+                android:text="@string/courses"
                 android:textColor="@color/darkWhite"
-
                 android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/cardView3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:backgroundTint="#076C0C"
             android:elevation="8dp"
             app:cardCornerRadius="8dp"
             app:cardUseCompatPadding="true"
             app:layout_column="2"
             app:layout_columnWeight="1"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/my_courses"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_gravity="fill"
             app:layout_row="0"
             app:layout_rowWeight="1">
@@ -128,22 +142,27 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/nunito_semibold"
-                android:text="Favorite"
+                android:text="@string/favorite"
                 android:textColor="@color/darkWhite"
-
                 android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/update_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:backgroundTint="@color/dot_dark_screen2"
             android:elevation="8dp"
+            android:padding="8dp"
             app:cardCornerRadius="8dp"
             app:cardUseCompatPadding="true"
             app:layout_column="0"
             app:layout_columnWeight="1"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toStartOf="@+id/cardView2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cardView"
+            app:layout_constraintTop_toBottomOf="@+id/my_courses"
             app:layout_gravity="fill"
             app:layout_row="1"
             app:layout_rowWeight="1">
@@ -154,24 +173,30 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/nunito_semibold"
-                android:text="Update Profile"
+                android:text="@string/update_profile"
+                android:textAlignment="center"
                 android:textColor="@color/darkWhite"
-
                 android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/cardView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:backgroundTint="@color/colorPrimaryDark"
             android:elevation="8dp"
             app:cardCornerRadius="8dp"
             app:cardUseCompatPadding="true"
             app:layout_column="2"
             app:layout_columnWeight="1"
+
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toStartOf="@+id/update_profile"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arduino_card"
             app:layout_gravity="fill"
             app:layout_row="1"
-
             app:layout_rowWeight="1">
 
             <TextView
@@ -180,21 +205,27 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/nunito_semibold"
-                android:text="Setting"
+                android:text="@string/set_ting"
                 android:textColor="@color/darkWhite"
 
                 android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/cardView2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:backgroundTint="#303F9F"
             android:elevation="8dp"
             app:cardCornerRadius="8dp"
             app:cardUseCompatPadding="true"
             app:layout_column="1"
             app:layout_columnWeight="1"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/update_profile"
+            app:layout_constraintTop_toBottomOf="@+id/cardView3"
             app:layout_gravity="fill"
             app:layout_row="1"
             app:layout_rowWeight="1">
@@ -205,14 +236,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/nunito_semibold"
-                android:text="Support"
+                android:text="@string/support"
                 android:textColor="@color/darkWhite"
                 android:textSize="20sp" />
         </androidx.cardview.widget.CardView>
-    </androidx.gridlayout.widget.GridLayout>
 
-
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

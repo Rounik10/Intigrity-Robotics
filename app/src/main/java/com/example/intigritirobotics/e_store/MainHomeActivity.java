@@ -1,18 +1,28 @@
 package com.example.intigritirobotics.e_store;
 
+import static com.example.intigritirobotics.e_store.SignUpActivity.pref;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
 import com.bumptech.glide.Glide;
 import com.example.intigritirobotics.R;
 import com.example.intigritirobotics.e_store.ui.MyAccount.UserProfileActivity;
@@ -24,19 +34,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import static com.example.intigritirobotics.e_store.SignUpActivity.pref;
 
 public class MainHomeActivity extends AppCompatActivity {
 
@@ -74,6 +73,7 @@ public class MainHomeActivity extends AppCompatActivity {
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
+        headerView.setOnClickListener(v -> account(null));
 
         headerText = headerView.findViewById(R.id.nav_name);
         headerImg = headerView.findViewById(R.id.nav_pic);
@@ -167,6 +167,7 @@ public class MainHomeActivity extends AppCompatActivity {
 
     public void account(MenuItem item) {
         Intent myIntent = new Intent(MainHomeActivity.this, UserProfileActivity.class);
+        myIntent.putExtra("user_name", TheUser.name);
         startActivity(myIntent);
 
     }

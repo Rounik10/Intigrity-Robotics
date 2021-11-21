@@ -162,4 +162,11 @@
     <string name="view_all">View all</string>
     <string name="popular_bundles">#Popular Bundles</string>
     <string name="trending">#Trending</string>
+    <string name="user_name">User Name</string>
+    <string name="arduino">Arduino</string>
+    <string name="courses">Courses</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="favorite">Favorite</string>
+    <string name="set_ting">Set ting</string>
+    <string name="support">Support</string>
 </resources>

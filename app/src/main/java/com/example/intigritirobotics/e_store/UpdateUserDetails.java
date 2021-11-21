@@ -1,5 +1,7 @@
 package com.example.intigritirobotics.e_store;
 
+import static com.example.intigritirobotics.e_store.MainHomeActivity.TheUser;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,8 +12,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.intigritirobotics.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,10 +23,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.example.intigritirobotics.e_store.MainHomeActivity.TheUser;
 
 public class UpdateUserDetails extends AppCompatActivity {
 
@@ -36,7 +39,7 @@ public class UpdateUserDetails extends AppCompatActivity {
     private EditText state;
     private EditText phone;
     private ImageView profilePic;
-    private Uri imageUri;
+    private Uri imageUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,7 @@ public class UpdateUserDetails extends AppCompatActivity {
                                 }
                             });
 
+                            openDashboard(null);
 
                         } else {
                             Toast.makeText(this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
@@ -145,7 +149,9 @@ public class UpdateUserDetails extends AppCompatActivity {
 
     private void uploadPic() {
         Uri file = imageUri;
-        if(file == null) finish();
+        if (file == null) {
+            return;
+        }
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -155,7 +161,6 @@ public class UpdateUserDetails extends AppCompatActivity {
         pd.show();
         StorageReference riversRef = storageReference.child("profileImg/" + currentUser);
 
-        assert file != null;
         riversRef.putFile(file)
                 .addOnSuccessListener(taskSnapshot -> {
                     // Get a URL to the uploaded content

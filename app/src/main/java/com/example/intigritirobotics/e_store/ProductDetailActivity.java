@@ -169,7 +169,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             if (task.isSuccessful() && is_app_starting > 1) {
                 DocumentSnapshot prodSnap = task.getResult();
                 assert prodSnap != null;
-                String s = prodSnap.get((v + "").substring(0, 1) + "_star") == null ? "0" : prodSnap.get((v + "").substring(0, 1) + "_star").toString();
+                String s = prodSnap.get((v + "").charAt(0) + "_star") == null ? "0" : Objects.requireNonNull(prodSnap.get((v + "").charAt(0) + "_star")).toString();
 
                 int x = s==null ? 0 : Integer.parseInt(s);
 
@@ -236,6 +236,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot documentSnapshot = task.getResult();
+                        assert documentSnapshot != null;
                         if (documentSnapshot.exists()) {
                             Toast.makeText(getApplicationContext(), "Already added to cart ;)", Toast.LENGTH_SHORT).show();
                         } else {

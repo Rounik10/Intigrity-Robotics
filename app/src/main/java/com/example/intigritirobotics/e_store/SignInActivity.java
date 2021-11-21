@@ -1,9 +1,5 @@
 package com.example.intigritirobotics.e_store;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,28 +15,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.intigritirobotics.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 
 public class SignInActivity extends AppCompatActivity {
 
-    private EditText em2,ps2;
-    private Button si2, su2 ;
-    int t=0,i,x,y,z,s,u,v,w;
-    private String e,p;
-    private char ch;
-    private TextView fp;
+    private EditText em2, ps2;
+    private Button si2;
+    int t = 0;
+    private String e, p;
     private ProgressBar pb2;
     private FirebaseAuth fba;
-    private Button psv2;
     SharedPreferences pref;
-    Context context;
     Intent intent;
-    private String m, emailpattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +39,13 @@ public class SignInActivity extends AppCompatActivity {
         em2 = (EditText) findViewById(R.id.email2);
         ps2 = (EditText) findViewById(R.id.pass2);
         si2 = (Button) findViewById(R.id.signin2);
-        su2 = (Button) findViewById(R.id.signup2);
-        psv2 = (Button) findViewById(R.id.passview2);
-        pb2 = (ProgressBar)findViewById(R.id.progressBar2);
-        pref = getSharedPreferences("user_details",MODE_PRIVATE);
-        intent = new Intent(SignInActivity.this,MainHomeActivity.class);
+        Button su2 = (Button) findViewById(R.id.signup2);
+        Button psv2 = (Button) findViewById(R.id.passview2);
+        pb2 = (ProgressBar) findViewById(R.id.progressBar2);
+        pref = getSharedPreferences("user_details", MODE_PRIVATE);
+        intent = new Intent(SignInActivity.this, MainHomeActivity.class);
         fba = FirebaseAuth.getInstance();
-        fp = (TextView)findViewById(R.id.FargotPass);
+        TextView fp = (TextView) findViewById(R.id.FargotPass);
         em2.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -88,35 +78,18 @@ public class SignInActivity extends AppCompatActivity {
 
             }
         });
-        si2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                e = String.valueOf(em2.getText());
-                p = String.valueOf(ps2.getText());
+        si2.setOnClickListener(v -> {
+            e = String.valueOf(em2.getText());
+            p = String.valueOf(ps2.getText());
 
-                Checkemailpss();
-            }
+            Checkemailpss();
         });
-        su2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signup();
-
-            }
+        su2.setOnClickListener(v -> signup());
+        psv2.setOnClickListener(v -> {
+            t++;
+            PassView();
         });
-        psv2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                t++;
-                PassView();
-            }
-        });
-        fp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Showreset();
-            }
-        });
+        fp.setOnClickListener(v -> Showreset());
 
 
     }
@@ -134,12 +107,7 @@ public class SignInActivity extends AppCompatActivity {
     }
     public void CheckInputs() {
         if (!TextUtils.isEmpty(em2.getText())) {
-            if (!TextUtils.isEmpty(ps2.getText())) {
-                si2.setEnabled(true);
-
-            } else {
-                si2.setEnabled(false);
-            }
+            si2.setEnabled(!TextUtils.isEmpty(ps2.getText()));
         } else {
             si2.setEnabled(false);
         }
@@ -148,23 +116,21 @@ public class SignInActivity extends AppCompatActivity {
     private void Checkemailpss() {
         pb2.setVisibility(View.VISIBLE);
         si2.setEnabled(false);
+        String emailpattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]";
         if (em2.getText().toString().matches(emailpattern)) {
             fba.signInWithEmailAndPassword(em2.getText().toString(), ps2.getText().toString())
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                SharedPreferences.Editor editor = pref.edit();
-                                editor.putString("username",e);
-                                editor.putString("password",p);
-                                editor.commit();
-                                HomeShow();
-                                finish();
-                            } else {
-                                pb2.setVisibility(View.INVISIBLE);
-                                si2.setEnabled(true);
-                                em2.setError("Invalid E-Mail or Password" );
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putString("username", e);
+                            editor.putString("password", p);
+                            editor.apply();
+                            HomeShow();
+                            finish();
+                        } else {
+                            pb2.setVisibility(View.INVISIBLE);
+                            si2.setEnabled(true);
+                            em2.setError("Invalid E-Mail or Password");
                         }
                     });
         } else {
